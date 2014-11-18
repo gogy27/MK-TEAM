@@ -40,17 +40,10 @@ class AuthPresenter extends BasePresenter {
 		$form->addSubmit('login', 'Prihlásiť');
 		$form->onSuccess[] = $this->newLoginFormSubmitted;
 
-		$renderer = $form->getRenderer();
-		$renderer->wrappers['controls']['container'] = 'div class=form-horizontal';
-		$renderer->wrappers['pair']['container'] = 'div class=form-group';
-		$renderer->wrappers['label']['container'] = 'div class="col-sm-4 control-label text-right"';
-		$renderer->wrappers['control']['container'] = 'div class=col-sm-8';
-		$renderer->wrappers['control']['.text'] = 'form-control';
-		$renderer->wrappers['control']['.password'] = 'form-control';
-		$renderer->wrappers['control']['.submit'] = 'btn btn-primary';
+		setFormRenderer($form->getRenderer());
 		
 		return $form;
-  }
+	}
 
 	public function newLoginFormSubmitted($form, $values) {
 		try {
@@ -60,4 +53,19 @@ class AuthPresenter extends BasePresenter {
 			$this->flashMessage($e->getMessage());
 		}
 	}
+	
+	public function createComponentNewRegisterUser(){
+		
+	}
+	
+	private function setFormRenderer($renderer) {
+		$renderer->wrappers['controls']['container'] = 'div class=form-horizontal';
+		$renderer->wrappers['pair']['container'] = 'div class=form-group';
+		$renderer->wrappers['label']['container'] = 'div class="col-sm-4 control-label text-right"';
+		$renderer->wrappers['control']['container'] = 'div class=col-sm-8';
+		$renderer->wrappers['control']['.text'] = 'form-control';
+		$renderer->wrappers['control']['.password'] = 'form-control';
+		$renderer->wrappers['control']['.submit'] = 'btn btn-primary';
+	}
+
 }
