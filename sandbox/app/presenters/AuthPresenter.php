@@ -28,10 +28,7 @@ class AuthPresenter extends BasePresenter {
 			}
 		}
 	}
-	
-	public function actionRegister() {
-		
-	}
+    }
 
 	protected function createComponentNewLoginForm() {
 		$form = new Form;
@@ -44,10 +41,17 @@ class AuthPresenter extends BasePresenter {
 		$form->addSubmit('login', 'Prihlásiť');
 		$form->onSuccess[] = $this->newLoginFormSubmitted;
 
-		$this->setFormRenderer($form->getRenderer());
+		$renderer = $form->getRenderer();
+		$renderer->wrappers['controls']['container'] = 'div class=form-horizontal';
+		$renderer->wrappers['pair']['container'] = 'div class=form-group';
+		$renderer->wrappers['label']['container'] = 'div class="col-sm-4 control-label text-right"';
+		$renderer->wrappers['control']['container'] = 'div class=col-sm-8';
+		$renderer->wrappers['control']['.text'] = 'form-control';
+		$renderer->wrappers['control']['.password'] = 'form-control';
+		$renderer->wrappers['control']['.submit'] = 'btn btn-primary';
 		
 		return $form;
-	}
+  }
 
 	public function newLoginFormSubmitted($form, $values) {
 		try {
@@ -57,6 +61,7 @@ class AuthPresenter extends BasePresenter {
 			$this->flashMessage($e->getMessage());
 		}
 	}
+<<<<<<< HEAD
 	
 	public function createComponentNewRegisterUser(){
 		$form = new Form;
@@ -96,4 +101,6 @@ class AuthPresenter extends BasePresenter {
 		$renderer->wrappers['control']['.submit'] = 'btn btn-primary';
 	}
 
+=======
+>>>>>>> 6a517175a609a4b41a339d324fd2dcdd0dc9b1ce
 }
