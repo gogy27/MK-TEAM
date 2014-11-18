@@ -1,7 +1,27 @@
 {* This is the welcome page, you can delete it *}
 
 {block content}
-{control newLoginForm}
+{form newLoginForm}
+    <div class="row">
+        <div class="col-sm-6 col-md-4" style="margin: 0 auto;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Prihlásenie</h3>
+                </div>
+                <div class="panel-body" n:foreach="$form->controls as $name => $field">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">{$field->getLabelPrototype()->class('col-sm-4 control-label')}</label>
+                        <div class="col-sm-8">
+                            {$field->control}
+                            <!--<input type="email" class="form-control" id="inputEmail3" placeholder="Email">-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/form}
+
 {/block}
 
 {block scripts}
