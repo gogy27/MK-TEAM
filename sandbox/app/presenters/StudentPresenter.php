@@ -25,7 +25,7 @@ class StudentPresenter extends BasePresenter {
 		$this->redirect('Teacher:default');
 	    }
 	}else{
-	    $this->redirect('Homepage:default');
+	    $this->redirect('Auth:default');
 	}
     }
 }

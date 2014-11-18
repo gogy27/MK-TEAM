@@ -54,7 +54,7 @@ class AuthPresenter extends BasePresenter {
     public function newLoginFormSubmitted($form, $values) {
 	try {
 	    $this->getUser()->login($values->name, $values->password);
-	    $this->redirect('Homepage:default');
+	    $this->redirect('Student:default');
 	} catch (Nette\Security\AuthenticationException $e) {
 	    $this->flashMessage($e->getMessage());
 	}
