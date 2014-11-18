@@ -32,7 +32,7 @@ class HomepagePresenter extends BasePresenter {
 
     protected function createComponentNewLoginForm() {
 	$form = new Form;
-	$form->getElementPrototype()->class('form-horizontal')->class('login-form');
+	$form->getElementPrototype()->class('form-horizontal login-form');
 	$form->addText('name', 'Meno:')
 		->addRule(Form::FILLED, 'Musíte zadať svoje prihlasovacie meno')
 		->setAttribute('placeholder', 'Zadajte meno')
