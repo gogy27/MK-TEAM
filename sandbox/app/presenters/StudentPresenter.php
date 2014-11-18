@@ -19,6 +19,13 @@ class StudentPresenter extends BasePresenter {
 	//put your code here
     
     public function actionDefault(){
-	
+	$user = $this->getUser();
+	if($user->isLoggedIn()){
+	    if($user->isInRole(\App\Model\UserManager::TEACHER)){
+		$this->redirect('Teacher:default');
+	    }
+	}else{
+	    $this->redirect('Homepage:default');
+	}
     }
 }
