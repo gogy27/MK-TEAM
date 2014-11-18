@@ -1,13 +1,16 @@
 /*ADD "--style compressed" TO COMPILER OPTIONS*/
 @import "bootstrap";
 
-html, body {
+html, body, .container {
     height: 100%;
 }
 
+.container {
+    display: table;
+    vertical-align: middle;
+}
+
 .login-form {
-    position: absolute;
-    width: 100%;
-    top: 50%;
-    margin-top: -100px;
+    display: table-cell;
+    vertical-align: middle;
 }
