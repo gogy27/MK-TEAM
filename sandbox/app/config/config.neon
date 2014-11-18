@@ -23,7 +23,7 @@ nette:
 	database:
 		dsn: 'mysql:host=localhost;dbname=dspv'
 		user: 'root'
-		password:
+		password: 'root'
 
 
 services:
