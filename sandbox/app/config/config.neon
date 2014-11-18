@@ -29,5 +29,6 @@ nette:
 services:
 	
 	authorizator: App\Model\UserManager
+	userRepository: App\Model\UserRepository
 	- App\RouterFactory
 	router: @App\RouterFactory::createRouter

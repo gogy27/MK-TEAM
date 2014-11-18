@@ -86,7 +86,14 @@ class AuthPresenter extends BasePresenter {
 	}
 	
 	public function newRegisterUserSubmitted($form, $values) {
-		
+		$registerResult = $this->users->register($values);
+    if($registerResult[0]){
+      $this->flashMessage($registerResult[1], 'success');
+      $this->redirect('Sign:');
+    }
+    else {
+      $this->flashMessage($registerResult[1], 'error'); 
+    }
 	}
 	
 	private function setFormRenderer($renderer) {
