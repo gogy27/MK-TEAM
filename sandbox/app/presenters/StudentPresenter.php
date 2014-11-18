@@ -11,6 +11,14 @@
  *
  * @author Gogy
  */
-class StudentPresenter {
+namespace App\Presenters;
+
+use Nette;
+
+class StudentPresenter extends BasePresenter {
 	//put your code here
+    
+    public function actionDefault(){
+	
+    }
 }
