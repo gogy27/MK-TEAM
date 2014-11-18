@@ -24,11 +24,10 @@ class HomepagePresenter extends BasePresenter {
     public function actionDefault() {
 	$user = $this->getUser();
 	if ($user->isLoggedIn()) {
-	    die("to nejde");
-	    if ($user->isInRole(STUDENT)) {
-		$this->redirect('Homepage:student');
-	    } else if ($user->isInRole(TEACHER)) {
-		$this->redirect('Homepage:teacher');
+	    if ($user->isInRole(self::STUDENT)) {
+		$this->redirect('Student:default');
+	    } else if ($user->isInRole(self::TEACHER)) {
+		$this->redirect('Teacher:default');
 	    }
 	}
     }
@@ -59,15 +58,11 @@ class HomepagePresenter extends BasePresenter {
 	$values = $form->getValues();
 	$username = $values['name'];
 	$password = $values['password'];
-	$successful = true;
 	try {
 	    $user->login($username, $password);
-	} catch (Nette\Security\AuthenticationException $e) {
-	    $successful = false;
-	    $this->flashMessage($e->getMessage());
-	}
-	if ($successful) {
 	    $this->redirect('Homepage:default');
+	} catch (Nette\Security\AuthenticationException $e) {
+	    $this->flashMessage($e->getMessage());
 	}
     }
 

@@ -204,7 +204,7 @@ class SystemContainer extends Nette\DI\Container
 	 */
 	public function createServiceNette__database__default()
 	{
-		$service = new Nette\Database\Connection('mysql:host=localhost;dbname=dspv', 'root', NULL, NULL);
+		$service = new Nette\Database\Connection('mysql:host=localhost;dbname=dspv', 'root', 'root', NULL);
 		Tracy\Debugger::getBlueScreen()->addPanel('Nette\\Bridges\\DatabaseTracy\\ConnectionPanel::renderException');
 		Nette\Database\Helpers::createDebugPanel($service, TRUE, 'default');
 		return $service;
