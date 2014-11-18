@@ -9,7 +9,7 @@ use Nette,
 /**
  * Homepage presenter.
  */
-class HomepagePresenter extends BasePresenter {
+class AuthPresenter extends BasePresenter {
 
 
     private $userManager;
