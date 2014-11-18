@@ -19,9 +19,6 @@
         <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
 
         <div class="container">
-	    {if $user->isLoggedIn()}
-		<a href="{$basePath}/auth/logout">Odhlásiť sa </a>
-	    {/if}
             {include content}
         </div>
 

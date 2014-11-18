@@ -29,13 +29,6 @@ class AuthPresenter extends BasePresenter {
 		}
 	}
     }
-    
-    public function actionLogout(){
-	if($this->getUser()->isLoggedIn()){
-	    $this->getUser()->logout();
-	}
-	$this->redirect('Auth:default');
-    }
 
 	protected function createComponentNewLoginForm() {
 		$form = new Form;
