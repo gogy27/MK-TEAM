@@ -4,6 +4,7 @@
 
 /**
  * @property Nette\Application\Application $application
+ * @property App\Model\UserManager $authorizator
  * @property Nette\Caching\Storages\FileStorage $cacheStorage
  * @property Nette\DI\Container $container
  * @property Nette\Http\Request $httpRequest
@@ -33,9 +34,9 @@ class SystemContainer extends Nette\DI\Container
 				'nette.presenterFactory',
 				'nette.mailer',
 				'nette.templateFactory',
-				'database.default',
-				'database.default.context',
-				'22_App_Model_UserManager',
+				'nette.database.default',
+				'nette.database.default.context',
+				'authorizator',
 				'container',
 			),
 			'nette\\bridges\\framework\\netteaccessor' => array('nette'),
@@ -62,10 +63,10 @@ class SystemContainer extends Nette\DI\Container
 			'nette\\bridges\\applicationlatte\\ilattefactory' => array('nette.latteFactory'),
 			'nette\\application\\ui\\itemplatefactory' => array('nette.templateFactory'),
 			'nette\\bridges\\applicationlatte\\templatefactory' => array('nette.templateFactory'),
-			'nette\\database\\connection' => array('database.default'),
-			'nette\\database\\context' => array('database.default.context'),
-			'nette\\security\\iauthenticator' => array('22_App_Model_UserManager'),
-			'app\\model\\usermanager' => array('22_App_Model_UserManager'),
+			'nette\\database\\connection' => array('nette.database.default'),
+			'nette\\database\\context' => array('nette.database.default.context'),
+			'nette\\security\\iauthenticator' => array('authorizator'),
+			'app\\model\\usermanager' => array('authorizator'),
 			'app\\routerfactory' => array('23_App_RouterFactory'),
 			'nette\\di\\container' => array('container'),
 		),
@@ -88,16 +89,6 @@ class SystemContainer extends Nette\DI\Container
 			),
 			'tempDir' => 'C:\\Users\\Matus\\Documents\\GitHub\\MK-TEAM\\sandbox\\app/../temp',
 		));
-	}
-
-
-	/**
-	 * @return App\Model\UserManager
-	 */
-	public function createService__22_App_Model_UserManager()
-	{
-		$service = new App\Model\UserManager($this->getService('database.default.context'));
-		return $service;
 	}
 
 
@@ -126,6 +117,16 @@ class SystemContainer extends Nette\DI\Container
 
 
 	/**
+	 * @return App\Model\UserManager
+	 */
+	public function createServiceAuthorizator()
+	{
+		$service = new App\Model\UserManager($this->getService('nette.database.default.context'));
+		return $service;
+	}
+
+
+	/**
 	 * @return Nette\Caching\Storages\FileStorage
 	 */
 	public function createServiceCacheStorage()
@@ -141,28 +142,6 @@ class SystemContainer extends Nette\DI\Container
 	public function createServiceContainer()
 	{
 		return $this;
-	}
-
-
-	/**
-	 * @return Nette\Database\Connection
-	 */
-	public function createServiceDatabase__default()
-	{
-		$service = new Nette\Database\Connection('mysql:host=127.0.0.1;dbname=test', NULL, NULL, array('lazy' => TRUE));
-		Tracy\Debugger::getBlueScreen()->addPanel('Nette\\Bridges\\DatabaseTracy\\ConnectionPanel::renderException');
-		Nette\Database\Helpers::createDebugPanel($service, TRUE, 'default');
-		return $service;
-	}
-
-
-	/**
-	 * @return Nette\Database\Context
-	 */
-	public function createServiceDatabase__default__context()
-	{
-		$service = new Nette\Database\Context($this->getService('database.default'), new Nette\Database\Reflection\DiscoveredReflection($this->getService('database.default'), $this->getService('cacheStorage')), $this->getService('cacheStorage'));
-		return $service;
 	}
 
 
@@ -216,6 +195,28 @@ class SystemContainer extends Nette\DI\Container
 	public function createServiceNette__cacheJournal()
 	{
 		$service = new Nette\Caching\Storages\FileJournal('C:\\Users\\Matus\\Documents\\GitHub\\MK-TEAM\\sandbox\\app/../temp');
+		return $service;
+	}
+
+
+	/**
+	 * @return Nette\Database\Connection
+	 */
+	public function createServiceNette__database__default()
+	{
+		$service = new Nette\Database\Connection('mysql:host=localhost;dbname=dspv', 'root', NULL, NULL);
+		Tracy\Debugger::getBlueScreen()->addPanel('Nette\\Bridges\\DatabaseTracy\\ConnectionPanel::renderException');
+		Nette\Database\Helpers::createDebugPanel($service, TRUE, 'default');
+		return $service;
+	}
+
+
+	/**
+	 * @return Nette\Database\Context
+	 */
+	public function createServiceNette__database__default__context()
+	{
+		$service = new Nette\Database\Context($this->getService('nette.database.default'), new Nette\Database\Reflection\DiscoveredReflection($this->getService('nette.database.default'), $this->getService('cacheStorage')), $this->getService('cacheStorage'));
 		return $service;
 	}
 
@@ -358,7 +359,7 @@ class SystemContainer extends Nette\DI\Container
 	 */
 	public function createServiceUser()
 	{
-		$service = new Nette\Security\User($this->getService('nette.userStorage'), $this->getService('22_App_Model_UserManager'));
+		$service = new Nette\Security\User($this->getService('nette.userStorage'), $this->getService('authorizator'));
 		Tracy\Debugger::getBar()->addPanel(new Nette\Bridges\SecurityTracy\UserPanel($service));
 		return $service;
 	}
