@@ -28,14 +28,7 @@ class AuthPresenter extends BasePresenter {
 			}
 		}
 	}
-    }
-    
-    public function actionLogout(){
-	if($this->getUser()->isLoggedIn()){
-	    $this->getUser()->logout();
-	}
-	$this->redirect('Auth:default');
-    }
+
 
 	protected function createComponentNewLoginForm() {
 		$form = new Form;
@@ -48,17 +41,10 @@ class AuthPresenter extends BasePresenter {
 		$form->addSubmit('login', 'Prihlásiť');
 		$form->onSuccess[] = $this->newLoginFormSubmitted;
 
-		$renderer = $form->getRenderer();
-		$renderer->wrappers['controls']['container'] = 'div class=form-horizontal';
-		$renderer->wrappers['pair']['container'] = 'div class=form-group';
-		$renderer->wrappers['label']['container'] = 'div class="col-sm-4 control-label text-right"';
-		$renderer->wrappers['control']['container'] = 'div class=col-sm-8';
-		$renderer->wrappers['control']['.text'] = 'form-control';
-		$renderer->wrappers['control']['.password'] = 'form-control';
-		$renderer->wrappers['control']['.submit'] = 'btn btn-primary';
+		$this->setFormRenderer($form->getRenderer());
 		
 		return $form;
-  }
+	}
 
 	public function newLoginFormSubmitted($form, $values) {
 		try {
@@ -68,4 +54,41 @@ class AuthPresenter extends BasePresenter {
 			$this->flashMessage($e->getMessage());
 		}
 	}
+	
+	public function createComponentNewRegisterUser(){
+		$form = new Form;
+		$form->addText('name', 'Meno:')
+						->setRequired('Prosim zadajte Vaše celé meno')
+						->addRule(Form::MIN_LENGTH, 'Vaše meno je príliš krátke', 5)
+						->setAttribute('placeholder', 'Meno Priezvisko');
+		$form->addText('email', 'Email:')
+						->setDefaultValue('@')
+						->addRule(Form::EMAIL, 'Zle zadaný email');
+		$form->addPassword('password', 'Heslo:')
+						->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znaky', 6);
+		$form->addPassword('password2', 'Heslo znova:')
+						->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znaky', 6)
+						->addRule(Form::EQUAL, 'Hesla sa nezhodujú', $form['password']);
+		$form->addSubmit('register', 'Zaregistrovať');
+		$form->onSuccess[] = $this->newRegisterUserSubmitted;
+
+		$this->setFormRenderer($form->getRenderer());
+		
+		return $form;
+	}
+	
+	public function newRegisterUserSubmitted($form, $values) {
+		
+	}
+	
+	private function setFormRenderer($renderer) {
+		$renderer->wrappers['controls']['container'] = 'div class=form-horizontal';
+		$renderer->wrappers['pair']['container'] = 'div class=form-group';
+		$renderer->wrappers['label']['container'] = 'div class="col-sm-4 control-label text-right"';
+		$renderer->wrappers['control']['container'] = 'div class=col-sm-8';
+		$renderer->wrappers['control']['.text'] = 'form-control';
+		$renderer->wrappers['control']['.password'] = 'form-control';
+		$renderer->wrappers['control']['.submit'] = 'btn btn-primary';
+	}
+
 }
