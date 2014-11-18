@@ -2,13 +2,13 @@
 // source: /Applications/MAMP/htdocs/TIS/sandbox/app/templates/Homepage/default.latte
 
 // prolog Latte\Macros\CoreMacros
-list($_b, $_g, $_l) = $template->initialize('4426133790', 'html')
+list($_b, $_g, $_l) = $template->initialize('1926244191', 'html')
 ;
 // prolog Latte\Macros\BlockMacros
 //
 // block content
 //
-if (!function_exists($_b->blocks['content'][] = '_lb773ae44657_content')) { function _lb773ae44657_content($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+if (!function_exists($_b->blocks['content'][] = '_lba15cebdf99_content')) { function _lba15cebdf99_content($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
 ;Nette\Bridges\FormsLatte\FormMacros::renderFormBegin($form = $_form = $_control["newLoginForm"], array()) ?>
 
     <div class="row">
@@ -17,17 +17,18 @@ if (!function_exists($_b->blocks['content'][] = '_lb773ae44657_content')) { func
                 <div class="panel-heading">
                     <h3 class="panel-title">Prihlásenie</h3>
                 </div>
-<?php $iterations = 0; foreach ($form->controls as $name => $field) { ?>                <div class="panel-body">
-                    <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-4 control-label"><?php echo Latte\Runtime\Filters::escapeHtml($field->getLabelPrototype()->class('col-sm-4 control-label'), ENT_NOQUOTES) ?></label>
+                <div class="panel-body">
+<?php $iterations = 0; foreach ($form->controls as $name => $field) { ?>                    <div class="form-group">
+                        <?php echo Latte\Runtime\Filters::escapeHtml($field->label, ENT_NOQUOTES) ?>
+
                         <div class="col-sm-8">
                             <?php echo Latte\Runtime\Filters::escapeHtml($field->control, ENT_NOQUOTES) ?>
 
                             <!--<input type="email" class="form-control" id="inputEmail3" placeholder="Email">-->
                         </div>
                     </div>
-                </div>
 <?php $iterations++; } ?>
+                </div>
             </div>
         </div>
     </div>
@@ -40,7 +41,7 @@ if (!function_exists($_b->blocks['content'][] = '_lb773ae44657_content')) { func
 //
 // block scripts
 //
-if (!function_exists($_b->blocks['scripts'][] = '_lbf305208dc2_scripts')) { function _lbf305208dc2_scripts($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+if (!function_exists($_b->blocks['scripts'][] = '_lb41d2ece061_scripts')) { function _lb41d2ece061_scripts($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
 ;Latte\Macros\BlockMacros::callBlockParent($_b, 'scripts', get_defined_vars()) ?>
 
 <?php
@@ -49,7 +50,7 @@ if (!function_exists($_b->blocks['scripts'][] = '_lbf305208dc2_scripts')) { func
 //
 // block head
 //
-if (!function_exists($_b->blocks['head'][] = '_lb87d5fb862b_head')) { function _lb87d5fb862b_head($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+if (!function_exists($_b->blocks['head'][] = '_lbbad15f0979_head')) { function _lbbad15f0979_head($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
 ;
 }}
 
