@@ -11,7 +11,6 @@ use Nette,
  */
 class HomepagePresenter extends BasePresenter {
 
-    const STUDENT = 'S', TEACHER = 'T';
 
     private $userManager;
 
@@ -23,9 +22,9 @@ class HomepagePresenter extends BasePresenter {
     public function actionDefault() {
 	$user = $this->getUser();
 	if ($user->isLoggedIn()) {
-	    if ($user->isInRole(self::STUDENT)) {
+	    if ($user->isInRole(Model\UserManager::STUDENT)) {
 		$this->redirect('Student:default');
-	    } else if ($user->isInRole(self::TEACHER)) {
+	    } else if ($user->isInRole(Model\UserManager::TEACHER)) {
 		$this->redirect('Teacher:default');
 	    }
 	}
