@@ -50,7 +50,7 @@ class AuthPresenter extends BasePresenter {
 		$renderer->wrappers['control']['.submit'] = 'btn btn-primary';
 		
 		return $form;
-	}
+  }
 
 	public function newLoginFormSubmitted($form, $values) {
 		try {
