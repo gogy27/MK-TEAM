@@ -69,6 +69,8 @@ class AuthPresenter extends BasePresenter {
 						->addRule(Form::EMAIL, 'Zle zadaný email');
 		$type = array(Model\UserManager::STUDENT => 'Učiteľ', Model\UserManager::TEACHER => 'Žiak',);
 		$form->addRadioList('type', 'Som:', $type);
+		$form['type']->getItemLabelPrototype()->addAttributes(array('class' => 'radio'));
+		$form['type']->getSeparatorPrototype()->setName(NULL);
      
 		$form->addPassword('password', 'Heslo:')
 						->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znaky', 6);
@@ -79,6 +81,7 @@ class AuthPresenter extends BasePresenter {
 		$form->onSuccess[] = $this->newRegisterUserSubmitted;
 
 		$this->setFormRenderer($form->getRenderer());
+		
 		return $form;
 	}
 	
