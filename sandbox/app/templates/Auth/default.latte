@@ -1,32 +1,20 @@
 {* This is the welcome page, you can delete it *}
 
 {block content}
-{form newLoginForm}
-	<div class="row">
-		<div class="col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
-			<div class="panel panel-primary">
-				<div class="panel-heading text-center">
-					<h3 class="panel-title">Prihlásenie</h3>
-				</div>
-				<div class="panel-body">
-					<div class="form-group" n:foreach="$form->controls as $name => $field">
-						{$field->label}
-						{if $field->control->attrs['name'] != 'login'}
-							<div class="col-sm-8">
-								{$field->control}
-								<!--<input type="email" class="form-control" id="inputEmail3" placeholder="Email">-->
-							</div>
-						{else}
-							<div class="col-sm-12 text-center">
-								{$field->control}
-							</div>
-						{/if}
+	<div id="login-form">
+		<div class="row">
+			<div class="col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+				<div class="panel panel-primary">
+					<div class="panel-heading text-center">
+						<h3 class="panel-title">Prihlásenie</h3>
+					</div>
+					<div class="panel-body">
+						{control newLoginForm}
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-{/form}
 
 {/block}
 
