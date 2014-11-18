@@ -59,5 +59,12 @@ class AuthPresenter extends BasePresenter {
 	    $this->flashMessage($e->getMessage());
 	}
     }
+    
+    public function actionLogout(){
+	if($this->getUser()->isLoggedIn()){
+	    $this->getUser()->logout();
+	}
+	$this->redirect('Auth:default');
+    }
 
 }
