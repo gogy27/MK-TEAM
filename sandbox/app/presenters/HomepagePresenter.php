@@ -51,15 +51,11 @@ class HomepagePresenter extends BasePresenter {
 	$values = $form->getValues();
 	$username = $values['name'];
 	$password = $values['password'];
-	$successful = true;
 	try {
 	    $user->login($username, $password);
-	} catch (Nette\Security\AuthenticationException $e) {
-	    $successful = false;
-	    $this->flashMessage($e->getMessage());
-	}
-	if ($successful) {
 	    $this->redirect('Homepage:default');
+	} catch (Nette\Security\AuthenticationException $e) {
+	    $this->flashMessage($e->getMessage());
 	}
     }
 
