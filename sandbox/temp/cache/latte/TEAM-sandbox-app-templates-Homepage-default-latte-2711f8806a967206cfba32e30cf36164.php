@@ -2,21 +2,20 @@
 // source: C:\Users\Matus\Documents\GitHub\MK-TEAM\sandbox\app/templates/Homepage/default.latte
 
 // prolog Latte\Macros\CoreMacros
-list($_b, $_g, $_l) = $template->initialize('7217403581', 'html')
+list($_b, $_g, $_l) = $template->initialize('6872102898', 'html')
 ;
 // prolog Latte\Macros\BlockMacros
 //
 // block content
 //
-if (!function_exists($_b->blocks['content'][] = '_lb043de38d68_content')) { function _lb043de38d68_content($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
-?><span class="glyphicon glyphicon-plus">Adam</span>
-<?php $_l->tmp = $_control->getComponent("newLoginForm"); if ($_l->tmp instanceof Nette\Application\UI\IRenderable) $_l->tmp->redrawControl(NULL, FALSE); $_l->tmp->render() ;
+if (!function_exists($_b->blocks['content'][] = '_lbc283b0d2cb_content')) { function _lbc283b0d2cb_content($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+;$_l->tmp = $_control->getComponent("newLoginForm"); if ($_l->tmp instanceof Nette\Application\UI\IRenderable) $_l->tmp->redrawControl(NULL, FALSE); $_l->tmp->render() ;
 }}
 
 //
 // block scripts
 //
-if (!function_exists($_b->blocks['scripts'][] = '_lb7b0c1c8cac_scripts')) { function _lb7b0c1c8cac_scripts($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+if (!function_exists($_b->blocks['scripts'][] = '_lbec17443a56_scripts')) { function _lbec17443a56_scripts($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
 ;Latte\Macros\BlockMacros::callBlockParent($_b, 'scripts', get_defined_vars()) ?>
 
 <?php
@@ -25,7 +24,7 @@ if (!function_exists($_b->blocks['scripts'][] = '_lb7b0c1c8cac_scripts')) { func
 //
 // block head
 //
-if (!function_exists($_b->blocks['head'][] = '_lb1ee6b95ec5_head')) { function _lb1ee6b95ec5_head($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
+if (!function_exists($_b->blocks['head'][] = '_lba6e2b482e7_head')) { function _lba6e2b482e7_head($_b, $_args) { foreach ($_args as $__k => $__v) $$__k = $__v
 ;
 }}
 
