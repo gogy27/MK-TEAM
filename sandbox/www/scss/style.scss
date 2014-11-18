@@ -15,17 +15,15 @@ html, body, .container {
     display: table;
     vertical-align: middle;
 }
-.login-form {
+#login-form {
     display: table-cell;
     vertical-align: middle;
+		width: 100%;
 		.panel {
 			background-color: #fbfbfb;
 			border: 1px solid #AAA;
 			border-bottom: 1px solid #888;
 			border-radius: 3px;
 			box-shadow: 0px 2px 2px #AAA;
-		}
-		.btn {
-			margin-top: 20px;
 		}
 }
