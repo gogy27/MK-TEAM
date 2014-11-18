@@ -1,6 +1,6 @@
 <?php
-// source: C:\Users\Matus\Documents\GitHub\MK-TEAM\sandbox\app/config/config.neon 
-// source: C:\Users\Matus\Documents\GitHub\MK-TEAM\sandbox\app/config/config.local.neon 
+// source: /Applications/MAMP/htdocs/TIS/sandbox/app/config/config.neon 
+// source: /Applications/MAMP/htdocs/TIS/sandbox/app/config/config.local.neon 
 
 /**
  * @property Nette\Application\Application $application
@@ -76,8 +76,8 @@ class SystemContainer extends Nette\DI\Container
 	public function __construct()
 	{
 		parent::__construct(array(
-			'appDir' => 'C:\\Users\\Matus\\Documents\\GitHub\\MK-TEAM\\sandbox\\app',
-			'wwwDir' => 'C:\\Users\\Matus\\Documents\\GitHub\\MK-TEAM\\sandbox\\www',
+			'appDir' => '/Applications/MAMP/htdocs/TIS/sandbox/app',
+			'wwwDir' => '/Applications/MAMP/htdocs/TIS/sandbox/www',
 			'debugMode' => TRUE,
 			'productionMode' => FALSE,
 			'environment' => 'development',
@@ -87,7 +87,7 @@ class SystemContainer extends Nette\DI\Container
 				'parent' => 'Nette\\DI\\Container',
 				'accessors' => TRUE,
 			),
-			'tempDir' => 'C:\\Users\\Matus\\Documents\\GitHub\\MK-TEAM\\sandbox\\app/../temp',
+			'tempDir' => '/Applications/MAMP/htdocs/TIS/sandbox/app/../temp',
 		));
 	}
 
@@ -131,7 +131,7 @@ class SystemContainer extends Nette\DI\Container
 	 */
 	public function createServiceCacheStorage()
 	{
-		$service = new Nette\Caching\Storages\FileStorage('C:\\Users\\Matus\\Documents\\GitHub\\MK-TEAM\\sandbox\\app/../temp/cache', $this->getService('nette.cacheJournal'));
+		$service = new Nette\Caching\Storages\FileStorage('/Applications/MAMP/htdocs/TIS/sandbox/app/../temp/cache', $this->getService('nette.cacheJournal'));
 		return $service;
 	}
 
@@ -194,7 +194,7 @@ class SystemContainer extends Nette\DI\Container
 	 */
 	public function createServiceNette__cacheJournal()
 	{
-		$service = new Nette\Caching\Storages\FileJournal('C:\\Users\\Matus\\Documents\\GitHub\\MK-TEAM\\sandbox\\app/../temp');
+		$service = new Nette\Caching\Storages\FileJournal('/Applications/MAMP/htdocs/TIS/sandbox/app/../temp');
 		return $service;
 	}
 
@@ -248,7 +248,7 @@ class SystemContainer extends Nette\DI\Container
 	public function createServiceNette__latte()
 	{
 		$service = new Latte\Engine;
-		$service->setTempDirectory('C:\\Users\\Matus\\Documents\\GitHub\\MK-TEAM\\sandbox\\app/../temp/cache/latte');
+		$service->setTempDirectory('/Applications/MAMP/htdocs/TIS/sandbox/app/../temp/cache/latte');
 		$service->setAutoRefresh(TRUE);
 		$service->setContentType('html');
 		return $service;
@@ -279,7 +279,7 @@ class SystemContainer extends Nette\DI\Container
 	 */
 	public function createServiceNette__presenterFactory()
 	{
-		$service = new Nette\Application\PresenterFactory('C:\\Users\\Matus\\Documents\\GitHub\\MK-TEAM\\sandbox\\app', $this);
+		$service = new Nette\Application\PresenterFactory('/Applications/MAMP/htdocs/TIS/sandbox/app', $this);
 		$service->setMapping(array(
 			'*' => 'App\\*Module\\Presenters\\*Presenter',
 		));
@@ -304,7 +304,7 @@ class SystemContainer extends Nette\DI\Container
 	 */
 	public function createServiceNette__templateCacheStorage()
 	{
-		$service = new Nette\Caching\Storages\PhpFileStorage('C:\\Users\\Matus\\Documents\\GitHub\\MK-TEAM\\sandbox\\app/../temp/cache', $this->getService('nette.cacheJournal'));
+		$service = new Nette\Caching\Storages\PhpFileStorage('/Applications/MAMP/htdocs/TIS/sandbox/app/../temp/cache', $this->getService('nette.cacheJournal'));
 		trigger_error('Service templateCacheStorage is deprecated.', 16384);
 		return $service;
 	}
@@ -397,7 +397,7 @@ final class SystemContainer_Nette_Bridges_ApplicationLatte_ILatteFactoryImpl_net
 	public function create()
 	{
 		$service = new Latte\Engine;
-		$service->setTempDirectory('C:\\Users\\Matus\\Documents\\GitHub\\MK-TEAM\\sandbox\\app/../temp/cache/latte');
+		$service->setTempDirectory('/Applications/MAMP/htdocs/TIS/sandbox/app/../temp/cache/latte');
 		$service->setAutoRefresh(TRUE);
 		$service->setContentType('html');
 		return $service;
