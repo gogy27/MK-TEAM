@@ -1,8 +1,14 @@
 /*ADD "--style compressed" TO COMPILER OPTIONS*/
 @import "bootstrap";
 
+body {
+	background-color: #E6E6E6;
+	
+}
+
 html, body, .container {
     height: 100%;
+		
 }
 
 .container {
@@ -12,4 +18,14 @@ html, body, .container {
 .login-form {
     display: table-cell;
     vertical-align: middle;
+		.panel {
+			background-color: #fbfbfb;
+			border: 1px solid #AAA;
+			border-bottom: 1px solid #888;
+			border-radius: 3px;
+			box-shadow: 0px 2px 2px #AAA;
+		}
+		.btn {
+			margin-top: 20px;
+		}
 }
