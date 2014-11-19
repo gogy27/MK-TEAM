@@ -11,7 +11,7 @@ use Nette,
  */
 class AuthPresenter extends BasePresenter {
 
-	private $userManager, $userRepository;
+	private $userManager, $userRepository, $args;
 
 	protected function startup() {
 		parent::startup();
@@ -75,9 +75,9 @@ class AuthPresenter extends BasePresenter {
 		$form['type']->getSeparatorPrototype()->setName(NULL);
 
 		$form->addPassword('password', 'Heslo:')
-						->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znaky', 6);
+						->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znaky', Model\UserRepository::PASSWORD_MIN_LENGTH);
 		$form->addPassword('passwordVerify', 'Heslo znova:')
-						->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znaky', 6)
+						->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znaky', Model\UserRepository::PASSWORD_MIN_LENGTH)
 						->addRule(Form::EQUAL, 'Hesla sa nezhodujú', $form['password']);
 		$form->addSubmit('register', 'Zaregistrovať');
 		$form->onSuccess[] = $this->newRegisterUserSubmitted;
@@ -114,17 +114,25 @@ class AuthPresenter extends BasePresenter {
 		$form->addSubmit('sendEmail', 'Poslať')
 						->setAttribute('class', 'btn btn-primary');
 		$form->onSuccess[] = $this->sendEmailToResetPasswordFormSubmitted;
+                
+                $this->setFormRenderer($form->getRenderer());
+                
 		return $form;
 	}
 
 	public function sendEmailToResetPasswordFormSubmitted($form, $values) {
+                $user_id = $this->userRepository->getInfoByEmail($values->email)->fetch()[Model\UserRepository::COLUMN_ID];
+                if(is_null($user_id)) {
+                    throw new Exception('Email ' . $values->email . ' does not exists in the database');
+                }
 		$uniq_id = uniqid('', TRUE);
 		$this->userRepository->addResetPasswordHash($values->email, $uniq_id);
-		$mail = new Message;
+                $urlToResetPassword = $this->link('//Auth:resetPassword', ['user_id' => $user_id, 'hash' => $uniq_id]);
+		$mail = new Nette\Mail\Message;
 		$mail->setFrom('Jozko Mrkvicka <jozko-mrkvicka@gmail.com>')
 						->addTo($values->email)
 						->setSubject('Zmena hesla')
-						->setHTMLBody('Dobry den,<br/><br/>Poziadali ste o zmenu hesla. Zmenu hesla prevediete na nasledujúcom formulári: <a href="' + $uniq_id + '">' + $uniq_id + '</a><br/>Ak ste o zmenu neziadali, tento email ignorujte.');
+						->setHTMLBody('Dobry den,<br/><br/>Poziadali ste o zmenu hesla. Zmenu hesla prevediete na nasledujucom formulari: <a href="' . $urlToResetPassword . '">' . $urlToResetPassword . '</a><br/>Ak ste o zmenu neziadali, tento email ignorujte.');
 		$mailer = new Nette\Mail\SmtpMailer(array(
 				'host' => 'smtp.gmail.com',
 				'username' => 'prevodyjednotiek@gmail.com',
@@ -134,6 +142,32 @@ class AuthPresenter extends BasePresenter {
 		$mailer->send($mail);
 	}
 
+        public function actionResetPassword($user_id, $hash) {
+            $this->args = ['user_id' => $user_id, 'hash' => $hash];
+        }
+        
+        protected function createComponentResetPasswordForm() {
+		$form = new Form;
+		$form->addPassword('password', 'Heslo:')
+						->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znaky', Model\UserRepository::PASSWORD_MIN_LENGTH);
+		$form->addPassword('passwordVerify', 'Heslo znova:')
+						->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znaky', Model\UserRepository::PASSWORD_MIN_LENGTH)
+						->addRule(Form::EQUAL, 'Hesla sa nezhodujú', $form['password']);
+                $form->addHidden('user_id', $this->args['user_id']);
+                $form->addHidden('hash', $this->args['hash']);
+		$form->addSubmit('resetPassword', 'Zmeniť heslo');
+		$form->onSuccess[] = $this->resetPasswordFormSubmitted;
+                
+                $this->setFormRenderer($form->getRenderer());
+                
+		return $form;
+	}
+        
+        public function resetPasswordFormSubmitted($form, $values) {
+            $userUpdated = $this->userRepository->resetPassword($values->user_id, $values->hash);
+            $this->redirect('Auth:');
+        }
+        
 	private function setFormRenderer($renderer) {
 		$renderer->wrappers['controls']['container'] = 'div class=form-horizontal';
 		$renderer->wrappers['pair']['container'] = 'div class=form-group';
