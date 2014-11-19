@@ -11,5 +11,9 @@ use Nette,
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter
 {
-
+	protected $user;
+	protected function startup() {
+		parent::startup();
+		$this->user = $this->getUser();
+	}
 }

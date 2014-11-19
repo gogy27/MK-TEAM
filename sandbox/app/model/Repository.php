@@ -1,7 +1,8 @@
 <?php
-/**
- * Performs operations on a database table.
- */
+namespace App\Model;
+
+use Nette;
+
 abstract class Repository extends Nette\Object
 {
   /** @var Nette\Database\Context */

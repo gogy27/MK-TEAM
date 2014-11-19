@@ -17,17 +17,18 @@ class AuthPresenter extends BasePresenter {
 		parent::startup();
 		$this->userManager = $this->context->authorizator;
 		$this->userRepository = $this->context->userRepository;
-	}
 
-	public function actionDefault() {
-		$user = $this->getUser();
-		if ($user->isLoggedIn()) {
-			if ($user->isInRole(Model\UserManager::STUDENT)) {
+		if ($this->user->isLoggedIn()) {
+			if ($this->user->isInRole(Model\UserRepository::STUDENT)) {
 				$this->redirect('Student:default');
-			} else if ($user->isInRole(Model\UserManager::TEACHER)) {
+			} else if ($this->user->isInRole(Model\UserRepository::TEACHER)) {
 				$this->redirect('Teacher:default');
 			}
 		}
+	}
+
+	public function actionDefault() {
+		
 	}
 
 	public function actionRegister() {
@@ -68,7 +69,7 @@ class AuthPresenter extends BasePresenter {
 		$form->addText('email', 'Email:')
 						->setDefaultValue('@')
 						->addRule(Form::EMAIL, 'Zle zadaný email');
-		$type = array(Model\UserManager::STUDENT => 'Učiteľ', Model\UserManager::TEACHER => 'Žiak',);
+		$type = array(Model\UserRepository::STUDENT => 'Učiteľ', Model\UserRepository::TEACHER => 'Žiak',);
 		$form->addRadioList('type', 'Som:', $type);
 		$form['type']->getItemLabelPrototype()->addAttributes(array('class' => 'radio'));
 		$form['type']->getSeparatorPrototype()->setName(NULL);
@@ -87,11 +88,10 @@ class AuthPresenter extends BasePresenter {
 	}
 
 	public function newRegisterUserSubmitted($form, $values) {
-		if ($this->userRepository->checkEmailAvailability($values->email)) {
+		if (!$this->userRepository->checkEmailAvailability($values->email)) {
 			$this->flashMessage("Ospravedlňujeme sa, ale Vami zadaná e-mailová adresa sa už v našej databáze nachádza. Prosím zvoľte inú.", 'error');
 		} else {
-			unset($values->passwordVerify);
-			$this->users->register($values);
+			$this->userRepository->register($values);
 			$this->flashMessage("Ďakujeme Vám za Vašu registráciu. Teraz sa môžete prihlásiť!", 'success');
 			$this->redirect('Auth:');
 		}
