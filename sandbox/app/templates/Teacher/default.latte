@@ -1,4 +1,15 @@
 {block content}
-
+    <div id="group_table">
+        <table>
+            <tr>
+                <td>Názov skupiny</td>
+                <td>Dátum vytvorenia</td>
+            </tr>
+            {foreach $groups as $group}
+                <td><a n:href="Teacher:ShowStudentsInGroup $group->id_group}">{$group->str_group_name}</td>
+                <td>{$group->dt_created|date:'F j, Y'}</td>
+            {/foreach}
+        </table>
+    </div>
 
 {/block}

@@ -12,5 +12,13 @@ class TeacherPresenter {
 			$this->redirect('Auth:');
 		}
 	}
+        
+        public function actionDefault (){
+            
+        }
+        
+        public function actionShowStudentsInGroup($group_id){
+            
+        }
 
 }
