@@ -26,7 +26,7 @@ class UserRepository extends Repository {
 	public function getInfo($id) {
 		return $this->find($id);
 	}
-        
+
         public function getInfoByEmail($email) {
 		return $this->findBy([self::COLUMN_EMAIL => $email]);
 	}
@@ -37,10 +37,10 @@ class UserRepository extends Repository {
 
 	public function register($data) {
 		$this->getTable()->insert(array(self::COLUMN_NAME => $data->name,
-																		self::COLUMN_EMAIL => $data->email,
-																		self::COLUMN_PASSWORD => Passwords::hash($data->password),
-																		self::COLUMN_ROLE => ($data->type == self::STUDENT) ? self::TEACHER : self::STUDENT,
-																		self::COLUMN_REG_TIME => date("Y-m-d H:i:s")));
+		    self::COLUMN_EMAIL => $data->email,
+		    self::COLUMN_PASSWORD => Passwords::hash($data->password),
+		    self::COLUMN_ROLE => ($data->type == self::STUDENT) ? self::TEACHER : self::STUDENT,
+		    self::COLUMN_REG_TIME => date("Y-m-d H:i:s")));
 	}
 
 	public function checkEmailAvailability($email) {
@@ -50,7 +50,7 @@ class UserRepository extends Repository {
 	public function addResetPasswordHash($email, $hash) {
 		return $this->database->table(self::TABLE_NAME)->where(self::COLUMN_EMAIL, $email)->update([self::COLUMN_PASSWORD_HASH => $hash]);
 	}
-        
+
         public function resetPassword($user_id, $hash) {
             $toUpdate = [
                 self::COLUMN_PASSWORD_HASH => NULL,

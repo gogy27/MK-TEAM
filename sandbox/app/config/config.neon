@@ -30,5 +30,6 @@ services:
 	
 	authorizator: Authenticator
 	userRepository: App\Model\UserRepository
+	classRepository: App\Model\ClassRepository
 	- App\RouterFactory
 	router: @App\RouterFactory::createRouter
