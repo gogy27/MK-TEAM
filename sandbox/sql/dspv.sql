@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Hostiteľ: localhost
--- Vygenerované: Út 18.Nov 2014, 19:42
+-- Vygenerované: Po 24.Nov 2014, 23:27
 -- Verzia serveru: 5.6.12-log
 -- Verzia PHP: 5.4.12
 
@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS `class` (
   `str_group_name` varchar(45) DEFAULT NULL COMMENT 'názov skupiny',
   `id_user` int(11) DEFAULT NULL COMMENT 'používateľ, ktorý vytvoril skupinu',
   `dt_created` datetime DEFAULT NULL COMMENT 'Čas vytvorenia skupiny',
+  `str_group_description` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_group`),
   KEY `FK_USER_idx` (`id_user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -113,14 +114,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `dt_login` datetime DEFAULT NULL COMMENT 'Čas posledného loginu',
   PRIMARY KEY (`id_user`),
   KEY `FK_GROUP_idx` (`id_group`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
---
--- Sťahujem dáta pre tabuľku `user`
---
-
-INSERT INTO `user` (`id_user`, `str_name`, `str_mail`, `str_user_password`, `str_pass_hash`, `id_group`, `fl_user_type`, `dt_registration`, `dt_login`) VALUES
-(1, 'user', NULL, '$2y$10$xsPYLxN6wpqsohTGoweBH.74hEZea8zmk0LpHkFJ5fzA.c5eg620.', NULL, NULL, 'S', NULL, NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Obmedzenie pre exportované tabuľky
