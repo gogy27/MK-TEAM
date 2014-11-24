@@ -16,8 +16,12 @@
     </head>
 
     <body>
-        <div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
-
+	<header>
+	    {if $user->isLoggedIn()}
+		<a n:href="Auth:Logout">Odhlásiť sa</a>
+	    {/if}
+	</header>
+	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
         <div class="container">
             {include content}
         </div>

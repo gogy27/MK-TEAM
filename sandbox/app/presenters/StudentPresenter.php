@@ -18,5 +18,8 @@ class StudentPresenter extends BasePresenter {
 			$this->redirect('Auth:');
 		}
 	}
+	
+	public function actionDefault(){
+	}
 
 }

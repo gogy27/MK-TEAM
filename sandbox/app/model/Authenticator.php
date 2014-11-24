@@ -32,6 +32,8 @@ class Authenticator extends Nette\Object implements Nette\Security\IAuthenticato
 			));
 		}
 
+		$this->database->query("UPDATE " . App\Model\UserRepository::TABLE_NAME . " SET " . App\Model\UserRepository::COLUMN_LOG_TIME . "= '" 
+			. date('Y-m-d H:i:s', time()) . "' WHERE " . App\Model\UserRepository::COLUMN_EMAIL . " = '" . $email . "';");
 		$arr = $row->toArray();
 		unset($arr[App\Model\UserRepository::COLUMN_PASSWORD]);
 		return new Nette\Security\Identity($row[App\Model\UserRepository::COLUMN_ID], $row[App\Model\UserRepository::COLUMN_ROLE], $arr);
