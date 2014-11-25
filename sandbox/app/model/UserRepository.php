@@ -52,10 +52,10 @@ class UserRepository extends Repository {
 		return $this->database->table(self::TABLE_NAME)->where(self::COLUMN_EMAIL, $email)->update([self::COLUMN_PASSWORD_HASH => $hash]);
 	}
 
-        public function resetPassword($user_id, $hash) {
+        public function resetPassword($user_id, $hash, $password) {
             $toUpdate = [
                 self::COLUMN_PASSWORD_HASH => NULL,
-                self::COLUMN_PASSWORD => Passwords::hash($user_id),
+                self::COLUMN_PASSWORD => Passwords::hash($password),
             ];
             $user = $this->find($user_id);
             if ($user[self::COLUMN_PASSWORD_HASH] != $hash) {

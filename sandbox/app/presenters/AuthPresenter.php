@@ -208,7 +208,7 @@ class AuthPresenter extends BasePresenter {
     }
 
     public function resetPasswordFormSubmitted($form, $values) {
-	$userUpdated = $this->userRepository->resetPassword($values->user_id, $values->hash);
+	$userUpdated = $this->userRepository->resetPassword($values->user_id, $values->hash, $values->password);
 	$this->redirect('Auth:');
     }
 
