@@ -79,7 +79,7 @@ class AuthPresenter extends BasePresenter {
 	    $this->getUser()->login($values->name, $values->password);
 	    $this->redirect('Auth:default');
 	} catch (Nette\Security\AuthenticationException $e) {
-	    $this->flashMessage($e->getMessage());
+	    $this->flashMessage($e->getMessage(), self::FLASH_MESSAGE_DANGER);
 	}
     }
 
@@ -94,7 +94,8 @@ class AuthPresenter extends BasePresenter {
 		->setDefaultValue('@')
 		->addRule(Form::EMAIL, 'Zle zadaný email');
 	$type = array(Model\UserRepository::STUDENT => 'Učiteľ', Model\UserRepository::TEACHER => 'Žiak',);
-	$form->addRadioList('type', 'Som:', $type);
+	$form->addRadioList('type', 'Som:', $type)
+                ->setRequired('Musíte zadať, či ste študent alebo učiteľ');
 	$form['type']->getItemLabelPrototype()->addAttributes(array('class' => 'radio'));
 	$form['type']->getSeparatorPrototype()->setName(NULL);
 
@@ -113,10 +114,10 @@ class AuthPresenter extends BasePresenter {
 
     public function newRegisterUserSubmitted($form, $values) {
 	if (!$this->userRepository->checkEmailAvailability($values->email)) {
-	    $this->flashMessage("Ospravedlňujeme sa, ale Vami zadaná e-mailová adresa sa už v našej databáze nachádza. Prosím zvoľte inú.", 'error');
+	    $this->flashMessage("Ospravedlňujeme sa, ale Vami zadaná e-mailová adresa sa už v našej databáze nachádza. Prosím zvoľte inú.", self::FLASH_MESSAGE_DANGER);
 	} else {
 	    $this->userRepository->register($values);
-	    $this->flashMessage("Ďakujeme Vám za Vašu registráciu. Teraz sa môžete prihlásiť!", 'success');
+	    $this->flashMessage("Ďakujeme Vám za Vašu registráciu. Teraz sa môžete prihlásiť!", self::FLASH_MESSAGE_SUCCESS);
 	    $this->redirect('Auth:');
 	}
     }
@@ -141,10 +142,10 @@ class AuthPresenter extends BasePresenter {
     public function newChangePasswordSubmitted($form, $values){
 	$password = $this->userRepository->getPassword($this->user->getId());
 	if(!Nette\Security\Passwords::verify($values->old, $password[Model\UserRepository::COLUMN_PASSWORD])){
-	    $this->flashMessage('Zle zadané heslo', 'error');
+	    $this->flashMessage('Zle zadané heslo', self::FLASH_MESSAGE_DANGER);
 	}else{
 	    $this->userRepository->changePassword($this->user->getId(), Nette\Security\Passwords::hash($values->new));
-	    $this->flashMessage('Heslo úspešne zmenené', 'success');
+	    $this->flashMessage('Heslo úspešne zmenené', self::FLASH_MESSAGE_SUCCESS);
 	    $this->redirect('Auth:');
 	}
     }
@@ -171,7 +172,8 @@ class AuthPresenter extends BasePresenter {
     public function sendEmailToResetPasswordFormSubmitted($form, $values) {
 	$user_id = $this->userRepository->getInfoByEmail($values->email)->fetch()[Model\UserRepository::COLUMN_ID];
 	if (is_null($user_id)) {
-	    throw new Exception('Email ' . $values->email . ' does not exists in the database');
+            $this->flashMessage('Zadaný email je neplatný', self::FLASH_MESSAGE_DANGER);
+	    //throw new Exception('Email ' . $values->email . ' does not exists in the database');
 	}
 	$uniq_id = uniqid('', TRUE);
 	$this->userRepository->addResetPasswordHash($values->email, $uniq_id);
@@ -209,13 +211,14 @@ class AuthPresenter extends BasePresenter {
 
     public function resetPasswordFormSubmitted($form, $values) {
 	$userUpdated = $this->userRepository->resetPassword($values->user_id, $values->hash, $values->password);
+        $this->flashMessage('Heslo bolo zmenené, môžete sa prihlásiť', self::FLASH_MESSAGE_SUCCESS);
 	$this->redirect('Auth:');
     }
 
     private function setFormRenderer($renderer) {
 	$renderer->wrappers['controls']['container'] = 'div class=form-horizontal';
 	$renderer->wrappers['pair']['container'] = 'div class=form-group';
-	$renderer->wrappers['label']['container'] = 'div class="col-sm-4 control-label text-right"';
+	$renderer->wrappers['label']['container'] = 'div class="col-sm-4 control-label"';
 	$renderer->wrappers['control']['container'] = 'div class=col-sm-8';
 	$renderer->wrappers['control']['.text'] = 'form-control';
 	$renderer->wrappers['control']['.password'] = 'form-control';

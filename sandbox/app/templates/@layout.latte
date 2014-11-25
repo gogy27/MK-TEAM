@@ -16,18 +16,46 @@
     </head>
 
     <body>
-	<header>
-	    {if $user->isLoggedIn()}
-		<a n:href="Auth:Logout">Odhlásiť sa</a>
-	    {/if}
-	</header>
-	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
-        <div class="container">
+        
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#"><span class="hidden-xs">Didaktický softvér pre výuku prevodov jednotiek</span><span class="visible-xs">DSPV</span></a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        {if $user->isLoggedIn()}
+                            <li><a n:href="Auth:Logout">Odhlásiť sa</a></li>
+                        {/if}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container first-content">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 text-center">
+                    <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">{$flash->message}</div>
+                </div>
+            </div>
             {include content}
         </div>
-
-        {block scripts}
+        
+        <footer class="footer text-center">
+            <hr class="style-two"/>
+            <div class="container">Vytvoril Matúš Kalužák!</div>
+        </footer>
+        
+        {block
+ scripts}
         <script src="{$basePath}/js/jquery.js"></script>
+        <script src="{$basePath}/js/bootstrap.js"></script>
         <script src="{$basePath}/js/netteForms.js"></script>
         <script src="{$basePath}/js/main.js"></script>
         {/block}

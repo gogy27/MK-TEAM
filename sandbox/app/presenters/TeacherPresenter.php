@@ -32,13 +32,13 @@ class TeacherPresenter extends BasePresenter {
 	
 	public function actionRemoveUser($student_id){
 	    $this->userRepository->removeUser($student_id);
-	    $this->flashMessage('Úspešne ste zmazali študenta', 'info');
+	    $this->flashMessage('Úspešne ste zmazali študenta', self::FLASH_MESSAGE_INFO);
 	    $this->redirect('Teacher:');
 	}
 	
 	public function actionRemoveGroup($group_id){
 	    $this->classRepository->removeGroup($group_id);
-	    $this->flashMessage('Úspešne ste vymazali skupinu', 'info');
+	    $this->flashMessage('Úspešne ste vymazali skupinu', self::FLASH_MESSAGE_INFO);
 	    $this->redirect('Teacher:');
 	}
 	
@@ -68,14 +68,14 @@ class TeacherPresenter extends BasePresenter {
     
     public function newGroupSubmitted($form, $values){
 	$this->classRepository->addGroup($this->user->getId(), $values->name, $values->password, $values->description);
-	$this->flashMessage("Úspešne ste vytvorili ste novú skupinu", 'success');
+	$this->flashMessage("Úspešne ste vytvorili ste novú skupinu", self::FLASH_MESSAGE_SUCCESS);
 	$this->redirect('Auth:');
     }
 
     private function setFormRenderer($renderer) {
 	$renderer->wrappers['controls']['container'] = 'div class=form-horizontal';
 	$renderer->wrappers['pair']['container'] = 'div class=form-group';
-	$renderer->wrappers['label']['container'] = 'div class="col-sm-4 control-label text-right"';
+	$renderer->wrappers['label']['container'] = 'div class="col-sm-4 control-label"';
 	$renderer->wrappers['control']['container'] = 'div class=col-sm-8';
 	$renderer->wrappers['control']['.text'] = 'form-control';
 	$renderer->wrappers['control']['.password'] = 'form-control';
