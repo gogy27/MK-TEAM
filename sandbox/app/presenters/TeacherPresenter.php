@@ -36,6 +36,12 @@ class TeacherPresenter extends BasePresenter {
 	    $this->redirect('Teacher:');
 	}
 	
+	public function actionRemoveGroup($group_id){
+	    $this->classRepository->removeGroup($group_id);
+	    $this->flashMessage('Úspešne ste vymazali skupinu', 'info');
+	    $this->redirect('Teacher:');
+	}
+	
 	public function createComponentNewGroup() {
 	$form = new Form;
 	$form->addText('name', 'Názov skupiny:')

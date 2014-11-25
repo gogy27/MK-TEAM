@@ -29,4 +29,8 @@ class ClassRepository extends Repository {
 		    self::COLUMN_USER_ID => $teacher_id,
 		    self::COLUMN_CREATE_TIME => date("Y-m-d H:i:s")));
     }
+    
+    public function removeGroup($group_id){
+	$this->getTable()->where(array(self::COLUMN_ID => $group_id))->delete();
+    }
 }

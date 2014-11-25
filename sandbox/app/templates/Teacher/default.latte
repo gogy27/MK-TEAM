@@ -4,12 +4,14 @@
 	    <th>Názov skupiny</th>
 	    <th>Dátum vytvorenia</th>
 	    <th>Heslo skupiny</th>
+	    <th>Zmazať skupinu</th>
 	</tr>
 	{foreach $groups as $group}
 	    <tr>
                 <td><a n:href="Teacher:ShowStudentsInGroup $group->id_group">{$group->str_group_name}</a></td>
                 <td>{$group->dt_created|date:'F j, Y'}</td>
 		<td>{$group->str_group_password}</td>
+		<td><a n:href="Teacher:removeGroup $group->id_group"> <i class="glyphicon glyphicon-remove"> </a></td>
 	    </tr>
 	{/foreach}
     </table>
