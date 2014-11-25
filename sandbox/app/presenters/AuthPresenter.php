@@ -19,7 +19,7 @@ class AuthPresenter extends BasePresenter {
 	$this->userRepository = $this->context->userRepository;
 
 	if ($this->user->isLoggedIn()) {
-	    if ($this->getAction() != 'logout') {
+	    if ($this->getAction() != 'logout' && $this->getAction() != 'changepassword') {
 		if ($this->user->isInRole(Model\UserRepository::STUDENT)) {
 		    $this->redirect('Student:default');
 		} else if ($this->user->isInRole(Model\UserRepository::TEACHER)) {
@@ -42,6 +42,20 @@ class AuthPresenter extends BasePresenter {
 	    $this->user->logout();
 	}
 	$this->redirect('Auth:');
+    }
+
+    public function actionSendEmailToResetPassword() {
+	;
+    }
+
+    public function actionChangePassword() {
+	if (!$this->user->isLoggedIn()) {
+	    $this->redirect('Auth:');
+	}
+    }
+
+    public function actionResetPassword($user_id, $hash) {
+	$this->args = ['user_id' => $user_id, 'hash' => $hash];
     }
 
     protected function createComponentNewLoginForm() {
@@ -72,10 +86,11 @@ class AuthPresenter extends BasePresenter {
     public function createComponentNewRegisterUser() {
 	$form = new Form;
 	$form->addText('name', 'Meno:')
-		->setRequired('Prosim zadajte Vaše celé meno')
+		->setRequired('Prosím zadajte Vaše celé meno')
 		->addRule(Form::MIN_LENGTH, 'Vaše meno je príliš krátke', 5)
 		->setAttribute('placeholder', 'Meno Priezvisko');
 	$form->addText('email', 'Email:')
+		->setRequired('Musíte zadať email')
 		->setDefaultValue('@')
 		->addRule(Form::EMAIL, 'Zle zadaný email');
 	$type = array(Model\UserRepository::STUDENT => 'Učiteľ', Model\UserRepository::TEACHER => 'Žiak',);
@@ -106,8 +121,32 @@ class AuthPresenter extends BasePresenter {
 	}
     }
 
-    public function actionSendEmailToResetPassword() {
-	;
+    public function createComponentChangePassword() {
+	$form = new Form;
+	$form->addPassword('old', 'Staré heslo:')
+		->setRequired('Musíte zadať heslo');	
+	$form->addPassword('new', 'Nové heslo:')
+		->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znakov', Model\UserRepository::PASSWORD_MIN_LENGTH);
+	$form->addPassword('newVerify', 'Nové heslo znova:')
+		->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znakov', Model\UserRepository::PASSWORD_MIN_LENGTH)
+		->addRule(Form::EQUAL, 'Heslá sa nezhodujú', $form['new']);
+	$form->addSubmit('change', 'Zmeniť heslo');
+	$form->onSuccess[] = $this->newChangePasswordSubmitted;
+
+	$this->setFormRenderer($form->getRenderer());
+
+	return $form;
+    }
+    
+    public function newChangePasswordSubmitted($form, $values){
+	$password = $this->userRepository->getPassword($this->user->getId());
+	if(!Nette\Security\Passwords::verify($values->old, $password[Model\UserRepository::COLUMN_PASSWORD])){
+	    $this->flashMessage('Zle zadané heslo', 'error');
+	}else{
+	    $this->userRepository->changePassword($this->user->getId(), Nette\Security\Passwords::hash($values->new));
+	    $this->flashMessage('Heslo úspešne zmenené', 'success');
+	    $this->redirect('Auth:');
+	}
     }
 
     public function emailExistsValidator($item, $arg) {
@@ -149,10 +188,6 @@ class AuthPresenter extends BasePresenter {
 	    'secure' => 'ssl',
 	));
 	$mailer->send($mail);
-    }
-
-    public function actionResetPassword($user_id, $hash) {
-	$this->args = ['user_id' => $user_id, 'hash' => $hash];
     }
 
     protected function createComponentResetPasswordForm() {

@@ -71,5 +71,13 @@ class UserRepository extends Repository {
 	public function removeUser($user_id){
 	    $this->database->table(self::TABLE_NAME)->where(array(self::COLUMN_ID => $user_id))->delete();
 	}
+	
+	public function getPassword($user_id){
+	    return $this->database->table(self::TABLE_NAME)->where(array(self::COLUMN_ID => $user_id))->fetch();
+	}
+	
+	public function changePassword($user_id, $new_password){
+	    $this->database->table(self::TABLE_NAME)->where(array(self::COLUMN_ID => $user_id))->update(array(self::COLUMN_PASSWORD => $new_password));
+	}
 
 }
