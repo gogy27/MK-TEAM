@@ -12,6 +12,7 @@ class UserRepository extends Repository {
 	const
 					TABLE_NAME = 'user',
 					COLUMN_ID = 'id_user',
+					COLUMN_ID_GROUP = 'id_group',
 					COLUMN_NAME = 'str_name',
 					COLUMN_EMAIL = 'str_mail',
 					COLUMN_PASSWORD = 'str_user_password',
@@ -62,5 +63,13 @@ class UserRepository extends Repository {
             }
             return $user->update($toUpdate);
         }
+	
+	public function getStudentsByGroup($group_id){
+	    return $this->findBy(array(self::COLUMN_ID_GROUP => $group_id));
+	}
+	
+	public function removeUser($user_id){
+	    $this->database->table(self::TABLE_NAME)->where(array(self::COLUMN_ID => $user_id))->delete();
+	}
 
 }

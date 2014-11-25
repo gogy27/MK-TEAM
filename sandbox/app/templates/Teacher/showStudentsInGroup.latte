@@ -1,0 +1,17 @@
+{block content}
+    <table class = "table table-striped table-responsive">
+	<tr>
+	    <th>Meno žiaka</th>
+	    <th>Posledný login</th>
+	    <th>Zmazať užívateľa</th>
+	</tr>
+	{foreach $students as $student}
+	    <tr>
+                <td>{$student->str_name}</td>
+                <td>{$student->dt_login|date:'F j, Y'}</td>
+		<td><a n:href="Teacher:removeUser $student->id_user"> <i class="glyphicon glyphicon-remove"> </a></td>
+	    </tr>
+	{/foreach}
+    </table>
+    
+{/block}

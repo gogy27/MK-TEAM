@@ -21,7 +21,7 @@ class ClassRepository extends Repository {
     public function getTeacherGroups($teacher_id){
         return $this->findBy(array(self::COLUMN_USER_ID => $teacher_id));
     } 
-    
+      
     public function addGroup($teacher_id, $group_name, $group_key, $description){
 	    $this->getTable()->insert(array(self::COLUMN_NAME => $group_name,
 		    self::COLUMN_PASSWORD => $group_key,

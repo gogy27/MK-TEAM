@@ -8,10 +8,11 @@ use Nette,
 
 class TeacherPresenter extends BasePresenter {
 
-	private $classRepository;
+	private $classRepository, $userRepository;
 	protected function startup() {
 		parent::startup();
 		$this->classRepository = $this->context->classRepository;
+		$this->userRepository = $this->context->userRepository;
 		if ($this->user->isLoggedIn()) {
 			if ($this->user->isInRole(Model\UserRepository::STUDENT)) {
 				$this->redirect('Student:');
@@ -22,12 +23,18 @@ class TeacherPresenter extends BasePresenter {
 	}
         
         public function actionDefault (){
-            
+            $this->template->groups = $this->classRepository->getTeacherGroups($this->user->getId());
         }
-        
+	
         public function actionShowStudentsInGroup($group_id){
-            
+            $this->template->students = $this->userRepository->getStudentsByGroup($group_id);
         }
+	
+	public function actionRemoveUser($student_id){
+	    $this->userRepository->removeUser($student_id);
+	    $this->flashMessage('Úspešne ste zmazali študenta', 'info');
+	    $this->redirect('Teacher:');
+	}
 	
 	public function createComponentNewGroup() {
 	$form = new Form;
@@ -40,10 +47,12 @@ class TeacherPresenter extends BasePresenter {
 		->setAttribute('placeholder', 'Popis')
 		->setAttribute('class', 'form-control');
 	$form->addPassword('password', 'Heslo skupiny:')
-		->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znaky', Model\UserRepository::PASSWORD_MIN_LENGTH);
+		->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znaky', Model\UserRepository::PASSWORD_MIN_LENGTH)
+		->setAttribute('placeholder', 'Heslo');
 	$form->addPassword('passwordVerify', 'Heslo znova:')
 		->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znaky', Model\UserRepository::PASSWORD_MIN_LENGTH)
-		->addRule(Form::EQUAL, 'Hesla sa nezhodujú', $form['password']);
+		->addRule(Form::EQUAL, 'Hesla sa nezhodujú', $form['password'])
+		->setAttribute('placeholder', 'Heslo znovu');
 	$form->addSubmit('createGroup', 'Vytvoriť skupinu');
 	$form->onSuccess[] = $this->newGroupSubmitted;
 

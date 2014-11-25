@@ -1,15 +1,19 @@
 {block content}
-    {*<div id="group_table">
-        <table>
-            <tr>
-                <td>Názov skupiny</td>
-                <td>Dátum vytvorenia</td>
-            </tr>
-            {foreach $groups as $group}
-                <td><a n:href="Teacher:ShowStudentsInGroup $group->id_group}">{$group->str_group_name}</td>
+    <table class = "table table-striped table-responsive">
+	<tr>
+	    <th>Názov skupiny</th>
+	    <th>Dátum vytvorenia</th>
+	    <th>Heslo skupiny</th>
+	</tr>
+	{foreach $groups as $group}
+	    <tr>
+                <td><a n:href="Teacher:ShowStudentsInGroup $group->id_group">{$group->str_group_name}</a></td>
                 <td>{$group->dt_created|date:'F j, Y'}</td>
-            {/foreach}
-        </table>
-    </div>*}
+		<td>{$group->str_group_password}</td>
+	    </tr>
+	{/foreach}
+    </table>
+    
+    {control newGroup}
 
 {/block}
