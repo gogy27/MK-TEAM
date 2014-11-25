@@ -8,41 +8,42 @@ use Nette,
 
 class TeacherPresenter extends BasePresenter {
 
-	private $classRepository, $userRepository;
-	protected function startup() {
-		parent::startup();
-		$this->classRepository = $this->context->classRepository;
-		$this->userRepository = $this->context->userRepository;
-		if ($this->user->isLoggedIn()) {
-			if ($this->user->isInRole(Model\UserRepository::STUDENT)) {
-				$this->redirect('Student:');
-			}
-		} else {
-			$this->redirect('Auth:');
-		}
+    private $classRepository, $userRepository;
+
+    protected function startup() {
+	parent::startup();
+	$this->classRepository = $this->context->classRepository;
+	$this->userRepository = $this->context->userRepository;
+	if ($this->user->isLoggedIn()) {
+	    if ($this->user->isInRole(Model\UserRepository::STUDENT)) {
+		$this->redirect('Student:');
+	    }
+	} else {
+	    $this->redirect('Auth:');
 	}
-        
-        public function actionDefault (){
-            $this->template->groups = $this->classRepository->getTeacherGroups($this->user->getId());
-        }
-	
-        public function actionShowStudentsInGroup($group_id){
-            $this->template->students = $this->userRepository->getStudentsByGroup($group_id);
-        }
-	
-	public function actionRemoveUser($student_id){
-	    $this->userRepository->removeUser($student_id);
-	    $this->flashMessage('Úspešne ste zmazali študenta', self::FLASH_MESSAGE_INFO);
-	    $this->redirect('Teacher:');
-	}
-	
-	public function actionRemoveGroup($group_id){
-	    $this->classRepository->removeGroup($group_id);
-	    $this->flashMessage('Úspešne ste vymazali skupinu', self::FLASH_MESSAGE_INFO);
-	    $this->redirect('Teacher:');
-	}
-	
-	public function createComponentNewGroup() {
+    }
+
+    public function actionDefault() {
+	$this->template->groups = $this->classRepository->getTeacherGroups($this->user->getId());
+    }
+
+    public function actionShowStudentsInGroup($group_id) {
+	$this->template->students = $this->userRepository->getStudentsByGroup($group_id);
+    }
+
+    public function actionRemoveUser($student_id) {
+	$this->userRepository->removeUser($student_id);
+	$this->flashMessage('Úspešne ste zmazali študenta', self::FLASH_MESSAGE_INFO);
+	$this->redirect('Teacher:');
+    }
+
+    public function actionRemoveGroup($group_id) {
+	$this->classRepository->removeGroup($group_id);
+	$this->flashMessage('Úspešne ste vymazali skupinu', self::FLASH_MESSAGE_INFO);
+	$this->redirect('Teacher:');
+    }
+
+    public function createComponentNewGroup() {
 	$form = new Form;
 	$form->addText('name', 'Názov skupiny:')
 		->setRequired('Prosim zadajte názov novej skupiny')
@@ -64,12 +65,16 @@ class TeacherPresenter extends BasePresenter {
 
 	$this->setFormRenderer($form->getRenderer());
 	return $form;
-    }	
-    
-    public function newGroupSubmitted($form, $values){
-	$this->classRepository->addGroup($this->user->getId(), $values->name, $values->password, $values->description);
-	$this->flashMessage("Úspešne ste vytvorili ste novú skupinu", self::FLASH_MESSAGE_SUCCESS);
-	$this->redirect('Auth:');
+    }
+
+    public function newGroupSubmitted($form, $values) {
+	if ($this->classRepository->getGroup($values->name)) {
+	    $this->flashMessage('Názov skupiny už existuje. Zvoľte iný.', self::FLASH_MESSAGE_DANGER);
+	} else {
+	    $this->classRepository->addGroup($this->user->getId(), $values->name, $values->password, $values->description);
+	    $this->flashMessage("Úspešne ste vytvorili ste novú skupinu", self::FLASH_MESSAGE_SUCCESS);
+	    $this->redirect('Auth:');
+	}
     }
 
     private function setFormRenderer($renderer) {
@@ -81,4 +86,5 @@ class TeacherPresenter extends BasePresenter {
 	$renderer->wrappers['control']['.password'] = 'form-control';
 	$renderer->wrappers['control']['.submit'] = 'btn btn-primary';
     }
+
 }

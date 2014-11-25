@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Hostiteľ: localhost
--- Vygenerované: Po 24.Nov 2014, 23:27
+-- Vygenerované: Út 25.Nov 2014, 22:47
 -- Verzia serveru: 5.6.12-log
 -- Verzia PHP: 5.4.12
 
@@ -37,7 +37,14 @@ CREATE TABLE IF NOT EXISTS `class` (
   `str_group_description` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id_group`),
   KEY `FK_USER_idx` (`id_user`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Sťahujem dáta pre tabuľku `class`
+--
+
+INSERT INTO `class` (`id_group`, `str_group_password`, `str_group_name`, `id_user`, `dt_created`, `str_group_description`) VALUES
+(1, '123456', 'Prvá skupina', 1, '2014-11-25 23:46:51', 'Toto je popis prvej skupiny. Je to uplne supa');
 
 -- --------------------------------------------------------
 
@@ -93,8 +100,22 @@ CREATE TABLE IF NOT EXISTS `unit` (
   `nb_category` int(11) DEFAULT NULL COMMENT 'Kategória, do ktorej patrí veličina',
   `str_unit_name` varchar(45) DEFAULT NULL COMMENT 'Značka jednotky',
   `nb_multiple` int(11) DEFAULT NULL COMMENT 'Násobok jednotky, nemusí sa vzťahovať k základnej jednotke!',
+  `nb_level` int(11) DEFAULT NULL COMMENT 'Náročnosť jednotky.',
+  `str_unit_description` varchar(45) DEFAULT NULL COMMENT 'Popis jednotky\n',
   PRIMARY KEY (`id_unit`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+
+--
+-- Sťahujem dáta pre tabuľku `unit`
+--
+
+INSERT INTO `unit` (`id_unit`, `fl_base_unit`, `nb_category`, `str_unit_name`, `nb_multiple`, `nb_level`, `str_unit_description`) VALUES
+(1, 'A', 1, 'J', 0, 1, 'Práca'),
+(2, 'N', 1, 'kJ', 3, 1, 'Práca'),
+(3, 'N', 1, 'MJ', 6, 1, 'Práca'),
+(4, 'N', 1, 'mJ', -3, 1, 'Práca'),
+(5, 'N', 1, 'TJ', 9, 1, 'Práca'),
+(6, 'N', 1, 'nJ', -9, 1, 'Práca');
 
 -- --------------------------------------------------------
 
@@ -114,7 +135,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   `dt_login` datetime DEFAULT NULL COMMENT 'Čas posledného loginu',
   PRIMARY KEY (`id_user`),
   KEY `FK_GROUP_idx` (`id_group`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Sťahujem dáta pre tabuľku `user`
+--
+
+INSERT INTO `user` (`id_user`, `str_name`, `str_mail`, `str_user_password`, `str_pass_hash`, `id_group`, `fl_user_type`, `dt_registration`, `dt_login`) VALUES
+(1, 'Teacher Adam', 'teacher@teacher.teacher', '$2y$10$Owf6ind6aDClPlc95/NKH.Vw.DflTz27PzpswLfsR9v04PtlMXDZa', NULL, NULL, 'T', '2014-11-25 23:45:09', '2014-11-25 23:46:09'),
+(2, 'Žiak Janko', 'student@student.student', '$2y$10$nY9Up/R68ZMXFiTeOdwH6.Ge1VwqG.PNGn5sXzV9lUgtdZ/WGKSBu', NULL, NULL, 'S', '2014-11-25 23:45:42', NULL);
 
 --
 -- Obmedzenie pre exportované tabuľky
