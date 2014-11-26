@@ -23,10 +23,6 @@ class StudentPresenter extends BasePresenter {
 	}
 
 	public function actionDefault() {
-		$tasks = array();
-		for($i = 0; $i < 100; $i++) {
-			$tasks[] = $this->unitConversion->generateConversion($this->user->getId());
-		}
-		$this->template->tasks = $tasks;
+
 	}
 }
