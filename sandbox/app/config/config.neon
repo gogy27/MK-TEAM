@@ -27,9 +27,12 @@ nette:
 
 
 services:
+	database: @Nette\Database\Connection
 	
 	authorizator: Authenticator
 	userRepository: App\Model\UserRepository
 	classRepository: App\Model\ClassRepository
+	unitConversion:
+		class: App\Model\UnitConversion(@database)
 	- App\RouterFactory
 	router: @App\RouterFactory::createRouter
