@@ -12,6 +12,7 @@ class StudentPresenter extends BasePresenter {
 	protected function startup() {
 		parent::startup();
 		$this->unitConversion = $this->context->unitConversion;
+		
 		if ($this->user->isLoggedIn()) {
 			if ($this->user->isInRole(Model\UserRepository::TEACHER)) {
 				$this->redirect('Teacher:');
@@ -22,7 +23,10 @@ class StudentPresenter extends BasePresenter {
 	}
 
 	public function actionDefault() {
-		
+		$tasks = array();
+		for($i = 0; $i < 100; $i++) {
+			$tasks[] = $this->unitConversion->generateConversion($this->user->getId());
+		}
+		$this->template->tasks = $tasks;
 	}
-
 }
