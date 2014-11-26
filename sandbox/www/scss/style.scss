@@ -64,3 +64,20 @@ footer.footer {
         background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
     }
 }
+
+#student-options {
+    & > div[class^='col'],div[class*=' col'] {
+        padding: 15px;
+    }
+}
+a.link-cell {
+    display: block;
+    height: 120px;
+    line-height: 120px;
+    background-color: $alert-info-bg;
+    text-align: center;
+    box-shadow: 0px 2px 2px #AAA;
+    &.link-cell-red {
+        background-color: $alert-danger-bg;
+    }
+}
