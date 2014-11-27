@@ -1,0 +1,22 @@
+{block content}
+
+<?php $form->render('begin') ?>
+<?php $form->render('errors') ?>
+    {foreach $tasks as $task}
+        <div class="form-group">
+            <label class="col-sm-3 control-label">{$task->toReal()} {$task->getUnitName()}<span class="equal-to">=</span></label>
+            <div class="col-sm-9">
+                <span class="nowrap">
+                    <input type="text" class="form-control input-sm base-number-format-input" placeholder="Zákl. tvar"> &times; 10 <sup><input type="text" class="form-control input-sm"></sup><span class="unit-name">{$task->getUnitName()}</span><span class="equal-to">=</span>
+                </span>
+                <span class="nowrap">
+                    <span class="text-right base-number-format"></span> &times; 10 <sup><input type="text" class="form-control input-sm"></sup><span class="equal-to">=</span>
+                </span>
+                <span class="nowrap">
+                    <input type="text" class="form-control input-sm" placeholder="Výsledok"> &times; 10 <sup><input type="text" class="form-control input-sm"></sup>
+                </span>
+            </div>
+        </div>
+    {/foreach}
+<?php $form->render('end') ?>
+{/block}

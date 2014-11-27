@@ -29,6 +29,10 @@ class Task {
 	public function getUnit(){
 		return $this->unit;
 	}
+        
+        public function getUnitName(){
+                return $this->unit->{UnitConversion::UNIT_COLUMN_NAME};
+	}
 	
 	public function getValue(){
 		return $this->value;

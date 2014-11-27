@@ -10,6 +10,8 @@ class UnitConversion extends Nette\Object {
 				UNIT_COLUMN_ID = 'id',
 				UNIT_COLUMN_DIFFICULTY = 'nb_level',
 				UNIT_COLUMN_BASE_UNIT = 'fl_base_unit',
+                                UNIT_COLUMN_CATEGORY = 'nb_category',
+                                UNIT_COLUMN_NAME = 'str_unit_name',
 				UNIT_BASE_UNIT_TRUE = 'A',
 				UNIT_BASE_UNIT_FALSE = 'N',
 				TASK_TABLE_NAME = 'task',
@@ -39,6 +41,14 @@ class UnitConversion extends Nette\Object {
 		$task->setId($this->database->getInsertId());
 		return $task;
 	}
+        
+        public function getBaseUnit($unit) {
+            return $this->database->table(self::UNIT_TABLE_NAME)
+                    ->where([
+                        self::UNIT_COLUMN_CATEGORY => $unit->{self::UNIT_COLUMN_CATEGORY},
+                        self::UNIT_COLUMN_BASE_UNIT => self::UNIT_BASE_UNIT_TRUE
+                    ])->limit(1)->fetch();
+        }
 	
 	private function getRandomUnit($difficulty) {
 		$offset_result = $this->database->table(self::UNIT_TABLE_NAME)->select("FLOOR(RAND() * COUNT(*)) AS `offset`")->where(array(self::UNIT_COLUMN_BASE_UNIT => self::UNIT_BASE_UNIT_FALSE, self::UNIT_COLUMN_DIFFICULTY => $difficulty));
