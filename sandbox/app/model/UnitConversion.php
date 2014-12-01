@@ -114,5 +114,10 @@ class UnitConversion extends Nette\Object {
 		$data[self::TASK_COLUMN_UPDATED] = date('Y-m-d H:i:s', time());
 		$task->update($data);
 	}
+	
+	public function getDistinctLevels(){
+	    //return $this->database->table(self::UNIT_TABLE_NAME)->select('DISTINCT ' . self::UNIT_COLUMN_DIFFICULTY . ' as level');
+	    return $this->database->query('SELECT DISTINCT nb_level as level FROM unit;');
+	}
 
 }

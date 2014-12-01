@@ -1,0 +1,8 @@
+{block content}
+    
+{ifset $open->id}
+    <a n:href="Teacher:closeTest $open->{$testRepository::COLUMN_ID}">Ukončiť test</a>
+{else}
+    {control newTest}
+{/ifset}
+{/block}

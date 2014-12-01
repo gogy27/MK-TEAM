@@ -32,6 +32,7 @@ services:
 	authorizator: Authenticator
 	userRepository: App\Model\UserRepository
 	classRepository: App\Model\ClassRepository
+	testRepository:	App\Model\TestRepository
 	unitConversion:
 		class: App\Model\UnitConversion(@database)
 	- App\RouterFactory
