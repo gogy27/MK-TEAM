@@ -3,50 +3,51 @@
 namespace App\Model;
 
 class Task {
-	
+
 	private $unit, $value, $exp, $id;
-	
+
 	public function __construct($unit) {
 		$this->unit = $unit;
-		$this->value = rand(1,999);
-		$this->exp = rand(-3,2);
+		$this->value = rand(1, 999);
+		$this->exp = rand(-3, 2);
+	}
+
+	public function __toString() {
+		return strval(($this->value / pow(10, floor(log($this->value, 10)))) * pow(10, $this->exp));
 	}
 	
-	public function toReal() {
-		switch(true) {
-			case ($this->value < 10):
-				$digits = 1;
-				break;
-			case ($this->value < 100):
-				$digits = 2;
-				break;
-			default:
-				$digits = 3; 
-		}
-		return ($this->value / pow(10, $digits-1)) * pow(10, $this->exp); 
-	}
-	
-	public function getUnit(){
+	public function getUnit() {
 		return $this->unit;
 	}
-        
-        public function getUnitName(){
-                return $this->unit->{UnitConversion::UNIT_COLUMN_NAME};
+
+	public function getUnitName() {
+		return $this->getUnit()->{UnitConversion::UNIT_COLUMN_NAME};
 	}
-	
-	public function getValue(){
+
+	public function getValue() {
 		return $this->value;
 	}
-	
-	public function getExp(){
+
+	public function getExp() {
 		return $this->exp;
 	}
-	
-	public function getId(){
+
+	public function getId() {
 		return $this->id;
 	}
-	
-	public function setId($id){
+
+	public function setId($id) {
 		$this->id = $id;
 	}
+	
+	public static function toBaseValue($value) {
+		$value = str_replace('.', '', strval($value));
+			
+		return intval($value);
+	}
+	
+	public static function toBaseExp($unit, $exp) {
+		return $unit->{UnitConversion::UNIT_COLUMN_MULTIPLE} + $exp;
+	}
+
 }

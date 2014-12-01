@@ -1,22 +1,30 @@
 {block content}
 
-<?php $form->render('begin') ?>
-<?php $form->render('errors') ?>
-    {foreach $tasks as $task}
-        <div class="form-group">
-            <label class="col-sm-3 control-label">{$task->toReal()} {$task->getUnitName()}<span class="equal-to">=</span></label>
-            <div class="col-sm-9">
-                <span class="nowrap">
-                    <input type="text" class="form-control input-sm base-number-format-input" placeholder="Zákl. tvar"> &times; 10 <sup><input type="text" class="form-control input-sm"></sup><span class="unit-name">{$task->getUnitName()}</span><span class="equal-to">=</span>
-                </span>
-                <span class="nowrap">
-                    <span class="text-right base-number-format"></span> &times; 10 <sup><input type="text" class="form-control input-sm"></sup><span class="equal-to">=</span>
-                </span>
-                <span class="nowrap">
-                    <input type="text" class="form-control input-sm" placeholder="Výsledok"> &times; 10 <sup><input type="text" class="form-control input-sm"></sup>
-                </span>
-            </div>
-        </div>
-    {/foreach}
-<?php $form->render('end') ?>
+{form newTaskForm}
+	<!-- Jednoduché vykreslení chyb -->
+	<ul class="errors" n:if="$form->hasErrors()">
+		<li n:foreach="$form->errors as $error">{$error}</li>
+	</ul>
+
+	{foreach $tasks as $key => $task}
+		<div class="form-group">
+			<div class="col-sm-3 text-right">
+				{label 'task'.$key /} <span class="equal-to">=</span>
+			</div>
+			<div class="col-sm-9">
+				<span class="nowrap">
+					{input 'task'.$key} &times; 10 <sup>{input 'taskExp'.$key}</sup><span class="unit-name">{$task->getUnitName()}</span><span class="equal-to">=</span>
+				</span>
+				<span class="nowrap">
+					<span class="text-right base-number-format">0</span> &times; 10 <sup>{input 'taskBaseExp'.$key}</sup> {$unitConversion->getBaseUnit($task->getUnit())->{$unitConversion::UNIT_COLUMN_NAME}}
+				</span>
+			</div>
+		</div>
+	{/foreach}
+	<div class="form-group">
+		<div class="col-sm-9 col-sm-offset-3">
+			{input send}
+		</div>
+	</div>
+{/form}
 {/block}

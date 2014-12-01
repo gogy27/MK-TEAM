@@ -4,9 +4,7 @@ namespace App\Model;
 
 use Nette,
 		Nette\Utils\Strings,
-		Nette\Security\Passwords
-
-;
+		Nette\Security\Passwords;
 
 class UserRepository extends Repository {
 
