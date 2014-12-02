@@ -96,7 +96,9 @@ class UserRepository extends Repository {
 				    FROM(
 					SELECT
 					    u.id,
-					    sum(CASE WHEN t.fl_correct = 'A' THEN 2 ELSE -1 END) as points
+					    sum(CASE WHEN t.fl_correct = 'A' THEN 2 
+						    WHEN t.dt_updated IS NOT NULL THEN -1
+						    ELSE 0 END) as points
 					FROM task t
 					LEFT JOIN user u
 					    ON u.id = t.id_user
