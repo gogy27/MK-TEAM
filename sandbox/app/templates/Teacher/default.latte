@@ -1,23 +1,33 @@
 {block content}
-    <table class = "table table-striped table-responsive text-center">
-	<tr>
-	    <th class="text-center">Názov skupiny</th>
-	    <th class="text-center">Dátum vytvorenia</th>
-	    <th class="text-center">Heslo skupiny</th>
-	    <th class="text-center">Zadať/Ukončiť test</th>
-	    <th class="text-center">Zmazať skupinu</th>
-	</tr>
-	{foreach $groups as $group}
-	    <tr>
-                <td><a n:href="Teacher:ShowStudentsInGroup $group->{$classRepository::COLUMN_ID}">{$group->{$classRepository::COLUMN_NAME}}</a></td>
-                <td>{$group->{$classRepository::COLUMN_CREATE_TIME}|date:'F j, Y'}</td>
-		<td>{$group->{$classRepository::COLUMN_PASSWORD}}</td>
-		<td><a n:href="Teacher:setTest $group->{$classRepository::COLUMN_ID}"><i class="glyphicon glyphicon-pencil"></i></a></td>
-		<td><a n:href="Teacher:removeGroup $group->{$classRepository::COLUMN_ID}"> <i class="glyphicon glyphicon-remove"></i> </a></td>
-	    </tr>
-	{/foreach}
-    </table>
-    
-    {control newGroup}
+
+<div class="row">
+    <div class="col-lg-7 col-md-12">
+        <table class = "table table-striped table-responsive text-center">
+            <tr>
+                <th class="text-center">Názov skupiny</th>
+                <th class="text-center">Dátum vytvorenia</th>
+                <th class="text-center">Heslo skupiny</th>
+                <th class="text-center">Zadať/Ukončiť test</th>
+                <th class="text-center">Zmazať skupinu</th>
+            </tr>
+            {foreach $groups as $group}
+                <tr>
+                    <td><a n:href="Teacher:ShowStudentsInGroup $group->{$classRepository::COLUMN_ID}">{$group->{$classRepository::COLUMN_NAME}}</a></td>
+                    <td>{$group->{$classRepository::COLUMN_CREATE_TIME}|date:'F j, Y'}</td>
+                    <td>{$group->{$classRepository::COLUMN_PASSWORD}}</td>
+                    <td><a n:href="Teacher:setTest $group->{$classRepository::COLUMN_ID}"><i class="glyphicon glyphicon-pencil"></i></a></td>
+                    <td><a n:href="Teacher:removeGroup $group->{$classRepository::COLUMN_ID}"> <i class="glyphicon glyphicon-remove"></i> </a></td>
+                </tr>
+            {/foreach}
+        </table>
+    </div>
+    <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-5 col-lg-offset-0">
+        <div class="panel panel-default">
+            <div class="panel-heading">Vytvorenie novej skupiny</div>
+            <div class="panel-body">
+                {control newGroup}
+            </div>
+        </div>
+    </div>
 
 {/block}

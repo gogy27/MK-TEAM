@@ -70,15 +70,35 @@ footer.footer {
         padding: 15px;
     }
 }
-a.link-cell {
-    display: block;
-    height: 120px;
-    line-height: 120px;
-    background-color: $alert-info-bg;
-    text-align: center;
-    box-shadow: 0px 2px 2px #AAA;
-    &.link-cell-red {
-        background-color: $alert-danger-bg;
+
+.row-cells {
+    & > div[class^='col'],div[class*=' col'] {
+        display: table !important;
+    }
+    a.link-cell {
+        display:table-cell;
+        vertical-align:middle;
+        height: 120px;
+        background-color: $alert-info-bg;
+        color: #444;
+        text-align: center;
+        font-size: 1.2em;
+        text-decoration: none;
+        box-shadow: 0px 2px 2px #AAA;
+        &:hover {
+            background-color: $alert-info-border;
+        }
+        &.link-cell-red {
+            background-color: $alert-danger-bg;
+            &:hover {
+                background-color: $alert-danger-border;
+            }
+        }
+        .start-time {
+            display: block;
+            font-size: .8em;
+            color: #777;
+        }
     }
 }
 
@@ -128,6 +148,12 @@ form.task-list {
 }
 
 @media (max-width: $screen-xs-max) {
+    .row-cells {
+        & > div[class^='col'],div[class*=' col'] {
+            width: 100%;
+        }
+    }
+    
     form.task-list {
         span.nowrap {
             display: block;

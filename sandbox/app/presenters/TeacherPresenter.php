@@ -107,7 +107,8 @@ class TeacherPresenter extends BasePresenter {
 	}
 	$form->addSelect('level', 'Náročnosť ', $levely)
 		->setRequired('Zadajte náročnosť')
-		->setPrompt('Vyberte náročnosť');
+		->setPrompt('Vyberte náročnosť')
+                ->setAttribute('class', 'form-control');
 	$form->addHidden('id_group', $this->group_id);
 	$form->addSubmit('createTest', 'Spustiť test');
 	$form->onSuccess[] = $this->newTestSubmitted;
