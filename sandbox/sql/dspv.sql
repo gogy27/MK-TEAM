@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.1.4
+-- version 4.0.4
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: St 26.Nov 2014, 23:34
--- Verzia serveru: 5.6.15-log
--- PHP Version: 5.5.8
+-- Hostiteľ: localhost
+-- Vygenerované: Út 02.Dec 2014, 00:03
+-- Verzia serveru: 5.6.12-log
+-- Verzia PHP: 5.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,8 +17,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `dspv`
+-- Databáza: `dspv`
 --
+CREATE DATABASE IF NOT EXISTS `dspv` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `dspv`;
 
 -- --------------------------------------------------------
 
@@ -35,14 +37,15 @@ CREATE TABLE IF NOT EXISTS `class` (
   `str_group_description` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_USER_idx` (`id_user`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Sťahujem dáta pre tabuľku `class`
 --
 
 INSERT INTO `class` (`id`, `str_group_password`, `str_group_name`, `id_user`, `dt_created`, `str_group_description`) VALUES
-(1, '123456', 'Prvá skupina', 1, '2014-11-25 23:46:51', 'Toto je popis prvej skupiny. Je to uplne supa');
+(1, '123456', 'Prvá skupina', 1, '2014-12-01 22:36:44', 'dfsf'),
+(2, '123456789', 'Druhá skupina', 1, '2014-12-01 22:37:36', 'lLAlLa');
 
 -- --------------------------------------------------------
 
@@ -66,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `task` (
   KEY `FK_USER_idx` (`id_user`),
   KEY `FK_UNIT_idx` (`id_unit`),
   KEY `FK_TEST_idx` (`id_test`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=382 ;
 
 -- --------------------------------------------------------
 
@@ -75,16 +78,29 @@ CREATE TABLE IF NOT EXISTS `task` (
 --
 
 CREATE TABLE IF NOT EXISTS `test` (
-  `id` int(11) NOT NULL COMMENT 'Primárny kľúč',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Primárny kľúč',
   `id_group` int(11) DEFAULT NULL COMMENT 'Cuzdí kľúč na grupu',
-  `nb_difficulty` int(11) DEFAULT NULL COMMENT 'Zadaná obtiažnosť',
+  `nb_level` int(11) DEFAULT NULL COMMENT 'Zadaná obtiažnosť',
   `nb_count` int(11) DEFAULT NULL COMMENT 'Počet príkladov',
   `dt_created` datetime DEFAULT NULL COMMENT 'Čas zadania písomky',
   `dt_closed` datetime DEFAULT NULL COMMENT 'Čas skončenia',
   `fl_closed` varchar(1) DEFAULT NULL COMMENT 'Flaga či je ešte aktívna',
   PRIMARY KEY (`id`),
   KEY `FK_GROUPT_idx` (`id_group`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+
+--
+-- Sťahujem dáta pre tabuľku `test`
+--
+
+INSERT INTO `test` (`id`, `id_group`, `nb_level`, `nb_count`, `dt_created`, `dt_closed`, `fl_closed`) VALUES
+(1, 2, 1, 10, '2014-12-01 22:38:21', NULL, 'A'),
+(2, 2, 1, 50, '2014-12-01 22:38:38', NULL, 'A'),
+(3, 1, 1, 15, '2014-12-01 22:57:46', NULL, 'A'),
+(4, 2, 1, 25, '2014-12-01 22:57:54', '2014-12-01 23:17:36', 'A'),
+(5, 2, 1, 25, '2014-12-01 23:18:57', '2014-12-01 23:21:20', 'A'),
+(6, 1, 1, 20, '2014-12-01 23:20:10', '2014-12-01 23:21:16', 'A'),
+(7, 1, 1, 50, '2014-12-01 23:27:48', NULL, 'N');
 
 -- --------------------------------------------------------
 
@@ -133,15 +149,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   `dt_login` datetime DEFAULT NULL COMMENT 'Čas posledného loginu',
   PRIMARY KEY (`id`),
   KEY `FK_GROUP_idx` (`id_group`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Sťahujem dáta pre tabuľku `user`
 --
 
 INSERT INTO `user` (`id`, `str_name`, `str_mail`, `str_user_password`, `str_pass_hash`, `id_group`, `fl_user_type`, `dt_registration`, `dt_login`) VALUES
-(1, 'Teacher Adam', 'teacher@teacher.teacher', '$2y$10$Owf6ind6aDClPlc95/NKH.Vw.DflTz27PzpswLfsR9v04PtlMXDZa', NULL, NULL, 'T', '2014-11-25 23:45:09', '2014-11-25 23:46:09'),
-(2, 'Žiak Janko', 'student@student.student', '$2y$10$nY9Up/R68ZMXFiTeOdwH6.Ge1VwqG.PNGn5sXzV9lUgtdZ/WGKSBu', NULL, NULL, 'S', '2014-11-25 23:45:42', '2014-11-26 23:30:49');
+(1, 'Janko Hraško', 'teacher@teacher.teacher', '$2y$10$8dwtYaL4e5WeZzeRaEa3..fUw2pK0cVtF9ZzQ5Hut4X9hmBOAXlRK', NULL, 1, 'T', '2014-12-01 22:35:57', '2014-12-02 00:06:30'),
+(2, 'Mandulienka', 'student@student.student', '$2y$10$gLuUTXs04v2VHJizO0lRju9MGtx9lPPGPiknGvXC3sg1CBqmwZJqK', NULL, 1, 'S', '2014-12-01 22:41:00', '2014-12-02 00:59:05');
 
 --
 -- Obmedzenie pre exportované tabuľky
@@ -157,9 +173,9 @@ ALTER TABLE `class`
 -- Obmedzenie pre tabuľku `task`
 --
 ALTER TABLE `task`
-  ADD CONSTRAINT `FK_TEST` FOREIGN KEY (`id_test`) REFERENCES `test` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_USER_tsk` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `FK_UNIT` FOREIGN KEY (`id_unit`) REFERENCES `unit` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_USER_tsk` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_TEST` FOREIGN KEY (`id_test`) REFERENCES `test` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Obmedzenie pre tabuľku `test`
