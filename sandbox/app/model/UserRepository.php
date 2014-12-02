@@ -19,7 +19,7 @@ class UserRepository extends Repository {
 	    COLUMN_ROLE = 'fl_user_type',
 	    COLUMN_REG_TIME = 'dt_registration',
 	    COLUMN_LOG_TIME = 'dt_login',
-	    STUDENT = 'S', TEACHER = 'T',
+	    STUDENT = 'S', TEACHER = 'T', ADMIN = 'A',
 	    PASSWORD_MIN_LENGTH = 6;
 
     public function getInfo($id) {

@@ -30,7 +30,7 @@ class AuthPresenter extends BasePresenter {
 	}
 
 	public function actionDefault() {
-		
+		//die(Nette\Security\Passwords::hash('heslo'));
 	}
 
 	public function actionRegister() {
