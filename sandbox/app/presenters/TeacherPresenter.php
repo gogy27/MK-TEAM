@@ -35,6 +35,8 @@ class TeacherPresenter extends BasePresenter {
     public function actionShowStudentsInGroup($group_id) {
 	$this->template->students = $this->userRepository->getStudentsByGroup($group_id);
 	$this->template->userRepository = $this->userRepository;
+	$this->template->statistics = $this->userRepository->getStatisticsOfTasks($group_id);
+	$this->template->statistics2 = $this->userRepository->getStatisticsOfGroupUser($group_id);
     }
 
     public function actionRemoveUser($student_id) {
