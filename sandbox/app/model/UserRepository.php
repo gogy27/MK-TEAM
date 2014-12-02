@@ -110,4 +110,19 @@ class UserRepository extends Repository {
 				    ORDER BY src.points;")->fetchAll();
     }
 
+    public function getStatisticsOfUnits($group_id){
+	return $this->database->query("SELECT 
+					    un.nb_category,
+					    un.str_unit_description,
+					    sum(CASE WHEN t.fl_correct = 'A' THEN 1 ELSE 0 END) as correct,
+					    sum(CASE WHEN t.fl_correct = 'N' AND t.dt_updated IS NOT NULL AND t.nb_value_to IS NOT NULL THEN 1 ELSE 0 END) as uncorrect
+					FROM task t
+					LEFT JOIN user u
+					    ON u.id = t.id_user
+					LEFT JOIN unit un
+					    ON un.id = t.id_unit
+					WHERE u.id_group = " . $group_id . 
+					" GROUP BY un.nb_category, un.str_unit_description ORDER BY un.str_unit_description DESC")
+		->fetchAll();
+    }
 }
