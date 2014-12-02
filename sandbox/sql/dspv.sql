@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Hostiteľ: localhost
--- Vygenerované: Út 02.Dec 2014, 00:03
+-- Vygenerované: Út 02.Dec 2014, 22:16
 -- Verzia serveru: 5.6.12-log
 -- Verzia PHP: 5.4.12
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 --
 -- Databáza: `dspv`
 --
-CREATE DATABASE IF NOT EXISTS `dspv` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+CREATE DATABASE IF NOT EXISTS `dspv` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE `dspv`;
 
 -- --------------------------------------------------------
@@ -37,15 +37,14 @@ CREATE TABLE IF NOT EXISTS `class` (
   `str_group_description` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_USER_idx` (`id_user`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Sťahujem dáta pre tabuľku `class`
 --
 
 INSERT INTO `class` (`id`, `str_group_password`, `str_group_name`, `id_user`, `dt_created`, `str_group_description`) VALUES
-(1, '123456', 'Prvá skupina', 1, '2014-12-01 22:36:44', 'dfsf'),
-(2, '123456789', 'Druhá skupina', 1, '2014-12-01 22:37:36', 'lLAlLa');
+(1, '123456', 'Prvá skupina', 2, '2014-12-02 23:11:17', 'Lorem Ipsum Dolor Sit AMEN');
 
 -- --------------------------------------------------------
 
@@ -69,7 +68,23 @@ CREATE TABLE IF NOT EXISTS `task` (
   KEY `FK_USER_idx` (`id_user`),
   KEY `FK_UNIT_idx` (`id_unit`),
   KEY `FK_TEST_idx` (`id_test`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=382 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+
+--
+-- Sťahujem dáta pre tabuľku `task`
+--
+
+INSERT INTO `task` (`id`, `id_user`, `id_unit`, `dt_created`, `dt_updated`, `nb_value_from`, `nb_power_from`, `nb_value_to`, `nb_power_to`, `fl_correct`, `id_test`) VALUES
+(1, 1, 78, '2014-12-02 23:12:04', '2014-12-02 23:14:48', 244, -3, 244, 0, 'A', NULL),
+(2, 1, 36, '2014-12-02 23:12:04', '2014-12-02 23:14:48', 160, 1, 16, -11, 'A', NULL),
+(3, 1, 38, '2014-12-02 23:12:04', '2014-12-02 23:14:48', 928, 0, 928, -6, 'A', NULL),
+(4, 1, 80, '2014-12-02 23:12:04', '2014-12-02 23:14:48', 16, -2, 16, 7, 'A', NULL),
+(5, 1, 14, '2014-12-02 23:12:04', '2014-12-02 23:14:48', 229, -3, 229, -5, 'A', NULL),
+(6, 1, 15, '2014-12-02 23:12:04', '2014-12-02 23:14:48', 471, -2, 471, -3, 'A', NULL),
+(7, 1, 34, '2014-12-02 23:12:04', '2014-12-02 23:14:48', 488, -3, 488, 6, 'A', NULL),
+(8, 1, 28, '2014-12-02 23:12:04', '2014-12-02 23:14:48', 620, 1, 62, -8, 'A', NULL),
+(9, 1, 39, '2014-12-02 23:12:04', '2014-12-02 23:14:48', 550, 1, 55, -2, 'A', NULL),
+(10, 1, 25, '2014-12-02 23:12:04', '2014-12-02 23:14:48', 56, 0, 56, 9, 'A', NULL);
 
 -- --------------------------------------------------------
 
@@ -87,20 +102,7 @@ CREATE TABLE IF NOT EXISTS `test` (
   `fl_closed` varchar(1) DEFAULT NULL COMMENT 'Flaga či je ešte aktívna',
   PRIMARY KEY (`id`),
   KEY `FK_GROUPT_idx` (`id_group`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
-
---
--- Sťahujem dáta pre tabuľku `test`
---
-
-INSERT INTO `test` (`id`, `id_group`, `nb_level`, `nb_count`, `dt_created`, `dt_closed`, `fl_closed`) VALUES
-(1, 2, 1, 10, '2014-12-01 22:38:21', NULL, 'A'),
-(2, 2, 1, 50, '2014-12-01 22:38:38', NULL, 'A'),
-(3, 1, 1, 15, '2014-12-01 22:57:46', NULL, 'A'),
-(4, 2, 1, 25, '2014-12-01 22:57:54', '2014-12-01 23:17:36', 'A'),
-(5, 2, 1, 25, '2014-12-01 23:18:57', '2014-12-01 23:21:20', 'A'),
-(6, 1, 1, 20, '2014-12-01 23:20:10', '2014-12-01 23:21:16', 'A'),
-(7, 1, 1, 50, '2014-12-01 23:27:48', NULL, 'N');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -117,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `unit` (
   `nb_level` int(11) DEFAULT NULL COMMENT 'Náročnosť jednotky.',
   `str_unit_description` varchar(45) DEFAULT NULL COMMENT 'Popis jednotky\n',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=111 ;
 
 --
 -- Sťahujem dáta pre tabuľku `unit`
@@ -133,7 +135,6 @@ INSERT INTO `unit` (`id`, `fl_base_unit`, `nb_category`, `str_unit_name`, `nb_mu
 (7, 'N', 1, 'MJ', 6, 1, 'Práca'),
 (8, 'N', 1, 'GJ', 9, 1, 'Práca'),
 (9, 'N', 1, 'TJ', 12, 1, 'Práca'),
-
 (10, 'N', 2, 'pm', -12, 1, 'Dĺžka'),
 (11, 'N', 2, 'nm', -9, 1, 'Dĺžka'),
 (12, 'N', 2, '&mum', -6, 1, 'Dĺžka'),
@@ -142,7 +143,6 @@ INSERT INTO `unit` (`id`, `fl_base_unit`, `nb_category`, `str_unit_name`, `nb_mu
 (15, 'N', 2, 'dm', -1, 1, 'Dĺžka'),
 (16, 'A', 2, 'm', 0, 1, 'Dĺžka'),
 (17, 'N', 2, 'km', 3, 1, 'Dĺžka'),
-
 (18, 'N', 3, 'pA', -12, 1, 'Elektrický prúd'),
 (19, 'N', 3, 'nA', -9, 1, 'Elektrický prúd'),
 (20, 'N', 3, '&muA', -6, 1, 'Elektrický prúd'),
@@ -152,7 +152,6 @@ INSERT INTO `unit` (`id`, `fl_base_unit`, `nb_category`, `str_unit_name`, `nb_mu
 (24, 'N', 3, 'MA', 6, 1, 'Elektrický prúd'),
 (25, 'N', 3, 'GA', 9, 1, 'Elektrický prúd'),
 (26, 'N', 3, 'TA', 12, 1, 'Elektrický prúd'),
-
 (27, 'N', 4, 'pV', -12, 1, 'Elektrické napätie'),
 (28, 'N', 4, 'nV', -9, 1, 'Elektrické napätie'),
 (29, 'N', 4, '&muV', -6, 1, 'Elektrické napätie'),
@@ -162,7 +161,6 @@ INSERT INTO `unit` (`id`, `fl_base_unit`, `nb_category`, `str_unit_name`, `nb_mu
 (33, 'N', 4, 'MV', 6, 1, 'Elektrické napätie'),
 (34, 'N', 4, 'GV', 9, 1, 'Elektrické napätie'),
 (35, 'N', 4, 'TV', 12, 1, 'Elektrické napätie'),
-
 (36, 'N', 5, 'p&Omega', -12, 1, 'Elektrický odpor'),
 (37, 'N', 5, 'n&Omega', -9, 1, 'Elektrický odpor'),
 (38, 'N', 5, '&mu&Omega', -6, 1, 'Elektrický odpor'),
@@ -172,7 +170,6 @@ INSERT INTO `unit` (`id`, `fl_base_unit`, `nb_category`, `str_unit_name`, `nb_mu
 (42, 'N', 5, 'M&Omega', 6, 1, 'Elektrický odpor'),
 (43, 'N', 5, 'G&Omega', 9, 1, 'Elektrický odpor'),
 (44, 'N', 5, 'T&Omega', 12, 1, 'Elektrický odpor'),
-
 (45, 'N', 6, 'pW', -12, 1, 'Výkon'),
 (46, 'N', 6, 'nW', -9, 1, 'Výkon'),
 (47, 'N', 6, '&muW', -6, 1, 'Výkon'),
@@ -182,7 +179,6 @@ INSERT INTO `unit` (`id`, `fl_base_unit`, `nb_category`, `str_unit_name`, `nb_mu
 (51, 'N', 6, 'MW', 6, 1, 'Výkon'),
 (52, 'N', 6, 'GW', 9, 1, 'Výkon'),
 (53, 'N', 6, 'TW', 12, 1, 'Výkon'),
-
 (54, 'N', 7, 'pg', -15, 1, 'Hmotnosť'),
 (55, 'N', 7, 'ng', -12, 1, 'Hmotnosť'),
 (56, 'N', 7, '&mug', -9, 1, 'Hmotnosť'),
@@ -193,7 +189,6 @@ INSERT INTO `unit` (`id`, `fl_base_unit`, `nb_category`, `str_unit_name`, `nb_mu
 (61, 'N', 7, 'kilotona', 6, 1, 'Hmotnosť'),
 (62, 'N', 7, 'megatona', 9, 1, 'Hmotnosť'),
 (63, 'N', 7, 'gigatona', 12, 1, 'Hmotnosť'),
-
 (64, 'N', 8, 'pN', -12, 1, 'Sila'),
 (65, 'N', 8, 'nN', -9, 1, 'Sila'),
 (66, 'N', 8, '&muN', -6, 1, 'Sila'),
@@ -203,7 +198,6 @@ INSERT INTO `unit` (`id`, `fl_base_unit`, `nb_category`, `str_unit_name`, `nb_mu
 (70, 'N', 8, 'MN', 6, 1, 'Sila'),
 (71, 'N', 8, 'GN', 9, 1, 'Sila'),
 (72, 'N', 8, 'TN', 12, 1, 'Sila'),
-
 (73, 'N', 9, 'pPa', -12, 1, 'Tlak'),
 (74, 'N', 9, 'nPa', -9, 1, 'Tlak'),
 (75, 'N', 9, '&muPa', -6, 1, 'Tlak'),
@@ -213,7 +207,6 @@ INSERT INTO `unit` (`id`, `fl_base_unit`, `nb_category`, `str_unit_name`, `nb_mu
 (79, 'N', 9, 'MPa', 6, 1, 'Tlak'),
 (80, 'N', 9, 'GPa', 9, 1, 'Tlak'),
 (81, 'N', 9, 'TPa', 12, 1, 'Tlak'),
-
 (82, 'N', 10, 'pHz', -12, 1, 'Frekvencia'),
 (83, 'N', 10, 'nHz', -9, 1, 'Frekvencia'),
 (84, 'N', 10, '&muHz', -6, 1, 'Frekvencia'),
@@ -223,7 +216,6 @@ INSERT INTO `unit` (`id`, `fl_base_unit`, `nb_category`, `str_unit_name`, `nb_mu
 (88, 'N', 10, 'MHz', 6, 1, 'Frekvencia'),
 (89, 'N', 10, 'GHz', 9, 1, 'Frekvencia'),
 (90, 'N', 10, 'THz', 12, 1, 'Frekvencia'),
-
 (91, 'N', 11, 'pm^2', -24, 2, 'Plocha'),
 (92, 'N', 11, 'nm^2', -18, 2, 'Plocha'),
 (93, 'N', 11, '&mum^2', -12, 2, 'Plocha'),
@@ -232,7 +224,6 @@ INSERT INTO `unit` (`id`, `fl_base_unit`, `nb_category`, `str_unit_name`, `nb_mu
 (96, 'N', 11, 'dm^2', -2, 2, 'Plocha'),
 (97, 'A', 11, 'm^2', 0, 2, 'Plocha'),
 (98, 'N', 11, 'km^2', 6, 2, 'Plocha'),
-
 (99, 'N', 12, 'pm^3', -36, 2, 'Objem'),
 (100, 'N', 12, 'nm^3', -27, 2, 'Objem'),
 (101, 'N', 12, '&mum^3', -18, 2, 'Objem'),
@@ -264,15 +255,15 @@ CREATE TABLE IF NOT EXISTS `user` (
   `dt_login` datetime DEFAULT NULL COMMENT 'Čas posledného loginu',
   PRIMARY KEY (`id`),
   KEY `FK_GROUP_idx` (`id_group`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Sťahujem dáta pre tabuľku `user`
 --
 
 INSERT INTO `user` (`id`, `str_name`, `str_mail`, `str_user_password`, `str_pass_hash`, `id_group`, `fl_user_type`, `dt_registration`, `dt_login`) VALUES
-(1, 'Janko Hraško', 'teacher@teacher.teacher', '$2y$10$8dwtYaL4e5WeZzeRaEa3..fUw2pK0cVtF9ZzQ5Hut4X9hmBOAXlRK', NULL, 1, 'T', '2014-12-01 22:35:57', '2014-12-02 00:06:30'),
-(2, 'Mandulienka', 'student@student.student', '$2y$10$gLuUTXs04v2VHJizO0lRju9MGtx9lPPGPiknGvXC3sg1CBqmwZJqK', NULL, 1, 'S', '2014-12-01 22:41:00', '2014-12-02 00:59:05');
+(1, 'Janko Hraško', 'student@student.student', '$2y$10$uqLKoX93kF6Fbc1ls.oFy.TZSW.WhjdYWzscHsaoC16sbQG7KTwPu', NULL, 1, 'S', '2014-12-02 23:10:30', '2014-12-02 23:12:02'),
+(2, 'teacher@teacher.teacher', 'teacher@teacher.teacher', '$2y$10$J3vk2oSmUwgN0nvNvMmvVOU4bSht6L3/guu5kvXvZ3jFF/38sC90.', NULL, NULL, 'T', '2014-12-02 23:10:45', '2014-12-02 23:16:00');
 
 --
 -- Obmedzenie pre exportované tabuľky
