@@ -13,8 +13,14 @@
 	</tr>
     {/foreach}
 </table>
-<div id="taskContainer" style="height: 300px; width: 50%; float:left;"> </div>
-<div id="userContainer" style="height: 300px; width: 50%; float:right"></div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="graph" id="taskContainer" style="height: 300px; width: 100%;"></div>
+    </div>
+    <div class="col-sm-6">
+        <div class="graph" id="userContainer" style="height: 300px; width: 100%;"></div>
+    </div>
+</div>
 	{/block}
 	{block scripts}
 	{include parent}
@@ -22,6 +28,7 @@
 	    window.onload = function () {
 		var chart = new CanvasJS.Chart("taskContainer",
 			{
+                            backgroundColor: "rgb(230, 230, 230)",
 			    title: {
 				text: "Štatistika príkladov v rámci skupiny"
 			    },
@@ -50,6 +57,7 @@
 						chart.render();
 						chart = {};
 						var chart2 = new CanvasJS.Chart("userContainer", {
+                                                    backgroundColor: "rgb(230, 230, 230)",
 						    title: {
 							text: "Úspešnosť žiakov"
 
