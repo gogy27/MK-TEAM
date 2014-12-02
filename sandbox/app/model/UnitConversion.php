@@ -25,7 +25,8 @@ class UnitConversion extends Nette\Object {
 					TASK_COLUMN_POWER_FROM = 'nb_power_from',
 					TASK_COLUMN_VALUE_TO = 'nb_value_to',
 					TASK_COLUMN_POWER_TO = 'nb_power_to',
-					TASK_COLUMN_CORRECT = 'fl_correct';
+					TASK_COLUMN_CORRECT = 'fl_correct',
+					TASK_COLUMN_TEST_ID = 'id_test';
 
 	/** @var Nette\Database\Context */
 	private $database;
@@ -66,7 +67,7 @@ class UnitConversion extends Nette\Object {
 		return true;
 	}
 
-	public function generateConversion($userID, $difficulty = 1) {
+	public function generateConversion($userID, $difficulty = 1, $test_id = NULL) {
 		$unit = $this->getRandomUnit($difficulty);
 		$task = new Task($unit);
 		$insertData = array(
@@ -74,7 +75,8 @@ class UnitConversion extends Nette\Object {
 				self::TASK_COLUMN_UNIT_ID => $unit->getPrimary(),
 				self::TASK_COLUMN_CREATED => date('Y-m-d H:i:s', time()),
 				self::TASK_COLUMN_VALUE_FROM => $task->getValue(),
-				self::TASK_COLUMN_POWER_FROM => $task->getExp());
+				self::TASK_COLUMN_POWER_FROM => $task->getExp(),
+				self::TASK_COLUMN_TEST_ID => $test_id);
 		$row = $this->database->table(self::TASK_TABLE_NAME)->insert($insertData);
 		$task->setId($row->id);
 		return $task;
@@ -116,7 +118,7 @@ class UnitConversion extends Nette\Object {
 	}
 	
 	public function getDistinctLevels(){
-	    //return $this->database->table(self::UNIT_TABLE_NAME)->select('DISTINCT ' . self::UNIT_COLUMN_DIFFICULTY . ' as level');
+	    //return $this->database->table(self::UNIT_TABLE_NAME)->select('DISTINCT ' . self::UNIT_COLUMN_DIFFICULTY . ' as level')->fetchAll();
 	    return $this->database->query('SELECT DISTINCT nb_level as level FROM unit;');
 	}
 

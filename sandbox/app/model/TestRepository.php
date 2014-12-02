@@ -21,21 +21,33 @@ class TestRepository extends Repository {
 	    MIN_COUNT = 3,
 	    MAX_COUNT = 50;
 
-    public function getUnclosedTestForGroup($group_id){
+    public function getUnclosedTestForGroup($group_id) {
 	return $this->database->table(self::TABLE_NAME)->select(self::COLUMN_ID)->where(array(self::COLUMN_ID_GROUP => $group_id, self::COLUMN_CLOSED => self::FALSE_VALUE))->fetch();
     }
-    
-    public function addTest($group_id, $level, $count){
+
+    public function addTest($group_id, $level, $count) {
 	$this->database->table(self::TABLE_NAME)->insert(array(self::COLUMN_ID_GROUP => $group_id,
-		    self::COLUMN_DIFFICULTY => $level,
-		    self::COLUMN_COUNT => $count,
-		    self::COLUMN_CLOSED => self::FALSE_VALUE,
-		    self::COLUMN_CREATED_TIME => date("Y-m-d H:i:s")));
+	    self::COLUMN_DIFFICULTY => $level,
+	    self::COLUMN_COUNT => $count,
+	    self::COLUMN_CLOSED => self::FALSE_VALUE,
+	    self::COLUMN_CREATED_TIME => date("Y-m-d H:i:s")));
     }
-    
-    public function closeTest($test_id){
+
+    public function closeTest($test_id) {
 	$this->database->table(self::TABLE_NAME)->where(array(self::COLUMN_ID => $test_id))->
 		update(array(self::COLUMN_CLOSED => self::TRUE_VALUE,
 		    self::COLUMN_CLOSED_TIME => date("Y-m-d H:i:s")));
     }
+
+    public function getTestForUser($user_id) {
+	//return $this->database->table(UserRepository::TABLE_NAME)->select('test.id, test.nb_level, test.nb_count')->where('test.id_group = user.id_group AND test.fl_closed = "N" AND user.id = ' . $user_id)->fetch();
+
+	return $this->database->query("SELECT test.id, test.nb_level, test.nb_count 
+				FROM user 
+				LEFT JOIN test 
+				ON test.id_group = user.id_group
+				AND test.fl_closed = 'N'
+				WHERE user.id = " . $user_id . ";")->fetch();
+    }
+
 }

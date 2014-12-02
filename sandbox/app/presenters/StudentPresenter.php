@@ -8,13 +8,14 @@ use Nette,
 
 class StudentPresenter extends BasePresenter {
 
-    private $unitConversion;
+    private $unitConversion, $testRepository;
     private $tasks;
-
+    private $numberOfTasks = 10, $difficulty = 1, $test_id = NULL;
+  
     protected function startup() {
 	parent::startup();
 	$this->unitConversion = $this->context->unitConversion;
-
+	$this->testRepository = $this->context->testRepository;
 	if ($this->user->isLoggedIn()) {
 	    if ($this->user->isInRole(Model\UserRepository::TEACHER)) {
 		$this->redirect('Teacher:');
@@ -30,11 +31,27 @@ class StudentPresenter extends BasePresenter {
 	
     }
 
-    public function actionNewTask() {
+    public function actionNewTask($test) {
 	if (!$this->getRequest()->isPost()) {
+	    if($test == 1){
+		$test_row = $this->testRepository->getTestForUser($this->user->getId());
+		$this->numberOfTasks = $test_row->nb_count;
+		$this->difficulty = $test_row->nb_level;
+		$this->test_id = $test_row->id;
+		echo $test_row->nb_count;
+	    }
 	    $this->template->form = $this['newTaskForm'];
 	    $this->template->tasks = $this->tasks;
 	    $this->template->unitConversion = $this->unitConversion;
+	}
+    }
+    
+    public function actionTest(){
+	if($this->testRepository->getTestForUser($this->user->getId())->id == NULL){
+	    $this->flashMessage('Momentálne pre Vás neexistuje test', self::FLASH_MESSAGE_WARNING);
+	    $this->redirect('Student:');
+	}else{
+	    $this->redirect('Student:newTask', 1);
 	}
     }
 
@@ -43,10 +60,9 @@ class StudentPresenter extends BasePresenter {
 
 	$form = new Form;
 	$form->getElementPrototype()->class('form-horizontal task-list');
-	$rand = rand(1, 3);
 	if (!$this->getRequest()->isPost()) {
-	    for ($i = 0; $i < $rand; $i++) {
-		$singleTask = $this->unitConversion->generateConversion($this->user->getId());
+	    for ($i = 0; $i < $this->numberOfTasks; $i++) {
+		$singleTask = $this->unitConversion->generateConversion($this->user->getId(), $this->difficulty, $this->test_id);
 		$this->tasks[$singleTask->getId()] = $singleTask;
 
 		$singleTaskInput = $form->addText("task" . $singleTask->getId(), $singleTask . " " . $singleTask->getUnitName());
