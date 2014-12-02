@@ -20,6 +20,9 @@
     <div class="col-sm-6">
         <div class="graph" id="userContainer" style="height: 300px; width: 100%;"></div>
     </div>
+    <div class="col-sm-6">
+        <div class="graph" id="unitContainer" style="height: 350px; width: 100%;"></div>
+    </div>
 </div>
 	{/block}
 	{block scripts}
@@ -39,7 +42,6 @@
 			    data: [
 				{
 				    indexLabelFontSize: 20,
-				    indexLabelFontFamily: "Monospace",
 				    indexLabelFontColor: "darkgrey",
 				    indexLabelLineColor: "darkgrey",
 				    indexLabelPlacement: "outside",
@@ -60,7 +62,7 @@
                                                     backgroundColor: "rgb(230, 230, 230)",
 						    title: {
 							text: "Úspešnosť žiakov"
-
+							
 						    },
 						    axisX: {
 							interval: 1,
@@ -68,8 +70,6 @@
 							labelFontSize: 10,
 							labelFontStyle: "normal",
 							labelFontWeight: "normal",
-							labelFontFamily: "Lucida Sans Unicode"
-
 						    },
 						    axisY2: {
 							interlacedColor: "rgba(1,77,101,.2)",
@@ -86,9 +86,6 @@
 					{{foreach $statistics2 as $item}}
 							    {y: {{$item->points}}, label: {{$item->str_name}}},
 					{{/foreach}}
-						    {y:10,label:"Adam"},
-						    {y:15,label:"Janko"},
-						    {y:12,label:"Jakubko"},
 							]
 						    }
 
@@ -97,6 +94,45 @@
 
 					    chart2.render();
 					    chart2 = {};
+						    
+						var chart3 = new CanvasJS.Chart("unitContainer",
+						{
+						    backgroundColor: "rgb(230, 230, 230)",
+							title:{
+								text: "Štatistika jednotiek"             
+							},
+							axisY:{
+								title: "percentá"
+							},
+							toolTip:{
+								shared: true,
+								content: "{name}: {y} - <strong>#percent%</strong>",
+							},
+							data:[
+							{        
+								type: "stackedBar100",
+								showInLegend: true, 
+								name: "Správne",
+								dataPoints: [
+								{{foreach $statistics3 as $item}}   
+								    {y: {{$item->correct}}, label: {{$item->str_unit_description}}},
+								{{/foreach}}
+								]
+							},
+							{        
+								type: "stackedBar100",
+								showInLegend: true, 
+								name: "Nesprávne",
+								dataPoints: [
+								{{foreach $statistics3 as $item}}   
+								    {y: {{$item->uncorrect}}, label: {{$item->str_unit_description}}},
+								{{/foreach}}
+								]
+							}  
+							]
+						});
+						chart3.render();
+						chart3 = {};
 					}
 	</script>
 	<script src="{$basePath}/js/jquery.canvasjs.min.js"></script>
