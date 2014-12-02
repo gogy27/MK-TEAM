@@ -9,9 +9,9 @@ use Nette,
 class StudentPresenter extends BasePresenter {
 
     private $unitConversion, $testRepository;
-    private $tasks;
+    private $tasks, $unFilledTasks = NULL;
     private $numberOfTasks = 10, $difficulty = 1, $test_id = NULL;
-  
+
     protected function startup() {
 	parent::startup();
 	$this->unitConversion = $this->context->unitConversion;
@@ -33,24 +33,36 @@ class StudentPresenter extends BasePresenter {
 
     public function actionNewTask($test) {
 	if (!$this->getRequest()->isPost()) {
-	    if($test == 1){
+	    if ($test == 1) {
 		$test_row = $this->testRepository->getTestForUser($this->user->getId());
+		if ($this->testRepository->getFilledTaskInTest($test_row->id, $this->user->getId())) {
+		    $this->flashMessage('Už ste vyplnili test', self::FLASH_MESSAGE_DANGER);
+		    $this->redirect('Student:');
+		} else if ($tasks = $this->testRepository->getUnfilledTaskInTest($test_row->id, $this->user->getId())) {
+		    $this->unFilledTasks = array();
+		    foreach ($tasks as $value) {
+			$this->unFilledTasks[] = $this->unitConversion->reGenerateTask($value);
+		    }
+		}
 		$this->numberOfTasks = $test_row->nb_count;
 		$this->difficulty = $test_row->nb_level;
 		$this->test_id = $test_row->id;
-		echo $test_row->nb_count;
+		$this->template->form = $this['newTaskForm'];
+		$this->template->tasks = $this->tasks;
+		$this->template->unitConversion = $this->unitConversion;
+	    } else {
+		$this->template->form = $this['newTaskForm'];
+		$this->template->tasks = $this->tasks;
+		$this->template->unitConversion = $this->unitConversion;
 	    }
-	    $this->template->form = $this['newTaskForm'];
-	    $this->template->tasks = $this->tasks;
-	    $this->template->unitConversion = $this->unitConversion;
 	}
     }
-    
-    public function actionTest(){
-	if($this->testRepository->getTestForUser($this->user->getId())->id == NULL){
+
+    public function actionTest() {
+	if ($this->testRepository->getTestForUser($this->user->getId())->id == NULL) {
 	    $this->flashMessage('Momentálne pre Vás neexistuje test', self::FLASH_MESSAGE_WARNING);
 	    $this->redirect('Student:');
-	}else{
+	} else {
 	    $this->redirect('Student:newTask', 1);
 	}
     }
@@ -62,7 +74,11 @@ class StudentPresenter extends BasePresenter {
 	$form->getElementPrototype()->class('form-horizontal task-list');
 	if (!$this->getRequest()->isPost()) {
 	    for ($i = 0; $i < $this->numberOfTasks; $i++) {
-		$singleTask = $this->unitConversion->generateConversion($this->user->getId(), $this->difficulty, $this->test_id);
+		if ($this->unFilledTasks) {
+		    $singleTask = $this->unFilledTasks[$i];
+		} else {
+		    $singleTask = $this->unitConversion->generateConversion($this->user->getId(), $this->difficulty, $this->test_id);
+		}
 		$this->tasks[$singleTask->getId()] = $singleTask;
 
 		$singleTaskInput = $form->addText("task" . $singleTask->getId(), $singleTask . " " . $singleTask->getUnitName());

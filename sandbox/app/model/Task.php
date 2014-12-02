@@ -11,6 +11,13 @@ class Task {
 		$this->value = rand(1, 999);
 		$this->exp = rand(-3, 2);
 	}
+	
+	public function setConstruct($id, $values){
+	    $this->unit = $values;
+	    $this->value = $values->nb_value_from;
+	    $this->exp = $values->nb_power_from;
+	    $this->id = $id;
+	}
 
 	public function __toString() {
 		return strval(($this->value / pow(10, floor(log($this->value, 10)))) * pow(10, $this->exp));

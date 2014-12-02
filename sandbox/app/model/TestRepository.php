@@ -49,5 +49,18 @@ class TestRepository extends Repository {
 				AND test.fl_closed = 'N'
 				WHERE user.id = " . $user_id . ";")->fetch();
     }
+    
+    public function getFilledTaskInTest($test_id, $student_id){
+	return $this->database->query('SELECT id FROM task WHERE dt_updated IS NOT NULL AND id_test =' . $test_id . ' AND id_user =' . $student_id . ';')->fetch();
+    }
+    
+    public function getUnfilledTaskInTest($test_id, $student_id){
+	return $this->database->query('SELECT t.id as idcko, t.nb_value_from, t.nb_power_from, u.* FROM task t
+					LEFT JOIN unit u
+					ON u.id = t.id_unit
+					WHERE dt_updated IS NULL AND id_test =' . $test_id . ' AND id_user =' . $student_id . ';')
+		->fetchAll()
+		;
+    }
 
 }
