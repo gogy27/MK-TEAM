@@ -24,6 +24,8 @@ class AuthPresenter extends BasePresenter {
 					$this->redirect('Student:default');
 				} else if ($this->user->isInRole(Model\UserRepository::TEACHER)) {
 					$this->redirect('Teacher:default');
+				} else if ($this->user->isInRole(Model\UserRepository::ADMIN)) {
+					$this->redirect('Admin:default');
 				}
 			}
 		}

@@ -125,4 +125,8 @@ class UserRepository extends Repository {
 					" GROUP BY un.nb_category, un.str_unit_description ORDER BY un.str_unit_description DESC")
 		->fetchAll();
     }
+    
+    public function  getTeachers() {
+        return $this->database->table(self::TABLE_NAME)->where([self::COLUMN_ROLE => self::TEACHER])->fetchAll();
+    }
 }
