@@ -35,8 +35,15 @@ class ClassRepository extends Repository {
 		$this->getTable()->where(array(self::COLUMN_ID => $group_id))->delete();
 	}
 
-	public function getGroup($group_name) {
+	public function getAllGroups() {
+		return $this->database->table(self::TABLE_NAME)->select(self::COLUMN_ID.", ".self::COLUMN_NAME)->fetchPairs(self::COLUMN_ID, self::COLUMN_NAME);
+	}
+	
+	public function getGroup($id) {
+		return $this->database->table(self::TABLE_NAME)->where(self::COLUMN_ID, intval($id))->fetch();
+	}
+	
+	public function getGroupByName($group_name) {
 		return $this->database->table(self::TABLE_NAME)->where(array(self::COLUMN_NAME => $group_name))->fetch();
 	}
-
 }

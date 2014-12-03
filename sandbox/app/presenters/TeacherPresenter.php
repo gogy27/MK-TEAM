@@ -89,7 +89,7 @@ class TeacherPresenter extends BasePresenter {
     }
 
     public function newGroupSubmitted($form, $values) {
-	if ($this->classRepository->getGroup($values->name)) {
+	if ($this->classRepository->getGroupByName($values->name)) {
 	    $this->flashMessage('Názov skupiny už existuje. Zvoľte iný.', self::FLASH_MESSAGE_DANGER);
 	} else {
 	    $this->classRepository->addGroup($this->user->getId(), $values->name, $values->password, $values->description);
