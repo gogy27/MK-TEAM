@@ -47,14 +47,10 @@ class StudentPresenter extends BasePresenter {
 				$this->numberOfTasks = $test_row->nb_count;
 				$this->difficulty = $test_row->nb_level;
 				$this->test_id = $test_row->id;
-				$this->template->form = $this['newTaskForm'];
-				$this->template->tasks = $this->tasks;
-				$this->template->unitConversion = $this->unitConversion;
-			} else {
-				$this->template->form = $this['newTaskForm'];
-				$this->template->tasks = $this->tasks;
-				$this->template->unitConversion = $this->unitConversion;
 			}
+			$this->template->form = $this['newTaskForm'];
+			$this->template->tasks = $this->tasks;
+			$this->template->unitConversion = $this->unitConversion;
 		}
 	}
 
