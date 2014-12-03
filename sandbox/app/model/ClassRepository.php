@@ -22,6 +22,11 @@ class ClassRepository extends Repository {
 	public function getTeacherGroups($teacher_id) {
 		return $this->findBy(array(self::COLUMN_USER_ID => $teacher_id));
 	}
+	
+	public function getTeacherGroupsWithTestInfo($teacher_id){
+		return $this->database->query("SELECT c.*,CASE WHEN t.id IS NULL THEN 'N' ELSE 'A' END as test"
+			. " FROM class c LEFT JOIN test t ON t.id_group = c.id AND t.fl_closed = 'N' WHERE c.id_user = " . $teacher_id . " ;");
+	}
 
 	public function addGroup($teacher_id, $group_name, $group_key, $description) {
 		$this->getTable()->insert(array(self::COLUMN_NAME => $group_name,

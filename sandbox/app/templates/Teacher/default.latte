@@ -8,6 +8,7 @@
                 <th class="text-center">Dátum vytvorenia</th>
                 <th class="text-center">Heslo skupiny</th>
                 <th class="text-center">Zadať/Ukončiť test</th>
+		<th class="text-center">Prebiehajúci test</th>
                 <th class="text-center">Zmazať skupinu</th>
             </tr>
             {foreach $groups as $group}
@@ -16,6 +17,7 @@
                     <td>{$group->{$classRepository::COLUMN_CREATE_TIME}|date:'F j, Y'}</td>
                     <td>{$group->{$classRepository::COLUMN_PASSWORD}}</td>
                     <td><a n:href="Teacher:setTest $group->{$classRepository::COLUMN_ID}"><i class="glyphicon glyphicon-pencil"></i></a></td>
+		    <td>{if $group->test == 'A'}<i class="glyphicon glyphicon-ok"></i>{else}<i class="glyphicon glyphicon-remove"></i>{/if}</td>
                     <td><a n:href="Teacher:removeGroup $group->{$classRepository::COLUMN_ID}"> <i class="glyphicon glyphicon-remove"></i> </a></td>
                 </tr>
             {/foreach}
