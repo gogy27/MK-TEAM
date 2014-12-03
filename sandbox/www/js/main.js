@@ -1,48 +1,22 @@
-$(function () {
-    
-    $('.base-number-format-input').keyup(function () {
-        $(this).parent('.nowrap').siblings('.nowrap').find('.base-number-format').text($(this).val());
-    });
-    
-    function netteJson(link) {
-        $.getJSON(odkaz, function (payload) {
-            if (payload.accepted) {
-                // uspesny             
-            }
-            else {
-                // neuspesny
-            }
-            $("#message").html(payload.message);
+$(function() {
 
-            for (var i in payload.snippets) {
-                updateSnippet(i, payload.snippets[i]);
-            }
-        });
-    }
-    
-    $('.remove-user').click(function(){
-        e.preventDefault();
-        alert($(this).attr('href'));
-        $.getJSON($(this).attr('href'), function (payload) {
-            if (payload.accepted) {
-                // uspesny          
-                alert('ide');
-                $(this).parent('td').parent('tr').remove();
-            }
-            else {
-                // neuspesny
-                alert('nejde');
-            }
-        });
-    });
-    /*
-    $.nette.ext('.remove-user', {
-        success: function () {
-            console.log('user removed');
-        },
-        error: function () {
-            console.log('vyskytla sa chyba pri dostranovani.');
-        }
-    });
-    */
+	$('.base-number-format-input').keyup(function() {
+		$(this).parent('.nowrap').siblings('.nowrap').find('.base-number-format').text($(this).val());
+	});
+
+	$('a.remove-user').click(function(e) {
+		e.preventDefault();
+		var $anchor = $(this);
+		$.getJSON($(this).attr('href'), function(payload) {
+			if (payload.accepted) {
+				$anchor.parent('td').parent('tr').fadeOut(400, function(){
+					$anchor.closest('table').before($('<div></div>').addClass('alert alert-success text-center col-xs-6 col-xs-offset-3').html(payload.message));
+					$(this).remove();
+				});
+			}
+			else {
+				$anchor.closest('table').before($('<div></div>').addClass('alert alert-danger text-center col-xs-6 col-xs-offset-3').html(payload.message));
+			}
+		});
+	});
 });

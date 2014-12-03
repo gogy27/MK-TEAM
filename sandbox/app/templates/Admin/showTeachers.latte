@@ -11,7 +11,7 @@
     </tr>
     {foreach $teachers as $key => $teacher}
     <tr>
-        <td><a n:href="Admin:deleteUser, 'id' => $teacher->{App\Model\UserRepository::COLUMN_ID}" class="btn btn-danger btn-sm remove-user" data-user-id="{$teacher->{App\Model\UserRepository::COLUMN_ID}}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+        <td><a n:href="deleteUser!, 'id' => $teacher->{App\Model\UserRepository::COLUMN_ID}" class="btn btn-danger btn-sm remove-user" data-user-id="{$teacher->{App\Model\UserRepository::COLUMN_ID}}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
         <!--<td><input type="checkbox" name="teacher[{$teacher->{App\Model\UserRepository::COLUMN_ID}}]" value="$teacher->{App\Model\UserRepository::COLUMN_ID}}"></td>-->
         <td>{$teacher->{App\Model\UserRepository::COLUMN_NAME}}</td>
         <td>{$teacher->{App\Model\UserRepository::COLUMN_EMAIL}}</td>
