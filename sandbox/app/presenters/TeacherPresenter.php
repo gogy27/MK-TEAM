@@ -61,7 +61,7 @@ class TeacherPresenter extends BasePresenter {
     public function actionCloseTest($test_id) {
 	if ($this->testRepository->getOwnerOfTest($test_id)->id == $this->user->getId()) {
 	    $this->testRepository->closeTest($test_id);
-	    $this->flashMessage('Test úspešne ukonšený˝', self::FLASH_MESSAGE_SUCCESS);
+	    $this->flashMessage('Test úspešne ukončený', self::FLASH_MESSAGE_SUCCESS);
 	} else {
 	    $this->flashMessage('Test nemôžete ukončiť. Nepatrí Vám!', self::FLASH_MESSAGE_DANGER);
 	}

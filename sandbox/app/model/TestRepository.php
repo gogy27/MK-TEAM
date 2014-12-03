@@ -22,7 +22,7 @@ class TestRepository extends Repository {
 	    MAX_COUNT = 50;
 
     public function getUnclosedTestForGroup($group_id) {
-	return $this->database->table(self::TABLE_NAME)->select(self::COLUMN_ID)->where(array(self::COLUMN_ID_GROUP => $group_id, self::COLUMN_CLOSED => self::FALSE_VALUE))->fetch();
+	return $this->database->table(self::TABLE_NAME)->select(self::COLUMN_ID . ','. self::COLUMN_CREATED_TIME)->where(array(self::COLUMN_ID_GROUP => $group_id, self::COLUMN_CLOSED => self::FALSE_VALUE))->fetch();
     }
 
     public function addTest($group_id, $level, $count) {

@@ -3,7 +3,7 @@
 {ifset $open->id}
     <div class="row row-cells">
         <div class="col-sm-4 col-sm-offset-4 text-center">
-            <a n:href="Teacher:closeTest $open->{$testRepository::COLUMN_ID}" class="link-cell link-cell-red">Ukončiť test<span class="start-time">Vytvorené: 12.32.2014</span></a>
+            <a n:href="Teacher:closeTest $open->{$testRepository::COLUMN_ID}" class="link-cell link-cell-red">Ukončiť test<span class="start-time">Zadané: {$open->dt_created|date:'F j, Y - H:i:s'}</span></a>
         </div>
     </div>
 {else}
