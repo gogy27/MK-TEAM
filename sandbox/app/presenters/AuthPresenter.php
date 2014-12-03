@@ -85,9 +85,9 @@ class AuthPresenter extends BasePresenter {
 			$this->flashMessage($e->getMessage(), self::FLASH_MESSAGE_DANGER);
 		}
 	}
-	
+
 	public function checkGroupKeyValidator($key, $groupID) {
-		if (!($group = $this->classRepository->getGroup($groupID))){
+		if (!($group = $this->classRepository->getGroup($groupID))) {
 			return false;
 		}
 		return $key->getValue() == $group->{Model\ClassRepository::COLUMN_PASSWORD};
@@ -108,14 +108,15 @@ class AuthPresenter extends BasePresenter {
 						->setRequired('Musíte zadať, či ste študent alebo učiteľ');
 		$form['type']->getItemLabelPrototype()->addAttributes(array('class' => 'radio'));
 		$form['type']->getSeparatorPrototype()->setName(NULL);
-		
+
 		$classes = $this->classRepository->getAllGroups();
 		$form->addSelect('group', 'Skupina:', $classes)
 						->setPrompt('---')
-						->setAttribute('class', 'form-control')
+						->setAttribute('class', 'form-control group-control')
 						->addConditionOn($form['type'], Form::EQUAL, Model\UserRepository::STUDENT)
 						->setRequired("Vyberte si svoju skupinu");
-		$form->addText('groupKey', 'Kľúč skupiny')
+		$form->addText('groupKey', 'Kľúč skupiny:')
+						->setAttribute('class', 'group-control')
 						->addConditionOn($form['type'], Form::EQUAL, Model\UserRepository::STUDENT)
 						->setRequired('Prosím zadajte kľúč skupiny')
 						->addRule(callback($this, 'checkGroupKeyValidator'), 'Neplatný kľúč do skupiny', $form['group']);

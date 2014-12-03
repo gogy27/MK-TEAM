@@ -1,16 +1,29 @@
 {block content}
-    <div id="login-form">
-        <div class="row">
-            <div class="col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
-                <div class="panel panel-primary">
-                    <div class="panel-heading text-center">
-                        <h3 class="panel-title">Registrácia</h3>
-                    </div>
-                    <div class="panel-body">
-                        {control newRegisterUser}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div id="login-form">
+	<div class="row">
+		<div class="col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+			<div class="panel panel-primary">
+				<div class="panel-heading text-center">
+					<h3 class="panel-title">Registrácia</h3>
+				</div>
+				<div class="panel-body">
+					{control newRegisterUser}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{/block}
+
+{block scripts}
+<script type="text/javascript" n:syntax="double">
+	$('#frm-newRegisterUser').find('input[name=type]').change(function(){
+		if($(this).val() == {{\App\Model\UserRepository::TEACHER}}) {
+			$('.group-control').closest('.form-group').slideUp();
+		}
+		else {
+			$('.group-control').closest('.form-group').slideDown();
+		}
+	});
+</script>
 {/block}
