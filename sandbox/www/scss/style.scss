@@ -2,12 +2,12 @@
 @import "bootstrap";
 
 html {
-    position: relative;
-    min-height: 100%;
+	position: relative;
+	min-height: 100%;
 }
 body {
-    margin: 0 0 40px; /* bottom = footer height */
-    background-color: #E6E6E6;
+	margin: 0 0 40px; /* bottom = footer height */
+	background-color: #E6E6E6;
 }
 
 /*html, body, .container {
@@ -15,21 +15,13 @@ body {
 }*/
 
 nav.navbar.navbar-default {
-    box-shadow: 0px 2px 2px #AAA;
-    border-radius: 0;
+	box-shadow: 0px 2px 2px #AAA;
+	border-radius: 0;
 }
-
-/*.container {
-	display: table;
-	vertical-align: middle;
-}*/
 .container.first-content {
-    margin-top: 70px;
+	margin-top: 70px;
 }
 #login-form {
-	/*display: table-cell;
-	vertical-align: middle;
-	width: 100%;*/
 	.panel {
 		background-color: #fbfbfb;
 		border: 1px solid #AAA;
@@ -47,120 +39,133 @@ nav.navbar.navbar-default {
 }
 
 footer.footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 40px;
-    
-    line-height: 40px;
-    font-size: .8em;
-    color: #555;
-    background-color: #E6E6E6;
-    hr.style-two {
-        margin: 0 auto;
-        border: 0;
-        width: 50%;
-        height: 1px;
-        background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
-        background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
-        background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
-        background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
-    }
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 40px;
+
+	line-height: 40px;
+	font-size: .8em;
+	color: #555;
+	background-color: #E6E6E6;
+	hr.style-two {
+		margin: 0 auto;
+		border: 0;
+		width: 50%;
+		height: 1px;
+		background-image: -webkit-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+		background-image:    -moz-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+		background-image:     -ms-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+		background-image:      -o-linear-gradient(left, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0)); 
+	}
 }
 
 #student-options {
-    & > div[class^='col'],div[class*=' col'] {
-        padding: 15px;
-    }
+	& > div[class^='col'],div[class*=' col'] {
+		padding: 15px;
+	}
 }
 
 .row-cells {
-    & > div[class^='col'],div[class*=' col'] {
-        display: table !important;
-    }
-    a.link-cell {
-        display:table-cell;
-        vertical-align:middle;
-        height: 120px;
-        background-color: $alert-info-bg;
-        color: #444;
-        text-align: center;
-        font-size: 1.2em;
-        text-decoration: none;
-        box-shadow: 0px 2px 2px #AAA;
-        &:hover {
-            background-color: $alert-info-border;
-        }
-        &.link-cell-red {
-            background-color: $alert-danger-bg;
-            &:hover {
-                background-color: $alert-danger-border;
-            }
-        }
-        .start-time {
-            display: block;
-            font-size: .8em;
-            color: #777;
-        }
-    }
+	& > div[class^='col'],div[class*=' col'] {
+		display: table !important;
+	}
+	a.link-cell {
+		display:table-cell;
+		vertical-align:middle;
+		height: 120px;
+		background-color: $alert-info-bg;
+		color: #444;
+		text-align: center;
+		font-size: 1.2em;
+		text-decoration: none;
+		box-shadow: 0px 2px 2px #AAA;
+		&:hover {
+			background-color: $alert-info-border;
+		}
+		&.link-cell-red {
+			background-color: $alert-danger-bg;
+			&:hover {
+				background-color: $alert-danger-border;
+			}
+		}
+		.start-time {
+			display: block;
+			font-size: .8em;
+			color: #777;
+		}
+	}
 }
 
 form {
-    sup input.form-control {
-        height: 20px;
-        width: 30px;
-        padding: 2px 4px;
-        font-size: 12px;
-    }
+	sup input.form-control {
+		height: 20px;
+		width: 30px;
+		padding: 2px 4px;
+		font-size: 12px;
+	}
 }
 
 form.task-list {
-    .form-group {
-        padding-top: 15px;
-        border-top: thin solid $table-border-color;
-        &:first-child {
-            padding-top: 0;
-            border-top: none;
-        }
-        label.control-label {
-            line-height: 19px;
-            padding-top: 6px;
-        }
-    }
-    input.form-control {
-        display: inline-block;
-        max-width: 80px;
-    }
-    .equal-to {
-        font-size: 16px;
-        padding: 0 15px;
-        font-weight: bold;
-    }
-    span.base-number-format {
-        display: inline-block;
-        width: 80px;
-    }
-    span.nowrap {
-        white-space: nowrap;
-    }
-    span.unit-name {
-        display: inline-block;
-        width: 20px;
-        padding-left: 8px;
-    }
+	.form-group {
+		padding-top: 15px;
+		border-top: thin solid $table-border-color;
+		&:first-child {
+			padding-top: 0;
+			border-top: none;
+		}
+		label.control-label {
+			line-height: 19px;
+			padding-top: 6px;
+		}
+	}
+	input.form-control {
+		display: inline-block;
+		max-width: 80px;
+	}
+	.equal-to {
+		font-size: 16px;
+		padding: 0 15px;
+		font-weight: bold;
+	}
+	span.base-number-format {
+		display: inline-block;
+		width: 80px;
+	}
+	span.nowrap {
+		white-space: nowrap;
+	}
+	span.unit-name {
+		display: inline-block;
+		width: 20px;
+		padding-left: 8px;
+	}
+}
+
+.form-horizontal {
+	.form-group {
+		.error {
+			@extend .bg-danger;
+			@extend .text-danger;
+			border-radius: 3px;
+			display: inline-block;
+			margin: 5px 0;
+			padding: 4px 8px;
+		}
+	}
 }
 
 @media (max-width: $screen-xs-max) {
-    .row-cells {
-        & > div[class^='col'],div[class*=' col'] {
-            width: 100%;
-        }
-    }
-    
-    form.task-list {
-        span.nowrap {
-            display: block;
-        }
-    }
+	.row-cells {
+		& > div[class^='col'],div[class*=' col'] {
+			width: 100%;
+		}
+	}
+
+	form.task-list {
+		span.nowrap {
+			display: block;
+		}
+	}
 }

@@ -11,12 +11,13 @@ use Nette,
  */
 class AuthPresenter extends BasePresenter {
 
-	private $userManager, $userRepository, $args;
+	private $userManager, $userRepository, $classRepository, $args;
 
 	protected function startup() {
 		parent::startup();
 		$this->userManager = $this->context->authorizator;
 		$this->userRepository = $this->context->userRepository;
+		$this->classRepository = $this->context->classRepository;
 
 		if ($this->user->isLoggedIn()) {
 			if ($this->getAction() != 'logout' && $this->getAction() != 'changepassword' && $this->getAction() != 'changePassword') {
@@ -24,13 +25,15 @@ class AuthPresenter extends BasePresenter {
 					$this->redirect('Student:default');
 				} else if ($this->user->isInRole(Model\UserRepository::TEACHER)) {
 					$this->redirect('Teacher:default');
+				} else if ($this->user->isInRole(Model\UserRepository::ADMIN)) {
+					$this->redirect('Admin:default');
 				}
 			}
 		}
 	}
 
 	public function actionDefault() {
-		
+		//die(Nette\Security\Passwords::hash('heslo'));
 	}
 
 	public function actionRegister() {
@@ -45,7 +48,7 @@ class AuthPresenter extends BasePresenter {
 	}
 
 	public function actionSendEmailToResetPassword() {
-		;
+		
 	}
 
 	public function actionChangePassword() {
@@ -60,8 +63,8 @@ class AuthPresenter extends BasePresenter {
 
 	protected function createComponentNewLoginForm() {
 		$form = new Form;
-		$form->addText('name', 'Meno:')
-						->addRule(Form::FILLED, 'Musíte zadať svoje prihlasovacie meno')
+		$form->addText('email', 'E-mail:')
+						->addRule(Form::FILLED, 'Musíte zadať svoj prihlasovací e-mail')
 						->setAttribute('placeholder', 'Zadajte meno');
 		$form->addPassword('password', 'Heslo:')
 						->addRule(Form::FILLED, 'Musíte zadať svoje prihlasovacie heslo')
@@ -76,11 +79,18 @@ class AuthPresenter extends BasePresenter {
 
 	public function newLoginFormSubmitted($form, $values) {
 		try {
-			$this->getUser()->login($values->name, $values->password);
+			$this->getUser()->login($values->email, $values->password);
 			$this->redirect('Auth:default');
 		} catch (Nette\Security\AuthenticationException $e) {
 			$this->flashMessage($e->getMessage(), self::FLASH_MESSAGE_DANGER);
 		}
+	}
+	
+	public function checkGroupKeyValidator($key, $groupID) {
+		if (!($group = $this->classRepository->getGroup($groupID))){
+			return false;
+		}
+		return $key->getValue() == $group->{Model\ClassRepository::COLUMN_PASSWORD};
 	}
 
 	public function createComponentNewRegisterUser() {
@@ -93,11 +103,22 @@ class AuthPresenter extends BasePresenter {
 						->setRequired('Musíte zadať email')
 						->setDefaultValue('@')
 						->addRule(Form::EMAIL, 'Zle zadaný email');
-		$type = array(Model\UserRepository::STUDENT => 'Učiteľ', Model\UserRepository::TEACHER => 'Žiak',);
+		$type = array(Model\UserRepository::TEACHER => 'Učiteľ', Model\UserRepository::STUDENT => 'Žiak',);
 		$form->addRadioList('type', 'Som:', $type)
 						->setRequired('Musíte zadať, či ste študent alebo učiteľ');
 		$form['type']->getItemLabelPrototype()->addAttributes(array('class' => 'radio'));
 		$form['type']->getSeparatorPrototype()->setName(NULL);
+		
+		$classes = $this->classRepository->getAllGroups();
+		$form->addSelect('group', 'Skupina:', $classes)
+						->setPrompt('---')
+						->setAttribute('class', 'form-control')
+						->addConditionOn($form['type'], Form::EQUAL, Model\UserRepository::STUDENT)
+						->setRequired("Vyberte si svoju skupinu");
+		$form->addText('groupKey', 'Kľúč skupiny')
+						->addConditionOn($form['type'], Form::EQUAL, Model\UserRepository::STUDENT)
+						->setRequired('Prosím zadajte kľúč skupiny')
+						->addRule(callback($this, 'checkGroupKeyValidator'), 'Neplatný kľúč do skupiny', $form['group']);
 
 		$form->addPassword('password', 'Heslo:')
 						->addRule(Form::MIN_LENGTH, 'Heslo musí obsahovať aspoň %d znaky', Model\UserRepository::PASSWORD_MIN_LENGTH);
@@ -223,6 +244,7 @@ class AuthPresenter extends BasePresenter {
 		$renderer->wrappers['control']['.text'] = 'form-control';
 		$renderer->wrappers['control']['.password'] = 'form-control';
 		$renderer->wrappers['control']['.submit'] = 'btn btn-primary';
+		$renderer->wrappers['control']['errorcontainer'] = 'span class="error"';
 	}
 
 }
