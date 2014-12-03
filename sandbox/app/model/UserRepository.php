@@ -53,7 +53,7 @@ class UserRepository extends Repository {
 	}
 
 	public function addResetPasswordHash($email, $hash) {
-		return $this->database->table(self::TABLE_NAME)->where(self::COLUMN_EMAIL, $email)->update([self::COLUMN_PASSWORD_HASH => $hash]);
+		return $this->findBy(array(self::COLUMN_EMAIL => $email))->update([self::COLUMN_PASSWORD_HASH => $hash]);
 	}
 
 	public function resetPassword($user_id, $hash, $password) {
@@ -73,15 +73,15 @@ class UserRepository extends Repository {
 	}
 
 	public function removeUser($user_id) {
-		$this->database->table(self::TABLE_NAME)->where(array(self::COLUMN_ID => $user_id))->delete();
+		$this->find($user_id)->delete();
 	}
 
 	public function getPassword($user_id) {
-		return $this->database->table(self::TABLE_NAME)->where(array(self::COLUMN_ID => $user_id))->fetch();
+		return $this->find($user_id)->fetch();
 	}
 
 	public function changePassword($user_id, $new_password) {
-		$this->database->table(self::TABLE_NAME)->where(array(self::COLUMN_ID => $user_id))->update(array(self::COLUMN_PASSWORD => $new_password));
+		$this->find($user_id)->update(array(self::COLUMN_PASSWORD => $new_password));
 	}
 
 	public function getStatisticsOfTasks($group_id) {
@@ -127,12 +127,13 @@ class UserRepository extends Repository {
 					    ON u.id = t.id_user
 					LEFT JOIN unit un
 					    ON un.id = t.id_unit
-					WHERE u.id_group = " . $group_id . 
-					" GROUP BY un.nb_category, un.str_unit_description ORDER BY un.str_unit_description DESC")
-		->fetchAll();
-    }
-    
-    public function  getTeachers() {
-        return $this->database->table(self::TABLE_NAME)->where([self::COLUMN_ROLE => self::TEACHER])->fetchAll();
-    }
+					WHERE u.id_group = " . $group_id .
+														" GROUP BY un.nb_category, un.str_unit_description ORDER BY un.str_unit_description DESC")
+										->fetchAll();
+	}
+
+	public function getTeachers() {
+		return $this->findBy([self::COLUMN_ROLE => self::TEACHER])->fetchAll();
+	}
+
 }

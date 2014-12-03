@@ -4,9 +4,7 @@ namespace App\Model;
 
 use Nette,
 		Nette\Utils\Strings,
-		Nette\Security\Passwords
-
-;
+		Nette\Security\Passwords;
 
 class ClassRepository extends Repository {
 
@@ -22,10 +20,10 @@ class ClassRepository extends Repository {
 	public function getTeacherGroups($teacher_id) {
 		return $this->findBy(array(self::COLUMN_USER_ID => $teacher_id));
 	}
-	
-	public function getTeacherGroupsWithTestInfo($teacher_id){
+
+	public function getTeacherGroupsWithTestInfo($teacher_id) {
 		return $this->database->query("SELECT c.*,CASE WHEN t.id IS NULL THEN 'N' ELSE 'A' END as test"
-			. " FROM class c LEFT JOIN test t ON t.id_group = c.id AND t.fl_closed = 'N' WHERE c.id_user = " . $teacher_id . " ;");
+										. " FROM class c LEFT JOIN test t ON t.id_group = c.id AND t.fl_closed = 'N' WHERE c.id_user = " . intval($teacher_id) . " ;");
 	}
 
 	public function addGroup($teacher_id, $group_name, $group_key, $description) {
@@ -37,18 +35,19 @@ class ClassRepository extends Repository {
 	}
 
 	public function removeGroup($group_id) {
-		$this->getTable()->where(array(self::COLUMN_ID => $group_id))->delete();
+		$this->findBy(array(self::COLUMN_ID => $group_id))->delete();
 	}
 
 	public function getAllGroups() {
-		return $this->database->table(self::TABLE_NAME)->select(self::COLUMN_ID.", ".self::COLUMN_NAME)->fetchPairs(self::COLUMN_ID, self::COLUMN_NAME);
+		return $this->getTable()->select(self::COLUMN_ID . ", " . self::COLUMN_NAME)->fetchPairs(self::COLUMN_ID, self::COLUMN_NAME);
 	}
-	
+
 	public function getGroup($id) {
-		return $this->database->table(self::TABLE_NAME)->where(self::COLUMN_ID, intval($id))->fetch();
+		return $this->find(intval($id))->fetch();
 	}
-	
+
 	public function getGroupByName($group_name) {
-		return $this->database->table(self::TABLE_NAME)->where(array(self::COLUMN_NAME => $group_name))->fetch();
+		return $this->findBy(array(self::COLUMN_NAME => $group_name))->fetch();
 	}
+
 }
