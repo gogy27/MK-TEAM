@@ -50,7 +50,6 @@ class UnitConversion extends Nette\Object {
 	$data['value'] = Task::toBaseValue($data['value']);
 	$userValue = ($data['value'] / pow(10, floor(log($data['value'], 10)))) * pow(10, $data['exp']);
 	$taskValue = ($task->{self::TASK_COLUMN_VALUE_FROM} / pow(10, floor(log($task->{self::TASK_COLUMN_VALUE_FROM}, 10)))) * pow(10, $task->{self::TASK_COLUMN_POWER_FROM});
-	echo "$userValue = $taskValue <br/>";
 	if ($userValue == $taskValue) {
 	    if ($data['expBase'] == Task::toBaseExp($this->getUnit($task->{self::TASK_COLUMN_UNIT_ID}), $task->{self::TASK_COLUMN_POWER_FROM})) {
 		$data[self::TASK_COLUMN_CORRECT] = self::TRUE_VALUE;
