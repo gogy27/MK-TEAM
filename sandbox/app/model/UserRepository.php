@@ -120,8 +120,8 @@ class UserRepository extends Repository {
 		return $this->database->query("SELECT 
 					    un.nb_category,
 					    un.str_unit_description,
-					    sum(CASE WHEN t.fl_correct = 'A' THEN 1 ELSE 0 END) as correct,
-					    sum(CASE WHEN t.fl_correct = 'N' AND t.dt_updated IS NOT NULL AND t.nb_value_to IS NOT NULL THEN 1 ELSE 0 END) as uncorrect
+					    COALESCE(sum(CASE WHEN t.fl_correct = 'A' THEN 1 ELSE 0 END), 0) as correct,
+					    COALESCE(sum(CASE WHEN t.fl_correct = 'N' AND t.dt_updated IS NOT NULL AND t.nb_value_to IS NOT NULL THEN 1 ELSE 0 END), 0) as uncorrect
 					FROM task t
 					LEFT JOIN user u
 					    ON u.id = t.id_user

@@ -57,10 +57,14 @@ class TeacherPresenter extends BasePresenter {
 	$this->template->open = $this->testRepository->getUnclosedTestForGroup($group_id);
 	$this->template->testRepository = $this->testRepository;
     }
-    
-    public function actionCloseTest($test_id){
-	$this->testRepository->closeTest($test_id);
-	$this->flashMessage('Test úspešne ukončený', self::FLASH_MESSAGE_SUCCESS);
+
+    public function actionCloseTest($test_id) {
+	if ($this->testRepository->getOwnerOfTest($test_id)->id == $this->user->getId()) {
+	    $this->testRepository->closeTest($test_id);
+	    $this->flashMessage('Test úspešne ukončený', self::FLASH_MESSAGE_SUCCESS);
+	} else {
+	    $this->flashMessage('Test nemôžete ukončit. Nepatrí Vám!', self::FLASH_MESSAGE_DANGER);
+	}
 	$this->redirect('Teacher:');
     }
 
@@ -111,7 +115,7 @@ class TeacherPresenter extends BasePresenter {
 	$form->addSelect('level', 'Náročnosť ', $levely)
 		->setRequired('Zadajte náročnosť')
 		->setPrompt('Vyberte náročnosť')
-                ->setAttribute('class', 'form-control');
+		->setAttribute('class', 'form-control');
 	$form->addHidden('id_group', $this->group_id);
 	$form->addSubmit('createTest', 'Spustiť test');
 	$form->onSuccess[] = $this->newTestSubmitted;
@@ -121,14 +125,17 @@ class TeacherPresenter extends BasePresenter {
     }
 
     public function newTestSubmitted($form, $values) {
-	if ($this->testRepository->getUnclosedTestForGroup($values->id_group)) {
-	    $this->flashMessage('Pre danú skupinu už je spustený test', self::FLASH_MESSAGE_WARNING);
-	    $this->redirect('Teacher:');
+	if ($this->classRepository->getGroup($values->id_group)->{Model\ClassRepository::COLUMN_USER_ID} == $this->user->getId()) {
+	    if ($this->testRepository->getUnclosedTestForGroup($values->id_group)) {
+		$this->flashMessage('Pre danú skupinu už je spustený test', self::FLASH_MESSAGE_WARNING);
+	    } else {
+		$this->testRepository->addTest($values->id_group, $values->level, $values->count);
+		$this->flashMessage('Test bol spustený!', self::FLASH_MESSAGE_INFO);
+	    }
 	} else {
-	    $this->testRepository->addTest($values->id_group, $values->level, $values->count);
-	    $this->flashMessage('Test bol spustený!', self::FLASH_MESSAGE_INFO);
-	    $this->redirect('Teacher:');
+	    $this->flashMessage('Pre túto skupinu nemôžete vytvárať test!', self::FLASH_MESSAGE_DANGER);
 	}
+	$this->redirect('Teacher:');
     }
 
     private function setFormRenderer($renderer) {

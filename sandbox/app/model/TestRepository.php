@@ -38,7 +38,16 @@ class TestRepository extends Repository {
 		update(array(self::COLUMN_CLOSED => self::TRUE_VALUE,
 		    self::COLUMN_CLOSED_TIME => date("Y-m-d H:i:s")));
     }
-
+    
+    public function getOwnerOfTest($test_id){
+	return $this->database->query('SELECT
+					c.id_user as id
+					FROM test t
+					LEFT JOIN class c
+						ON c.id = t.id_group
+					WHERE t.id =  ' . 1 . ';')->fetch();
+    }
+    
     public function getTestForUser($user_id) {
 	//return $this->database->table(UserRepository::TABLE_NAME)->select('test.id, test.nb_level, test.nb_count')->where('test.id_group = user.id_group AND test.fl_closed = "N" AND user.id = ' . $user_id)->fetch();
 
