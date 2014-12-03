@@ -25,6 +25,7 @@ class UnitConversion extends Nette\Object {
 	    TASK_COLUMN_POWER_FROM = 'nb_power_from',
 	    TASK_COLUMN_VALUE_TO = 'nb_value_to',
 	    TASK_COLUMN_POWER_TO = 'nb_power_to',
+			TASK_COLUMN_POWER_BASE_TO = 'nb_power_base_to',
 	    TASK_COLUMN_CORRECT = 'fl_correct',
 	    TASK_COLUMN_TEST_ID = 'id_test';
 
@@ -48,16 +49,23 @@ class UnitConversion extends Nette\Object {
 	$data[self::TASK_COLUMN_CORRECT] = self::FALSE_VALUE;
 
 	$data['value'] = Task::toBaseValue($data['value']);
-	$userValue = ($data['value'] / pow(10, floor(log($data['value'], 10)))) * pow(10, $data['exp']);
-	$taskValue = ($task->{self::TASK_COLUMN_VALUE_FROM} / pow(10, floor(log($task->{self::TASK_COLUMN_VALUE_FROM}, 10)))) * pow(10, $task->{self::TASK_COLUMN_POWER_FROM});
-	if ($userValue == $taskValue) {
-	    if ($data['expBase'] == Task::toBaseExp($this->getUnit($task->{self::TASK_COLUMN_UNIT_ID}), $task->{self::TASK_COLUMN_POWER_FROM})) {
-		$data[self::TASK_COLUMN_CORRECT] = self::TRUE_VALUE;
-	    }
+	$userValue = 0;
+	if ($data['value'] > 0) {
+		$userValue = ($data['value'] / pow(10, floor(log($data['value'], 10)))) * pow(10, $data['exp']);
+		$taskValue = ($task->{self::TASK_COLUMN_VALUE_FROM} / pow(10, floor(log($task->{self::TASK_COLUMN_VALUE_FROM}, 10)))) * pow(10, $task->{self::TASK_COLUMN_POWER_FROM});
+		$taskBaseExp = Task::toBaseExp($this->getUnit($task->{self::TASK_COLUMN_UNIT_ID}), $task->{self::TASK_COLUMN_POWER_FROM});
+		if (($userValue == $taskValue) && ($data['expBase'] == $taskBaseExp)) {
+			$data[self::TASK_COLUMN_CORRECT] = self::TRUE_VALUE;
+		}
 	}
+	else {
+		$data[self::TASK_COLUMN_CORRECT] = null;
+	}
+	
 
 	$data[self::TASK_COLUMN_VALUE_TO] = $data['value'];
-	$data[self::TASK_COLUMN_POWER_TO] = $data['expBase'];
+	$data[self::TASK_COLUMN_POWER_TO] = $data['exp'];
+	$data[self::TASK_COLUMN_POWER_BASE_TO] = $data['expBase'];
 	unset($data['value']);
 	unset($data['exp']);
 	unset($data['expBase']);
