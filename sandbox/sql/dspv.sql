@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Hostiteľ: localhost
--- Vygenerované: St 03.Dec 2014, 21:51
+-- Vygenerované: St 03.Dec 2014, 23:24
 -- Verzia serveru: 5.6.12-log
 -- Verzia PHP: 5.4.12
 
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `class` (
 --
 
 INSERT INTO `class` (`id`, `str_group_password`, `str_group_name`, `id_user`, `dt_created`, `str_group_description`) VALUES
-(1, '123456', 'Prvá skupina', 1, '2014-12-03 22:48:22', 'Prvá');
+(1, '123456', 'Prvá skupina', 3, '2014-12-03 22:48:22', 'Prvá');
 
 -- --------------------------------------------------------
 
@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS `task` (
   `nb_power_to` int(11) DEFAULT NULL COMMENT 'Mocninu akú užívateľ zadal',
   `fl_correct` varchar(1) DEFAULT NULL COMMENT 'Správnosť vyriešenia príkladu',
   `id_test` int(11) DEFAULT NULL COMMENT 'Cudzí kľúč na test, ak daný príklad patrí k testu',
-  `nb_power_base` int(11) DEFAULT NULL,
+  `nb_power_base_to` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_USER_idx` (`id_user`),
   KEY `FK_UNIT_idx` (`id_unit`),
@@ -247,9 +247,9 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`id`, `str_name`, `str_mail`, `str_user_password`, `str_pass_hash`, `id_group`, `fl_user_type`, `dt_registration`, `dt_login`) VALUES
-(1, 'Učiteľ Adam', 'teacher@teacher.teacher', '$2y$10$jVMr4ezkjzdzKm3gmqL2puE87JiQixik36oDIqMipkbWFsF0BRlZO', NULL, NULL, 'T', '2014-12-03 22:47:56', '2014-12-03 22:48:12'),
+(1, 'MK ADMIN', 'adminko@adminko.adminko', '$2y$10$4NEDQ0AzBDQaqRdZXAiZJOQvnnboF8G7nYD.T7Ut.TGm31/DRR0Fm', NULL, NULL, 'A', '2014-12-03 22:49:53', '2014-12-03 22:54:37'),
 (2, 'Janko Hraško', 'student@student.student', '$2y$10$9waHstqYZqZ5uJ2s3wpN5Ot0KD1Yqu7jxdxjDbawIEWlnisDv.gMu', NULL, 1, 'S', '2014-12-03 22:49:24', NULL),
-(3, 'MK ADMIN', 'adminko@adminko.adminko', '$2y$10$4NEDQ0AzBDQaqRdZXAiZJOQvnnboF8G7nYD.T7Ut.TGm31/DRR0Fm', NULL, NULL, 'A', '2014-12-03 22:49:53', NULL);
+(3, 'Učiteľ Adam', 'teacher@teacher.teacher', '$2y$10$jVMr4ezkjzdzKm3gmqL2puE87JiQixik36oDIqMipkbWFsF0BRlZO', NULL, NULL, 'T', '2014-12-03 22:47:56', '2014-12-03 22:53:15');
 
 --
 -- Obmedzenie pre exportované tabuľky
@@ -266,14 +266,14 @@ ALTER TABLE `class`
 --
 ALTER TABLE `task`
   ADD CONSTRAINT `FK_USER_tsk` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_UNIT` FOREIGN KEY (`id_unit`) REFERENCES `unit` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_TEST` FOREIGN KEY (`id_test`) REFERENCES `test` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_UNIT` FOREIGN KEY (`id_unit`) REFERENCES `unit` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_TEST` FOREIGN KEY (`id_test`) REFERENCES `test` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Obmedzenie pre tabuľku `test`
 --
 ALTER TABLE `test`
-  ADD CONSTRAINT `FK_GROUPT` FOREIGN KEY (`id_group`) REFERENCES `class` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_GROUPT` FOREIGN KEY (`id_group`) REFERENCES `class` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Obmedzenie pre tabuľku `user`
