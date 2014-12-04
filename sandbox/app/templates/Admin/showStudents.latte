@@ -1,6 +1,6 @@
 {block content}
 
-<h1>Vymazávanie učiteľov</h1>
+<h1>Vymazávanie študentov{isset($group) ? ' v skupine '.$group->{App\Model\ClassRepository::COLUMN_NAME} : ''}</h1>
 
 <table class="table table-responsive table-hover">
     <tr>
@@ -13,7 +13,7 @@
     {foreach $users as $key => $user}
     <tr>
         <td><a n:href="deleteUser!, 'id' => $user->{App\Model\UserRepository::COLUMN_ID}" class="btn btn-danger btn-sm remove-user" data-user-id="{$user->{App\Model\UserRepository::COLUMN_ID}}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
-        <td><a n:href="Admin:showGroups, 'teacher_id' => $user->{App\Model\UserRepository::COLUMN_ID}">{$user->{App\Model\UserRepository::COLUMN_NAME}}</a></td>
+        <td>{$user->{App\Model\UserRepository::COLUMN_NAME}}</td>
         <td>{$user->{App\Model\UserRepository::COLUMN_EMAIL}}</td>
         <td>{$user->{App\Model\UserRepository::COLUMN_REG_TIME}}</td>
         <td>{$user->{App\Model\UserRepository::COLUMN_LOG_TIME}}</td>

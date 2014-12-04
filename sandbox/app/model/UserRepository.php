@@ -68,16 +68,20 @@ class UserRepository extends Repository {
 		return $user->update($toUpdate);
 	}
 
+        public function getStudents() {
+            return $this->getTable()->where(self::COLUMN_ID_GROUP . ' IS NOT NULL')->fetchAll();
+        }
+        
 	public function getStudentsByGroup($group_id) {
 		return $this->findBy(array(self::COLUMN_ID_GROUP => $group_id));
 	}
 
 	public function removeUser($user_id) {
-		$this->find($user_id)->delete();
+		return $this->find($user_id)->delete();
 	}
 
-	public function getPassword($user_id) {
-		return $this->find($user_id)->fetch();
+	public function getUser($user_id) {
+		return $this->find($user_id);
 	}
 
 	public function changePassword($user_id, $new_password) {

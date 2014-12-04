@@ -1,0 +1,22 @@
+{block content}
+
+<h1>Vymazávanie skupín{isset($teacher) ? ' u učiteľa '.$teacher->{App\Model\UserRepository::COLUMN_NAME} : ''}</h1>
+
+<table class="table table-responsive table-hover">
+    <tr>
+        <th></th>
+        <th>Názov skupiny</th>
+        <th>Popis</th>
+        <th>Vytvorená</th>
+    </tr>
+    {foreach $groups as $key => $group}
+    <tr>
+        <td><a n:href="deleteGroup!, 'id' => $group->{App\Model\ClassRepository::COLUMN_ID}" class="btn btn-danger btn-sm remove-user"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+        <td><a n:href="Admin:showStudents, 'group_id' => $group->{App\Model\ClassRepository::COLUMN_ID}">{$group->{App\Model\ClassRepository::COLUMN_ID}} {$group->{App\Model\ClassRepository::COLUMN_NAME}}</a></td>
+        <td>{$group->{App\Model\ClassRepository::COLUMN_DESCRIPTION}}</td>
+        <td>{$group->{App\Model\ClassRepository::COLUMN_CREATE_TIME}}</td>
+    </tr>
+    {/foreach}
+</table>
+    
+{/block}

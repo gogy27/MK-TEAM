@@ -32,40 +32,55 @@ class AdminPresenter extends BasePresenter {
 	}
 
 	public function actionShowTeachers() {
-		$this->template->teachers = $this->userRepository->getTeachers();
+		$this->template->users = $this->userRepository->getTeachers();
 	}
+        
+        public function actionShowGroups($teacher_id = NULL) {
+            if (!is_null($teacher_id)) {
+                $this->template->groups = $this->classRepository->getTeacherGroups($teacher_id);
+                $this->template->teacher = $this->userRepository->getUser($teacher_id);
+            } else {
+                $this->template->groups = $this->classRepository->getAllGroupsWithAllInfo();
+            }
+        }
+        
+        public function actionShowStudents($group_id = NULL) {
+            if (!is_null($group_id)) {
+                $this->template->users = $this->userRepository->getStudentsByGroup($group_id);
+                $this->template->group = $this->classRepository->getGroup($group_id);
+            } else {
+                $this->template->users = $this->userRepository->getStudents();
+            }
+        }
 
-	public function handleDeleteUser($id) {
-		$result['accepted'] = true;
+        public function handleDeleteUser($id) {
+            $result['accepted'] = (bool) $this->userRepository->removeUser($id);
+            
+            $this->payload->accepted = $result['accepted'];
+            
+            $this->payload->message = 'Užívateľ bol vymazaný';
 
-
-		$this->payload->accepted = $result['accepted'];
-		
-		$this->payload->message = "Success";
-		
-		if (!$this->isAjax()) {
-      $this->redirect('this');
-    }
-		else {
-			$this->terminate();
-		}
-	}
-
-	protected function createComponentTeachersForm() {
-		$form = new Form;
-		$container = $form->addContainer('teacher');
-		foreach ($this->template->teachers as $teacher) {
-			$col_id = $teacher->{Model\UserRepository::COLUMN_ID};
-			$container->addHidden($col_id, $col_id);
-		}
-
-		$form->onSuccess[] = $this->teachersFormSubmitted;
-
-		return $form;
-	}
-
-	public function teachersFormSubmitted() {
-		
-	}
+            if (!$this->isAjax()) {
+                $this->redirect('this');
+            } else {
+                $this->terminate();
+            }
+        }
+        
+        public function handleDeleteGroup($id) {
+            $this->payload->accepted = (bool) $this->classRepository->removeGroup($id);
+            
+            $this->payload->message = 'Skupina bola vymazaná';
+            
+            if (!$this->isAjax()) {
+                $this->redirect('this');
+            } else {
+                $this->terminate();
+            }
+        }
+        
+        public function handleDeleteTasks($date) {
+            //$this->payload->accepted = (bool) $this->tas
+        }
 
 }

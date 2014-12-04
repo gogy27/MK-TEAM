@@ -162,7 +162,7 @@ class AuthPresenter extends BasePresenter {
 	}
 
 	public function newChangePasswordSubmitted($form, $values) {
-		$password = $this->userRepository->getPassword($this->user->getId());
+		$password = $this->userRepository->getUser($this->user->getId());
 		if (!Nette\Security\Passwords::verify($values->old, $password[Model\UserRepository::COLUMN_PASSWORD])) {
 			$this->flashMessage('Zle zadané heslo', self::FLASH_MESSAGE_DANGER);
 		} else {

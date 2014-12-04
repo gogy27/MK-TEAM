@@ -35,15 +35,19 @@ class ClassRepository extends Repository {
 	}
 
 	public function removeGroup($group_id) {
-		$this->findBy(array(self::COLUMN_ID => $group_id))->delete();
+		return $this->findBy(array(self::COLUMN_ID => $group_id))->delete();
 	}
 
 	public function getAllGroups() {
 		return $this->getTable()->select(self::COLUMN_ID . ", " . self::COLUMN_NAME)->fetchPairs(self::COLUMN_ID, self::COLUMN_NAME);
 	}
+        
+        public function getAllGroupsWithAllInfo() {
+            return $this->getTable()->fetchAll();
+        }
 
 	public function getGroup($id) {
-		return $this->find(intval($id))->fetch();
+		return $this->find(intval($id));
 	}
 
 	public function getGroupByName($group_name) {
