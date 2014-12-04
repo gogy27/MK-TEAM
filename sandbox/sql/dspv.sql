@@ -19,8 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Databáza: `dspv`
 --
-CREATE DATABASE IF NOT EXISTS `dspv` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `dspv`;
+/*CREATE DATABASE IF NOT EXISTS `dspv` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `dspv`;*/
 
 -- --------------------------------------------------------
 
