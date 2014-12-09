@@ -53,6 +53,21 @@ class StudentPresenter extends BasePresenter {
 			$this->template->unitConversion = $this->unitConversion;
 		}
 	}
+	
+	public function actionResults() {
+		$this->template->tasks = array();
+		$this->tasks = $this->unitConversion->getUserTasks($this->user->getId())->order(Model\UnitConversion::UNIT_COLUMN_ID . " DESC");
+		foreach($this->tasks as $task) {
+			$unit = $this->unitConversion->getUnit($task->{Model\UnitConversion::TASK_COLUMN_UNIT_ID});
+			$baseUnit = $this->unitConversion->getBaseUnit($unit);
+			$this->template->tasks[] = array(
+					'prescription' => Model\Task::toHumanValue($task->{Model\UnitConversion::TASK_COLUMN_VALUE_FROM}, $task->{Model\UnitConversion::TASK_COLUMN_POWER_FROM}) . " " . $unit->{Model\UnitConversion::UNIT_COLUMN_NAME},
+					'correctAnswer' => Model\Task::toRealValue($task->{Model\UnitConversion::TASK_COLUMN_VALUE_FROM}) . " &times; 10 <sup>". $task->{Model\UnitConversion::TASK_COLUMN_POWER_FROM} . "</sup> " . $unit->{Model\UnitConversion::UNIT_COLUMN_NAME} . " <span class='equal-to'> = </span> " . Model\Task::toRealValue($task->{Model\UnitConversion::TASK_COLUMN_VALUE_FROM}) . " &times; 10 <sup>" . Model\Task::toBaseExp($unit, $task->{Model\UnitConversion::TASK_COLUMN_POWER_FROM}) . "</sup> " . $baseUnit->{Model\UnitConversion::UNIT_COLUMN_NAME},
+					'userAnswer' => Model\Task::toRealValue($task->{Model\UnitConversion::TASK_COLUMN_VALUE_TO}) . " &times; 10 <sup>". $task->{Model\UnitConversion::TASK_COLUMN_POWER_TO} . "</sup> " . $unit->{Model\UnitConversion::UNIT_COLUMN_NAME} . " <span class='equal-to'> = </span> " . Model\Task::toRealValue($task->{Model\UnitConversion::TASK_COLUMN_VALUE_TO}) . " &times; 10 <sup>" . $task->{Model\UnitConversion::TASK_COLUMN_POWER_BASE_TO} . "</sup> " . $baseUnit->{Model\UnitConversion::UNIT_COLUMN_NAME},
+					'isCorrect' => ($task->{Model\UnitConversion::TASK_COLUMN_CORRECT} == Model\UnitConversion::TRUE_VALUE)
+					);
+		}
+	}
 
 	public function actionTest() {
 		if ($this->testRepository->getTestForUser($this->user->getId())->id == NULL) {

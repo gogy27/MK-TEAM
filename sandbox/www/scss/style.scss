@@ -1,4 +1,3 @@
-/*ADD "--style compressed" TO COMPILER OPTIONS*/
 @import "bootstrap";
 
 html {
@@ -62,11 +61,6 @@ form.task-list {
 		display: inline-block;
 		max-width: 80px;
 	}
-	.equal-to {
-		font-size: 16px;
-		padding: 0 10px;
-		font-weight: bold;
-	}
 	span.nowrap {
 		white-space: nowrap;
 	}
@@ -90,6 +84,12 @@ nav.navbar.navbar-default {
 
 .container.first-content {
 	margin-top: 70px;
+}
+
+.equal-to {
+	font-size: 16px;
+	padding: 0 10px;
+	font-weight: bold;
 }
 
 .form-horizontal {

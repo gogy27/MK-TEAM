@@ -20,7 +20,7 @@ class Task {
 	}
 
 	public function __toString() {
-		return strval(self::toRealValue($this->value) * pow(10, $this->exp));
+		return strval(self::toHumanValue($this->value, $this->exp));
 	}
 	
 	public function getUnit() {
@@ -49,6 +49,9 @@ class Task {
 	
 	public static function toRealValue($value) {
 		$value = intval($value);
+		if ($value == 0) {
+			return 0;
+		}
 		$value = $value / pow(10, floor(log($value, 10)));
 			
 		return $value;
@@ -64,4 +67,7 @@ class Task {
 		return $unit->{UnitConversion::UNIT_COLUMN_MULTIPLE} + $exp;
 	}
 
+	public static function toHumanValue($value, $exp) {
+		return self::toRealValue($value) * pow(10, $exp);
+	}
 }
