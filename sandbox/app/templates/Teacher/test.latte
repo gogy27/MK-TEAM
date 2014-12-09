@@ -1,0 +1,21 @@
+{block content}
+
+<table class="table table-responsive table-striped text-center">
+    <tr>
+        <th class="text-center">Meno</th>
+        <th class="text-center">Mail</th>
+	<th class="text-center">Počet správnych odpovedí</th>
+	<th class="text-center">Počet nesprávnych odpovedí</th>
+        <th class="text-center">Počet zvyšných</th>
+    </tr>
+    {foreach $students as $student}
+    <tr>
+        <td>{$student->name}</td>
+	<td>{$student->mail}</td>
+	<td>{$student->correct}</td>
+	<td>{$student->incorrect}</td>
+	<td>{$student->other}</td>
+    </tr>
+    {/foreach}
+</table>
+{/block}

@@ -67,6 +67,10 @@ class TestRepository extends Repository {
 	return $this->database->query('SELECT id FROM task WHERE dt_updated IS NOT NULL AND id_test =' . $test_id . ' AND id_user =' . $student_id . ';')->fetch();
     }
     
+    public function getTest($id){
+	return $this->find(intval($id));
+    }
+    
     public function getUnfilledTaskInTest($test_id, $student_id){
 	return $this->database->query('SELECT t.id as idcko, t.nb_value_from, t.nb_power_from, u.* FROM task t
 					LEFT JOIN unit u
@@ -74,6 +78,33 @@ class TestRepository extends Repository {
 					WHERE dt_updated IS NULL AND id_test =' . $test_id . ' AND id_user =' . $student_id . ';')
 		->fetchAll()
 		;
+    }
+    
+    public function getStudentsResults($test_id){
+	return $this->database->query("SELECT 
+					    src.name
+					   ,src.mail
+					   ,src.correct
+					   ,src.incorrect
+					   ,(total - correct - incorrect) as other
+				       FROM
+					   (
+				       SELECT 
+					    min(u.str_name) as name
+					   ,min(u.str_mail) as mail
+					   ,sum(CASE WHEN ta.fl_correct = 'A' THEN 1 ELSE 0 END) as correct
+					   ,sum(CASE WHEN ta.fl_correct = 'N' THEN 1 ELSE 0 END) as incorrect
+					   ,t.nb_count as total
+				       FROM test t
+				       LEFT JOIN user u
+					   ON u.id_group = t.id_group
+				       LEFT JOIN task ta
+					   ON ta.id_test = " . $test_id . 
+					   " AND ta.id_user = u.id
+				       WHERE t.id = " . $test_id .
+				       " GROUP BY u.id
+				       )src
+				   ")->fetchAll();
     }
 
 }

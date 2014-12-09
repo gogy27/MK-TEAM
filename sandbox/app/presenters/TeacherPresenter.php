@@ -77,10 +77,26 @@ class TeacherPresenter extends BasePresenter {
 	if ($this->testRepository->getOwnerOfTest($test_id)->id == $this->user->getId()) {
 	    $this->testRepository->closeTest($test_id);
 	    $this->flashMessage('Test úspešne ukončený', self::FLASH_MESSAGE_SUCCESS);
+	    $this->redirect('Teacher:Test', $test_id);
 	} else {
 	    $this->flashMessage('Test nemôžete ukončiť. Nepatrí Vám!', self::FLASH_MESSAGE_DANGER);
+	    $this->redirect('Teacher:');
 	}
-	$this->redirect('Teacher:');
+    }
+
+    public function actionTest($test_id) {
+	$id_test = intval($test_id);
+	if ($this->testRepository->getTest($id_test)) {
+	    if ($this->testRepository->getOwnerOfTest($id_test)->id == $this->user->getId()) {
+		$this->template->students = $this->testRepository->getStudentsResults($id_test);
+	    } else {
+		$this->flashMessage('K tomuto testu nemáte prístup', self::FLASH_MESSAGE_DANGER);
+		$this->redirect('Teacher:');
+	    }
+	} else {
+	    $this->flashMessage('Takýto test neexistuje', self::FLASH_MESSAGE_DANGER);
+	    $this->redirect('Teacher:');
+	}
     }
 
     public function createComponentNewGroup() {
