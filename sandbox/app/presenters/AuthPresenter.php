@@ -38,7 +38,8 @@ class AuthPresenter extends BasePresenter {
 	}
 
 	public function actionDefault() {
-		//die(Nette\Security\Passwords::hash('heslo'));
+            print_r($_SERVER);
+            die();
 	}
 
 	public function actionRegister() {
@@ -65,11 +66,6 @@ class AuthPresenter extends BasePresenter {
 	public function actionResetPassword($user_id, $hash) {
 		$this->args = ['user_id' => $user_id, 'hash' => $hash];
 	}
-        
-        public function actionPokus() {
-            print_r($_SERVER);
-            die();
-        }
 
 	protected function createComponentNewLoginForm() {
 		$form = new Form;
