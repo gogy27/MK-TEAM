@@ -11,6 +11,11 @@ use Nette,
  */
 class AuthPresenter extends BasePresenter {
 
+        const SMTP_HOST = 'smtp.gmail.com',
+            SMTP_USERNAME = 'prevodyjednotiek@gmail.com',
+            SMTP_PASSWORD = 'Heslo123',
+            SMTP_SECURE = 'ssl';
+        
 	private $userManager, $userRepository, $classRepository, $args;
 
 	protected function startup() {
@@ -60,12 +65,17 @@ class AuthPresenter extends BasePresenter {
 	public function actionResetPassword($user_id, $hash) {
 		$this->args = ['user_id' => $user_id, 'hash' => $hash];
 	}
+        
+        public function actionPokus() {
+            print_r($_SERVER);
+            die();
+        }
 
 	protected function createComponentNewLoginForm() {
 		$form = new Form;
 		$form->addText('email', 'E-mail:')
 						->addRule(Form::FILLED, 'Musíte zadať svoj prihlasovací e-mail')
-						->setAttribute('placeholder', 'Zadajte meno');
+						->setAttribute('placeholder', 'Zadajte email');
 		$form->addPassword('password', 'Heslo:')
 						->addRule(Form::FILLED, 'Musíte zadať svoje prihlasovacie heslo')
 						->setAttribute('placeholder', 'Zadajte heslo');
@@ -206,10 +216,10 @@ class AuthPresenter extends BasePresenter {
 						->setSubject('Zmena hesla')
 						->setHTMLBody('Dobry den,<br/><br/>Poziadali ste o zmenu hesla. Zmenu hesla prevediete na nasledujucom formulari: <a href="' . $urlToResetPassword . '">' . $urlToResetPassword . '</a><br/>Ak ste o zmenu neziadali, tento email ignorujte.');
 		$mailer = new Nette\Mail\SmtpMailer(array(
-				'host' => 'smtp.gmail.com',
-				'username' => 'prevodyjednotiek@gmail.com',
-				'password' => 'Heslo123',
-				'secure' => 'ssl',
+				'host' => self::SMTP_HOST,
+				'username' => self::SMTP_USERNAME,
+				'password' => self::SMTP_PASSWORD,
+				'secure' => self::SMTP_SECURE,
 		));
 		$mailer->send($mail);
 	}
