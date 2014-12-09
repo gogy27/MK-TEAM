@@ -51,8 +51,8 @@ class UnitConversion extends Nette\Object {
 		$data['value'] = Task::toBaseValue($data['value']);
 		$userValue = 0;
 		if ($data['value'] > 0) {
-			$userValue = Task::toRealValue($data['value']) * pow(10, $data['exp']);
-			$taskValue = Task::toRealValue($task->{self::TASK_COLUMN_VALUE_FROM})* pow(10, $task->{self::TASK_COLUMN_POWER_FROM});
+			$userValue = Task::toHumanValue($data['value'], $data['exp']);
+			$taskValue = Task::toHumanValue($task->{self::TASK_COLUMN_VALUE_FROM}, $task->{self::TASK_COLUMN_POWER_FROM});
 			$taskBaseExp = Task::toBaseExp($this->getUnit($task->{self::TASK_COLUMN_UNIT_ID}), $task->{self::TASK_COLUMN_POWER_FROM});
 			if (($userValue == $taskValue) && ($data['expBase'] == $taskBaseExp)) {
 				$data[self::TASK_COLUMN_CORRECT] = self::TRUE_VALUE;
@@ -60,7 +60,6 @@ class UnitConversion extends Nette\Object {
 		} else {
 			$data[self::TASK_COLUMN_CORRECT] = null;
 		}
-
 
 		$data[self::TASK_COLUMN_VALUE_TO] = $data['value'];
 		$data[self::TASK_COLUMN_POWER_TO] = $data['exp'];
@@ -118,6 +117,10 @@ class UnitConversion extends Nette\Object {
 
 	public function getUnit($unitID) {
 		return $this->database->table(self::UNIT_TABLE_NAME)->where('id', $unitID)->fetch();
+	}
+	
+	public function getUserTasks($userID) {
+		return $this->database->table(self::TASK_TABLE_NAME)->where(array(self::TASK_COLUMN_USER_ID, $userID));
 	}
 
 	public function isTaskOpen($task) {
