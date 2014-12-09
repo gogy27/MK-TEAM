@@ -19,4 +19,22 @@
     </div>
 {/ifset}
 
+<table class="table table-responsive table-striped">
+    <tr>
+        <th>Poradie testu</th>
+        <th>Čas vytvorenia testu</th>
+	<th>Počet príkladov</th>
+	<th>Náročnosť</th>
+        <th>Čas ukončenia testu</th>
+    </tr>
+    {foreach $tests as $test}
+    <tr>
+        <td>{$iterator->counter}</td>
+	<td>{$test->{$testRepository::COLUMN_CREATED_TIME}|date:'F j, Y - H:i:s'}</td>
+	<td>{$test->{$testRepository::COLUMN_COUNT}}</td>
+	<td>{$test->{$testRepository::COLUMN_DIFFICULTY}}</td>
+	<td>{$test->{$testRepository::COLUMN_CLOSED_TIME}|date:'F j, Y - H:i:s'}</td>
+    </tr>
+    {/foreach}
+</table>
 {/block}

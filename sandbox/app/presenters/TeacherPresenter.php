@@ -45,7 +45,7 @@ class TeacherPresenter extends BasePresenter {
 	    $this->userRepository->removeUser($student_id);
 	    $this->flashMessage('Úspešne ste zmazali študenta', self::FLASH_MESSAGE_INFO);
 	    $this->redirect('Teacher:');
-	}else{
+	} else {
 	    $this->flashMessage('Zmazanie študenta sa nepodarilo', self::FLASH_MESSAGE_DANGER);
 	    $this->redirect('Teacher:');
 	}
@@ -62,9 +62,15 @@ class TeacherPresenter extends BasePresenter {
     }
 
     public function actionSetTest($group_id) {
-	$this->group_id = $group_id;
-	$this->template->open = $this->testRepository->getUnclosedTestForGroup($group_id);
-	$this->template->testRepository = $this->testRepository;
+	if ($this->classRepository->getGroup($group_id)->{Model\ClassRepository::COLUMN_USER_ID} == $this->user->getId()) {
+	    $this->group_id = $group_id;
+	    $this->template->open = $this->testRepository->getUnclosedTestForGroup($group_id);
+	    $this->template->testRepository = $this->testRepository;
+	    $this->template->tests = $this->testRepository->getTestsOfGroup($group_id);
+	} else {
+	    $this->flashMessage('K tejto groupe nemáte prístup!', self::FLASH_MESSAGE_WARNING);
+	    redirect('Teacher:');
+	}
     }
 
     public function actionCloseTest($test_id) {

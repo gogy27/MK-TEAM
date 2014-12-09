@@ -39,13 +39,17 @@ class TestRepository extends Repository {
 		    self::COLUMN_CLOSED_TIME => date("Y-m-d H:i:s")));
     }
     
+    public function getTestsOfGroup($group_id){
+	return $this->findBy(array(self::COLUMN_ID_GROUP =>$group_id))->order(self::COLUMN_CREATED_TIME)->fetchAll();
+    }
+    
     public function getOwnerOfTest($test_id){
 	return $this->database->query('SELECT
 					c.id_user as id
 					FROM test t
 					LEFT JOIN class c
 						ON c.id = t.id_group
-					WHERE t.id =  ' . 1 . ';')->fetch();
+					WHERE t.id =  ' . $test_id . ';')->fetch();
     }
     
     public function getTestForUser($user_id) {
