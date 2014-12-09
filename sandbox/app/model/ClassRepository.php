@@ -37,6 +37,10 @@ class ClassRepository extends Repository {
 	public function removeGroup($group_id) {
 		return $this->findBy(array(self::COLUMN_ID => $group_id))->delete();
 	}
+	
+	public function removeGroupByTeacher($group_id, $teacher_id){
+		return $this->findBy(array(self::COLUMN_ID => $group_id, self::COLUMN_USER_ID => $teacher_id))->delete();
+	}
 
 	public function getAllGroups() {
 		return $this->getTable()->select(self::COLUMN_ID . ", " . self::COLUMN_NAME)->fetchPairs(self::COLUMN_ID, self::COLUMN_NAME);

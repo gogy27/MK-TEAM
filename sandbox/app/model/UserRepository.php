@@ -79,6 +79,14 @@ class UserRepository extends Repository {
 	public function removeUser($user_id) {
 		return $this->find($user_id)->delete();
 	}
+	
+	public function isOwnedByTeacher($student_id, $teacher_id){
+		return $this->database->query("SELECT u.id as id FROM user u 
+						LEFT JOIN  class c 
+							ON c.id = u.id_group
+						WHERE c.id_user = " . $teacher_id . 
+						" AND u.id =  " .  $student_id . ";")->fetch();
+	}
 
 	public function getUser($user_id) {
 		return $this->find($user_id);
