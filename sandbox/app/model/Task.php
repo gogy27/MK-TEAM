@@ -20,7 +20,7 @@ class Task {
 	}
 
 	public function __toString() {
-		return strval(($this->value / pow(10, floor(log($this->value, 10)))) * pow(10, $this->exp));
+		return strval(self::toRealValue($this->value) * pow(10, $this->exp));
 	}
 	
 	public function getUnit() {
@@ -45,6 +45,13 @@ class Task {
 
 	public function setId($id) {
 		$this->id = $id;
+	}
+	
+	public static function toRealValue($value) {
+		$value = intval($value);
+		$value = $value / pow(10, floor(log($value, 10)));
+			
+		return $value;
 	}
 	
 	public static function toBaseValue($value) {

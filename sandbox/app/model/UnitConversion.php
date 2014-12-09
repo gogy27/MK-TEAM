@@ -51,8 +51,8 @@ class UnitConversion extends Nette\Object {
 		$data['value'] = Task::toBaseValue($data['value']);
 		$userValue = 0;
 		if ($data['value'] > 0) {
-			$userValue = ($data['value'] / pow(10, floor(log($data['value'], 10)))) * pow(10, $data['exp']);
-			$taskValue = ($task->{self::TASK_COLUMN_VALUE_FROM} / pow(10, floor(log($task->{self::TASK_COLUMN_VALUE_FROM}, 10)))) * pow(10, $task->{self::TASK_COLUMN_POWER_FROM});
+			$userValue = Task::toRealValue($data['value']) * pow(10, $data['exp']);
+			$taskValue = Task::toRealValue($task->{self::TASK_COLUMN_VALUE_FROM})* pow(10, $task->{self::TASK_COLUMN_POWER_FROM});
 			$taskBaseExp = Task::toBaseExp($this->getUnit($task->{self::TASK_COLUMN_UNIT_ID}), $task->{self::TASK_COLUMN_POWER_FROM});
 			if (($userValue == $taskValue) && ($data['expBase'] == $taskBaseExp)) {
 				$data[self::TASK_COLUMN_CORRECT] = self::TRUE_VALUE;
@@ -103,7 +103,7 @@ class UnitConversion extends Nette\Object {
 	}
 
 	private function getRandomUnit($difficulty) {
-		$offset_result = $this->database->table(self::UNIT_TABLE_NAME)->select("FLOOR(RAND() * COUNT(*)) AS `offset`")->where(array(self::UNIT_COLUMN_BASE_UNIT => self::FALSE_VALUE, self::UNIT_COLUMN_DIFFICULTY => $difficulty));
+		$offset_result = $this->database->table(self::UNIT_TABLE_NAME)->select("FLOOR(RAND() * COUNT(*)) AS `offset`")->where(array(self::UNIT_COLUMN_BASE_UNIT => self::FALSE_VALUE, self::UNIT_COLUMN_DIFFICULTY . " <= " . $difficulty));
 		$offset = $offset_result->fetch()->offset;
 		return $this->database->table(self::UNIT_TABLE_NAME)->where(array(self::UNIT_COLUMN_BASE_UNIT => self::FALSE_VALUE, self::UNIT_COLUMN_DIFFICULTY => $difficulty))->order(self::UNIT_COLUMN_ID)->limit(1, $offset)->fetch();
 	}

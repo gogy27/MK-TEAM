@@ -84,9 +84,9 @@ class StudentPresenter extends BasePresenter {
 				$singleTaskInput->getLabelPrototype()->class = 'control-label';
 				$singleTaskInput->setAttribute('class', 'form-control input-sm base-number-format-input');
 				$singleTaskInput->setAttribute('placeholder', 'Zákl. tvar');
-				$form->addText("taskExp" . $singleTask->getId())->setAttribute('class', 'form-control input-sm')
+				$form->addText("taskExp" . $singleTask->getId())->setAttribute('class', 'form-control input-sm exp-input')
 								->addCondition(Form::FILLED)->addRule(Form::FLOAT, "Prvý exponent " . ($i + 1) . ". príkladu má neplatný číselný zápis");
-				$form->addText("taskBaseExp" . $singleTask->getId())->setAttribute('class', 'form-control input-sm')
+				$form->addText("taskBaseExp" . $singleTask->getId())->setAttribute('class', 'form-control input-sm expBase-input')
 								->addCondition(Form::FILLED)->addRule(Form::FLOAT, "Druhý exponent " . ($i + 1) . ". príkladu má neplatný číselný zápis");
 			}
 			$form->addSubmit("send", "Vyhodnotiť")->setAttribute('class', 'btn btn-primary');
@@ -110,6 +110,35 @@ class StudentPresenter extends BasePresenter {
 			}
 		}
 		$this->setView('showResult');
+	}
+
+	public function handleGetHint($id) {
+		$this->payload->accepted = true;
+
+		$task = $this->unitConversion->getTask(intval($id));
+
+		if ($task && ($this->unitConversion->getTaskOwner($task) == $this->user->getId())) {
+			$rand = rand(0, 2);
+			if ($rand == 0) {
+				$this->payload->part = "base-number";
+				$this->payload->value = Model\Task::toRealValue($task->{Model\UnitConversion::TASK_COLUMN_VALUE_FROM});
+			} elseif($rand == 1) {
+				$this->payload->part = "exp";
+				$this->payload->value = $task->{Model\UnitConversion::TASK_COLUMN_POWER_FROM};
+			} else {
+				$this->payload->part = "expBase";
+				$this->payload->value = Model\Task::toBaseExp($this->unitConversion->getUnit($task->{Model\UnitConversion::TASK_COLUMN_UNIT_ID}), $task->{Model\UnitConversion::TASK_COLUMN_POWER_FROM});
+			}
+		} else {
+			$this->payload->accepted = false;
+			$this->payload->value = 0;
+		}
+
+		if (!$this->isAjax()) {
+			$this->redirect('this');
+		} else {
+			$this->terminate();
+		}
 	}
 
 	public function renderShowResult() {

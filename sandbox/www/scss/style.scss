@@ -54,6 +54,9 @@ form.task-list {
 			line-height: 19px;
 			padding-top: 6px;
 		}
+		& > div:first-child {
+			text-align: right;
+		}
 	}
 	input.form-control {
 		display: inline-block;
@@ -61,12 +64,8 @@ form.task-list {
 	}
 	.equal-to {
 		font-size: 16px;
-		padding: 0 15px;
+		padding: 0 10px;
 		font-weight: bold;
-	}
-	span.base-number-format {
-		display: inline-block;
-		width: 80px;
 	}
 	span.nowrap {
 		white-space: nowrap;
@@ -75,6 +74,12 @@ form.task-list {
 		display: inline-block;
 		width: 60px;
 		padding-left: 8px;
+	}
+	.clearfix {
+		margin: 10px 0;
+	}
+	.btn-hint {
+		float: right;
 	}
 }
 
@@ -172,6 +177,14 @@ nav.navbar.navbar-default {
 	form.task-list {
 		span.nowrap {
 			display: block;
+		}
+		.form-group {
+			& > div:first-child {
+				text-align: left;
+			}
+		}
+		.btn-hint {
+			float: none;
 		}
 	}
 }
