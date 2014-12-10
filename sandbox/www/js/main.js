@@ -32,8 +32,7 @@ $(function() {
                         });
                 }    
 	});
-    });
-
+        
 	$('.btn-hint').click(function(e) {
 		e.preventDefault();
 		var $task = $(this).closest('.form-group');
