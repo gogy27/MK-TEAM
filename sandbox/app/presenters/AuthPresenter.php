@@ -204,12 +204,7 @@ class AuthPresenter extends BasePresenter {
 		$uniq_id = uniqid('', TRUE);
 		$this->userRepository->addResetPasswordHash($values->email, $uniq_id);
                 
-		$urlToResetPassword = filter_input(INPUT_SERVER, 'HTTP_X_FORWARDED_HOST'); //similar to $_SERVER[HTTP_X_FORWARDED_HOST]
-                if (is_null($urlToResetPassword) || $urlToResetPassword === FALSE) {
-                    $urlToResetPassword = $this->link('//Auth:resetPassword', ['user_id' => $user_id, 'hash' => $uniq_id]);
-                } else {
-                    $urlToResetPassword = 'http://' . $urlToResetPassword . chop(filter_input(INPUT_SERVER, 'SCRIPT_NAME'), 'index.php') . 'reset-password?user_id=' . $user_id . '&hash=' . $uniq_id;
-                }
+		$urlToResetPassword = $this->getUrlToResetPassword($user_id, $uniq_id);
                 
 		$mail = new Nette\Mail\Message;
 		$mail->setFrom('Jozko Mrkvicka <jozko-mrkvicka@gmail.com>')
@@ -224,6 +219,16 @@ class AuthPresenter extends BasePresenter {
 		));
 		$mailer->send($mail);
 	}
+        
+        private function getUrlToResetPassword($user_id, $hash) {
+            $urlToResetPassword = filter_input(INPUT_SERVER, 'HTTP_X_FORWARDED_HOST'); //similar to $_SERVER[HTTP_X_FORWARDED_HOST]
+            if (is_null($urlToResetPassword) || $urlToResetPassword === FALSE) {
+                $urlToResetPassword = $this->link('//Auth:resetPassword', ['user_id' => $user_id, 'hash' => $hash]);
+            } else {
+                $urlToResetPassword = 'http://' . $urlToResetPassword . chop(filter_input(INPUT_SERVER, 'SCRIPT_NAME'), 'index.php') . 'reset-password?user_id=' . $user_id . '&hash=' . $hash;
+            }
+            return $urlToResetPassword;
+        }
 
 	protected function createComponentResetPasswordForm() {
 		$form = new Form;
