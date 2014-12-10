@@ -24,7 +24,7 @@ class AuthPresenter extends BasePresenter {
 		$this->userRepository = $this->context->userRepository;
 		$this->classRepository = $this->context->classRepository;
 		if ($this->user->isLoggedIn()) {
-			if ($this->getAction() != 'logout' && $this->getAction() != 'changepassword' && $this->getAction() != 'changePassword') {
+			if ($this->getAction() != 'logout' && strtolower($this->getAction()) != 'changepassword' && strtolower($this->getAction()) != 'change-password') {
 				if ($this->user->isInRole(Model\UserRepository::STUDENT)) {
 					$this->redirect('Student:default');
 				} else if ($this->user->isInRole(Model\UserRepository::TEACHER)) {
