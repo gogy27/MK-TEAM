@@ -2,12 +2,17 @@
 
 {ifset $open->id}
     <div class="row row-cells">
-        <div class="col-sm-4 col-sm-offset-4 text-center">
+        <div class="col-md-4 col-sm-6 col-sm-offset-3 col-md-offset-4">
             <a n:href="Teacher:closeTest $open->{$testRepository::COLUMN_ID}" class="link-cell link-cell-red">Ukončiť test<span class="start-time">Zadané: {$open->dt_created|date:'F j, Y - H:i:s'}</span></a>
         </div>
     </div>
 {else}
-    <div class="row">
+    <div class="row row-cells" id="student-options">
+	<div class="col-md-4 col-sm-6 col-sm-offset-3 col-md-offset-4">
+	    <span class="link-cell" id="show_test_form">Zadať test</span>
+	</div>
+    </div>
+    <div class="row" id="set_test_form">
         <div class="col-sm-6 col-sm-offset-3">
             <div class="panel panel-default">
                 <div class="panel-heading">Zadanie päťminutovky</div>
@@ -19,22 +24,22 @@
     </div>
 {/ifset}
 
-<table class="table table-responsive table-striped text-center">
+<table class="table table-responsive table-striped text-center" id="table_test">
     <tr>
-        <th class="text-center">Poradie testu</th>
-        <th class="text-center">Čas vytvorenia testu</th>
+	<th class="text-center">Poradie testu</th>
+	<th class="text-center">Čas vytvorenia testu</th>
 	<th class="text-center">Počet príkladov</th>
 	<th class="text-center">Náročnosť</th>
-        <th class="text-center">Čas ukončenia testu</th>
+	<th class="text-center">Čas ukončenia testu</th>
     </tr>
     {foreach $tests as $test}
-    <tr>
-        <td><a n:href="Teacher:Test $test->{$testRepository::COLUMN_ID}">{$iterator->counter}</a></td>
-	<td>{$test->{$testRepository::COLUMN_CREATED_TIME}|date:'F j, Y - H:i:s'}</td>
-	<td>{$test->{$testRepository::COLUMN_COUNT}}</td>
-	<td>{$test->{$testRepository::COLUMN_DIFFICULTY}}</td>
-	<td>{$test->{$testRepository::COLUMN_CLOSED_TIME}|date:'F j, Y - H:i:s'}</td>
-    </tr>
+	<tr>
+	    <td><a n:href="Teacher:Test $test->{$testRepository::COLUMN_ID}">{$iterator->counter}</a></td>
+	    <td>{$test->{$testRepository::COLUMN_CREATED_TIME}|date:'F j, Y - H:i:s'}</td>
+	    <td>{$test->{$testRepository::COLUMN_COUNT}}</td>
+	    <td>{$test->{$testRepository::COLUMN_DIFFICULTY}}</td>
+	    <td>{$test->{$testRepository::COLUMN_CLOSED_TIME}|date:'F j, Y - H:i:s'}</td>
+	</tr>
     {/foreach}
 </table>
 {/block}
