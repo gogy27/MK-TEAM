@@ -126,7 +126,7 @@ nav.navbar.navbar-default {
 	& > div[class^='col'],div[class*=' col'] {
 		display: table !important;
 	}
-	a.link-cell {
+	a.link-cell, span.link-cell {
 		display:table-cell;
 		vertical-align:middle;
 		height: 120px;
@@ -136,6 +136,7 @@ nav.navbar.navbar-default {
 		font-size: 1.2em;
 		text-decoration: none;
 		box-shadow: 0px 2px 2px #AAA;
+		cursor:pointer;
 		&:hover {
 			background-color: $alert-info-border;
 		}
@@ -151,6 +152,18 @@ nav.navbar.navbar-default {
 			color: #777;
 		}
 	}
+}
+
+#set_test_form{
+    display: none;
+}
+
+#table_test{
+    margin-top: 20px;
+}
+
+#group_form{
+    display: none;
 }
 
 #login-form {
