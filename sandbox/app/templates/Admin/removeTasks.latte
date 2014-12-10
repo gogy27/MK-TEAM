@@ -1,0 +1,38 @@
+{block content}
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1 col-lg-6 col-lg-offset-3 form-horizontal">
+        <div class="form-group">
+            <label for="input-date" class="col-sm-7 control-label">Dátum, po ktorý odstrániť príklady</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="input-date" placeholder="Dátum">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-7 col-sm-5">
+                <a n:href="deleteTasks!" class="btn btn-danger remove-record remove-tasks">Vymazať</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal-remove-item" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">Odstrániť údaje</h4>
+            </div>
+            <div class="modal-body">
+                Naozaj chcete odstrániť zadané údaje z databázy?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default no" data-dismiss="modal"">Nie</button>
+                <button type="button" class="btn btn-primary yes">Áno</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{/block}

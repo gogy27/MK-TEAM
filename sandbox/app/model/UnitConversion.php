@@ -137,4 +137,8 @@ class UnitConversion extends Nette\Object {
 		return $this->database->query('SELECT DISTINCT nb_level as level FROM unit;');
 	}
 
+        public function removeTasks($date) {
+            $formatedDate = date( 'Y-m-d H:i:s', strtotime($date) );
+            return $this->database->table(self::TASK_TABLE_NAME)->where(self::TASK_COLUMN_UPDATED . "< '".$formatedDate."'")->delete();
+        }
 }

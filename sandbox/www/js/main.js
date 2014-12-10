@@ -2,23 +2,37 @@ $(function() {
 	$('.base-number-format-input').keyup(function() {
 		$(this).parent('.nowrap').siblings('.nowrap').find('.base-number-format').text($(this).val());
 	});
-
-	$('a.remove-user').click(function(e) {
+        
+	$('a.remove-record').click(function(e) {
 		e.preventDefault();
-		var $anchor = $(this);
-		$.getJSON($(this).attr('href'), function(payload) {
-			if (payload.accepted) {
-				$anchor.parent('td').parent('tr').fadeOut(400, function(){
-					$anchor.closest('table').before($('<div></div>').addClass('alert alert-success text-center col-xs-6 col-xs-offset-3').html(payload.message));
-					$(this).remove();
-				});
-			}
-			else {
-				$anchor.closest('table').before($('<div></div>').addClass('alert alert-danger text-center col-xs-6 col-xs-offset-3').html(payload.message));
-			}
-		});
+                if (confirm('Naozaj chcete odstrániť zadané údaje z databázy?')) {
+                            var $anchor = $(this);
+                            var customHref = $(this).attr('href');
+                            if ($anchor.hasClass('remove-tasks')) {
+                                if ($('#input-date').val().length === 0) {
+                                    return;
+                                }
+                                customHref += '&date=' + $('#input-date').val();
+                                $('#input-date').val('');
+                            }
+                            $.getJSON(customHref, function (payload) {
+                                if ($anchor.hasClass('remove-tasks')) {
+                                    $anchor.closest('.form-horizontal').before($('<div></div>').addClass('alert alert-success text-center col-xs-6 col-xs-offset-3').html(payload.message));
+                                    return;
+                                }
+                                if (payload.accepted) {
+                                    $anchor.parent('td').parent('tr').fadeOut(400, function () {
+                                        $anchor.closest('table').before($('<div></div>').addClass('alert alert-success text-center col-xs-6 col-xs-offset-3').html(payload.message));
+                                        $(this).remove();
+                                    });
+                                }
+                                else {
+                                    $anchor.closest('table').before($('<div></div>').addClass('alert alert-danger text-center col-xs-6 col-xs-offset-3').html(payload.message));
+                                }
+                        });
+                }    
 	});
-	
+        
 	$('.btn-hint').click(function(e) {
 		e.preventDefault();
 		var $task = $(this).closest('.form-group');
