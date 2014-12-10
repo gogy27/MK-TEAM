@@ -225,7 +225,7 @@ class AuthPresenter extends BasePresenter {
             if (is_null($urlToResetPassword) || $urlToResetPassword === FALSE) {
                 $urlToResetPassword = $this->link('//Auth:resetPassword', ['user_id' => $user_id, 'hash' => $hash]);
             } else {
-                $urlToResetPassword = 'http://' . $urlToResetPassword . chop(filter_input(INPUT_SERVER, 'SCRIPT_NAME'), 'index.php') . 'reset-password?user_id=' . $user_id . '&hash=' . $hash;
+                $urlToResetPassword = 'http://' . $urlToResetPassword . chop(filter_input(INPUT_SERVER, 'SCRIPT_NAME'), 'index.php') . 'auth/reset-password?user_id=' . $user_id . '&hash=' . $hash;
             }
             return $urlToResetPassword;
         }
