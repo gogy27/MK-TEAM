@@ -23,8 +23,6 @@ class AuthPresenter extends BasePresenter {
 		$this->userManager = $this->context->authorizator;
 		$this->userRepository = $this->context->userRepository;
 		$this->classRepository = $this->context->classRepository;
-print_r($_SERVER);
-die();
 		if ($this->user->isLoggedIn()) {
 			if ($this->getAction() != 'logout' && $this->getAction() != 'changepassword' && $this->getAction() != 'changePassword') {
 				if ($this->user->isInRole(Model\UserRepository::STUDENT)) {
@@ -206,7 +204,12 @@ die();
 		$uniq_id = uniqid('', TRUE);
 		$this->userRepository->addResetPasswordHash($values->email, $uniq_id);
                 
-		$urlToResetPassword = $this->link('//Auth:resetPassword', ['user_id' => $user_id, 'hash' => $uniq_id]);
+		$urlToResetPassword = filter_input(INPUT_SERVER, 'HTTP_X_FORWARDED_HOST'); //similar to $_SERVER[HTTP_X_FORWARDED_HOST]
+                if (is_null($urlToResetPassword) || $urlToResetPassword === FALSE) {
+                    $urlToResetPassword = $this->link('//Auth:resetPassword', ['user_id' => $user_id, 'hash' => $uniq_id]);
+                } else {
+                    $urlToResetPassword = 'http://' . $urlToResetPassword . chop(filter_input(INPUT_SERVER, 'SCRIPT_NAME'), 'index.php') . 'reset-password?user_id=' . $user_id . '&hash=' . $uniq_id;
+                }
                 
 		$mail = new Nette\Mail\Message;
 		$mail->setFrom('Jozko Mrkvicka <jozko-mrkvicka@gmail.com>')
