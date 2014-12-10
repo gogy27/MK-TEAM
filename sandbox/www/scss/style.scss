@@ -9,6 +9,15 @@ body {
 	background-color: #E6E6E6;
 }
 
+h1 {
+    font-size: 26px;
+    padding-bottom: 24px;
+}
+
+.vertical-center tr td {
+    vertical-align: middle !important;
+}
+
 footer.footer {
 	position: absolute;
 	left: 0;
