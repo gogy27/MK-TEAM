@@ -23,7 +23,8 @@ class AuthPresenter extends BasePresenter {
 		$this->userManager = $this->context->authorizator;
 		$this->userRepository = $this->context->userRepository;
 		$this->classRepository = $this->context->classRepository;
-
+print_r($_SERVER);
+die();
 		if ($this->user->isLoggedIn()) {
 			if ($this->getAction() != 'logout' && $this->getAction() != 'changepassword' && $this->getAction() != 'changePassword') {
 				if ($this->user->isInRole(Model\UserRepository::STUDENT)) {
@@ -38,8 +39,7 @@ class AuthPresenter extends BasePresenter {
 	}
 
 	public function actionDefault() {
-            print_r($_SERVER);
-            die();
+            //print_r($_SERVER);
 	}
 
 	public function actionRegister() {
@@ -205,7 +205,9 @@ class AuthPresenter extends BasePresenter {
 		}
 		$uniq_id = uniqid('', TRUE);
 		$this->userRepository->addResetPasswordHash($values->email, $uniq_id);
+                
 		$urlToResetPassword = $this->link('//Auth:resetPassword', ['user_id' => $user_id, 'hash' => $uniq_id]);
+                
 		$mail = new Nette\Mail\Message;
 		$mail->setFrom('Jozko Mrkvicka <jozko-mrkvicka@gmail.com>')
 						->addTo($values->email)
