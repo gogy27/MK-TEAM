@@ -7,7 +7,7 @@ use Nette,
 		Nette\Application\UI\Form;
 
 /**
- * Homepage presenter.
+ * Auth presenter.
  */
 class AuthPresenter extends BasePresenter {
 
@@ -36,14 +36,24 @@ class AuthPresenter extends BasePresenter {
 		}
 	}
 
+        /**
+         * Show root page - login form with relevant links
+         */
 	public function actionDefault() {
             //print_r($_SERVER);
 	}
 
+        /**
+         * Show and manage register form - registration for students and
+         * teachers
+         */
 	public function actionRegister() {
 		
 	}
 
+        /**
+         * Manage logout of logged in user
+         */
 	public function actionLogout() {
 		if ($this->user->isLoggedIn()) {
 			$this->user->logout();
@@ -51,16 +61,28 @@ class AuthPresenter extends BasePresenter {
 		$this->redirect('Auth:');
 	}
 
+        /**
+         * Send email with link to reset password
+         */
 	public function actionSendEmailToResetPassword() {
 		
 	}
 
+        /**
+         * Change password of logged in user
+         */
 	public function actionChangePassword() {
 		if (!$this->user->isLoggedIn()) {
 			$this->redirect('Auth:');
 		}
 	}
 
+        /**
+         * Set new password after user requires to reset password
+         * 
+         * @param int $user_id unique ID of user in the DB
+         * @param string $hash hash to reset forgotten password
+         */
 	public function actionResetPassword($user_id, $hash) {
 		$this->args = ['user_id' => $user_id, 'hash' => $hash];
 	}
@@ -81,6 +103,12 @@ class AuthPresenter extends BasePresenter {
 		return $form;
 	}
 
+        /**
+         * Manage submitted login of user
+         * 
+         * @param type $form 
+         * @param stdClass $values submitted values
+         */
 	public function newLoginFormSubmitted($form, $values) {
 		try {
 			$this->getUser()->login($values->email, $values->password);
@@ -90,6 +118,14 @@ class AuthPresenter extends BasePresenter {
 		}
 	}
 
+        /**
+         * Check whether the key $key equals to group's defined key
+         * 
+         * @param string $key inputted key to check
+         * @param int $groupID unique ID of group in DB
+         * @return boolean return true if key is equal to teacher's defined key,
+         * otherwise false
+         */
 	public function checkGroupKeyValidator($key, $groupID) {
 		if (!($group = $this->classRepository->getGroup($groupID))) {
 			return false;
@@ -97,7 +133,7 @@ class AuthPresenter extends BasePresenter {
 		return $key->getValue() == $group->{Model\ClassRepository::COLUMN_PASSWORD};
 	}
 
-	public function createComponentNewRegisterUser() {
+	protected function createComponentNewRegisterUser() {
 		$form = new Form;
 		$form->addText('name', 'Meno:')
 						->setRequired('Prosím zadajte Vaše celé meno')
@@ -138,6 +174,12 @@ class AuthPresenter extends BasePresenter {
 		return $form;
 	}
 
+        /**
+         * Manage submitted register form
+         * 
+         * @param type $form
+         * @param stdClass $values sent form inputs
+         */
 	public function newRegisterUserSubmitted($form, $values) {
 		if (!$this->userRepository->checkEmailAvailability($values->email)) {
 			$this->flashMessage("Ospravedlňujeme sa, ale Vami zadaná e-mailová adresa sa už v našej databáze nachádza. Prosím zvoľte inú.", self::FLASH_MESSAGE_DANGER);
@@ -148,7 +190,7 @@ class AuthPresenter extends BasePresenter {
 		}
 	}
 
-	public function createComponentChangePassword() {
+	protected function createComponentChangePassword() {
 		$form = new Form;
 		$form->addPassword('old', 'Staré heslo:')
 						->setRequired('Musíte zadať heslo');
@@ -165,6 +207,12 @@ class AuthPresenter extends BasePresenter {
 		return $form;
 	}
 
+        /**
+         * Manage password change form submitted
+         * 
+         * @param type $form
+         * @param stdClass $values sent form inputs
+         */
 	public function newChangePasswordSubmitted($form, $values) {
 		$password = $this->userRepository->getUser($this->user->getId());
 		if (!Nette\Security\Passwords::verify($values->old, $password[Model\UserRepository::COLUMN_PASSWORD])) {
@@ -176,6 +224,13 @@ class AuthPresenter extends BasePresenter {
 		}
 	}
 
+        /**
+         * Determine whether email exists - used for form validation purpose
+         * 
+         * @param type $item
+         * @param type $arg
+         * @return boolean true when email exists, false otherwise
+         */
 	public function emailExistsValidator($item, $arg) {
 		return !($this->userRepository->checkEmailAvailability($item->value));
 	}
@@ -195,6 +250,12 @@ class AuthPresenter extends BasePresenter {
 		return $form;
 	}
 
+        /**
+         * Perform email sending to renew forgotten password
+         * 
+         * @param type $form
+         * @param stdClass $values sent form inputs
+         */
 	public function sendEmailToResetPasswordFormSubmitted($form, $values) {
 		$user_id = $this->userRepository->getInfoByEmail($values->email)->fetch()[Model\UserRepository::COLUMN_ID];
 		if (is_null($user_id)) {
@@ -247,6 +308,12 @@ class AuthPresenter extends BasePresenter {
 		return $form;
 	}
 
+        /**
+         * Submitted form with renew password info management
+         * 
+         * @param type $form
+         * @param stdClass $values sent form inputs
+         */
 	public function resetPasswordFormSubmitted($form, $values) {
 		$userUpdated = $this->userRepository->resetPassword($values->user_id, $values->hash, $values->password);
 		$this->flashMessage('Heslo bolo zmenené, môžete sa prihlásiť', self::FLASH_MESSAGE_SUCCESS);
