@@ -8,13 +8,13 @@ use Nette,
 
 class AdminPresenter extends BasePresenter {
 
-	private $userRepository, $classRepository, $testRepository;
+	private $userRepository, $classRepository, $unitConversion;
 
 	protected function startup() {
 		parent::startup();
 		$this->userRepository = $this->context->userRepository;
 		$this->classRepository = $this->context->classRepository;
-		$this->testRepository = $this->context->testRepository;
+		$this->unitConversion = $this->context->unitConversion;
 
 		if ($this->user->isLoggedIn()) {
 			if ($this->user->isInRole(Model\UserRepository::STUDENT)) {
@@ -80,7 +80,15 @@ class AdminPresenter extends BasePresenter {
         }
         
         public function handleDeleteTasks($date) {
-            //$this->payload->accepted = (bool) $this->tas
+            $this->payload->accepted = (bool) $this->unitConversion->removeTasks($date);
+            
+            $this->payload->message = "Príklady po dátume $date boli vymazané";
+            
+            if (!$this->isAjax()) {
+                $this->redirect('this');
+            } else {
+                $this->terminate();
+            }
         }
 
 }

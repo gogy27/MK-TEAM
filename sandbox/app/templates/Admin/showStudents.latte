@@ -12,7 +12,7 @@
     </tr>
     {foreach $users as $key => $user}
     <tr>
-        <td><a n:href="deleteUser!, 'id' => $user->{App\Model\UserRepository::COLUMN_ID}" class="btn btn-danger btn-sm remove-user" data-user-id="{$user->{App\Model\UserRepository::COLUMN_ID}}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+        <td><a n:href="deleteUser!, 'id' => $user->{App\Model\UserRepository::COLUMN_ID}" class="btn btn-danger btn-sm remove-record"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
         <td>{$user->{App\Model\UserRepository::COLUMN_NAME}}</td>
         <td>{$user->{App\Model\UserRepository::COLUMN_EMAIL}}</td>
         <td>{$user->{App\Model\UserRepository::COLUMN_REG_TIME}}</td>
