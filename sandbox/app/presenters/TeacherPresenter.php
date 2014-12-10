@@ -26,12 +26,18 @@ class TeacherPresenter extends BasePresenter {
 	    $this->redirect('Auth:');
 	}
     }
-
+    /**
+     * Shows groups of teacher and form for creating new groups
+     */
     public function actionDefault() {
 	$this->template->groups = $this->classRepository->getTeacherGroupsWithTestInfo($this->user->getId());
 	$this->template->classRepository = $this->classRepository;
     }
 
+    /**
+     * Shows students in group
+     * @param type $group_id Group unique id in DB
+     */
     public function actionShowStudentsInGroup($group_id) {
 	$this->template->students = $this->userRepository->getStudentsByGroup($group_id);
 	$this->template->userRepository = $this->userRepository;
@@ -40,6 +46,10 @@ class TeacherPresenter extends BasePresenter {
 	$this->template->statistics3 = $this->userRepository->getStatisticsOfUnits($group_id);
     }
 
+    /**
+     * Deletes user and his tasks.
+     * @param type $student_id User unique id in DB
+     */
     public function actionRemoveUser($student_id) {
 	if ($this->userRepository->isOwnedByTeacher($student_id, $this->user->getId())) {
 	    $this->userRepository->removeUser($student_id);
@@ -51,6 +61,10 @@ class TeacherPresenter extends BasePresenter {
 	}
     }
 
+    /**
+     * Deletes group, it's students, tests and tasks
+     * @param type $group_id Unique group id in DB
+     */
     public function actionRemoveGroup($group_id) {
 	if ($this->classRepository->removeGroupByTeacher($group_id, $this->user->getId())) {
 	    $this->flashMessage('Úspešne ste vymazali skupinu', self::FLASH_MESSAGE_INFO);
@@ -61,6 +75,10 @@ class TeacherPresenter extends BasePresenter {
 	}
     }
 
+    /**
+     * Provides basic actions with test. List of tests and creating a new test
+     * @param type $group_id Unique group id in DB for which is test generated
+     */
     public function actionSetTest($group_id) {
 	if ($this->classRepository->getGroup($group_id)->{Model\ClassRepository::COLUMN_USER_ID} == $this->user->getId()) {
 	    $this->group_id = $group_id;
@@ -73,6 +91,10 @@ class TeacherPresenter extends BasePresenter {
 	}
     }
 
+    /**
+     * Closing test
+     * @param type $test_id Unique test id in DB, which test is being closed
+     */
     public function actionCloseTest($test_id) {
 	if ($this->testRepository->getOwnerOfTest($test_id)->id == $this->user->getId()) {
 	    $this->testRepository->closeTest($test_id);
@@ -84,6 +106,10 @@ class TeacherPresenter extends BasePresenter {
 	}
     }
 
+    /**
+     * List of students and their answers on test
+     * @param type $test_id Unique test id in DB
+     */
     public function actionTest($test_id) {
 	$id_test = intval($test_id);
 	if ($this->testRepository->getTest($id_test)) {
@@ -99,7 +125,7 @@ class TeacherPresenter extends BasePresenter {
 	}
     }
 
-    public function createComponentNewGroup() {
+    protected function createComponentNewGroup() {
 	$form = new Form;
 	$form->addText('name', 'Názov skupiny:')
 		->setRequired('Prosim zadajte názov novej skupiny')
@@ -123,6 +149,11 @@ class TeacherPresenter extends BasePresenter {
 	return $form;
     }
 
+    /**
+     * Calls after submitting a form for creating new groups
+     * @param type $form Form which called this method
+     * @param type $values Values the form was called with
+     */
     public function newGroupSubmitted($form, $values) {
 	if ($this->classRepository->getGroupByName($values->name)) {
 	    $this->flashMessage('Názov skupiny už existuje. Zvoľte iný˝.', self::FLASH_MESSAGE_DANGER);
@@ -133,7 +164,7 @@ class TeacherPresenter extends BasePresenter {
 	}
     }
 
-    public function createComponentNewTest() {
+    protected function createComponentNewTest() {
 	$form = new Form;
 	$form->addText('count', 'Počet príkladov:')
 		->setRequired('Prosím zadajte počet príkladov')
@@ -155,6 +186,11 @@ class TeacherPresenter extends BasePresenter {
 	return $form;
     }
 
+    /**
+     * Calls after submitting a form for creating new tests
+     * @param type $form Form which called this method
+     * @param type $values Values the form was called with
+     */
     public function newTestSubmitted($form, $values) {
 	if ($this->classRepository->getGroup($values->id_group)->{Model\ClassRepository::COLUMN_USER_ID} == $this->user->getId()) {
 	    if ($this->testRepository->getUnclosedTestForGroup($values->id_group)) {
