@@ -120,7 +120,7 @@ class UnitConversion extends Nette\Object {
 	}
 	
 	public function getUserTasks($userID) {
-		return $this->database->table(self::TASK_TABLE_NAME)->where(array(self::TASK_COLUMN_USER_ID, $userID));
+		return $this->database->table(self::TASK_TABLE_NAME)->where(self::TASK_COLUMN_USER_ID, $userID)->where(self::TASK_COLUMN_UPDATED." IS NOT NULL");
 	}
 
 	public function isTaskOpen($task) {

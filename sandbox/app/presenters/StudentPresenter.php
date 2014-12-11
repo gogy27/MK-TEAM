@@ -123,7 +123,7 @@ class StudentPresenter extends BasePresenter {
 		$values = $form->getHttpData();
 		foreach ($values as $key => $value) {
 			if (preg_match("/^task([0-9]+)$/", $key, $matches) > 0) {
-				$data['value'] = floatval($value);
+				$data['value'] = floatval(str_replace(",", ".", $value));
 				$data['exp'] = (array_key_exists('taskExp' . $matches[1], $values)) ? intval($values['taskExp' . $matches[1]]) : 0;
 				$data['expBase'] = (array_key_exists('taskBaseExp' . $matches[1], $values)) ? intval($values['taskBaseExp' . $matches[1]]) : 0;
 				$this->unitConversion->checkConversion($this->user->getId(), $matches[1], $data);
