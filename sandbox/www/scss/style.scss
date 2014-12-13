@@ -128,7 +128,7 @@ nav.navbar.navbar-default {
 		display: table !important;
 	}
 	a.link-cell, span.link-cell {
-		display:table-cell;
+		display: block;
 		vertical-align:middle;
 		height: 120px;
 		background-color: $alert-info-bg;
@@ -138,6 +138,8 @@ nav.navbar.navbar-default {
 		text-decoration: none;
 		box-shadow: 0px 2px 2px #AAA;
 		cursor:pointer;
+		padding: 50px 0;
+		margin-bottom: 20px;
 		&:hover {
 			background-color: $alert-info-border;
 		}

@@ -28,11 +28,12 @@ class StudentPresenter extends BasePresenter {
 	}
 
 	public function actionDefault() {
-		
+		$this->template->levels = $this->unitConversion->getDistinctLevels();
 	}
 
-	public function actionNewTask($test) {
-		if (!$this->getRequest()->isPost()) {
+	public function actionNewTask($test = NULL, $diff = 1) {
+		if (!$this->getRequest()->isPost() && !$this->isSignalReceiver($this)) {
+			$this->unitConversion->removeUnpostedTasks($this->user->getId());
 			if ($test == 1) {
 				$test_row = $this->testRepository->getTestForUser($this->user->getId());
 				if ($this->testRepository->getFilledTaskInTest($test_row->id, $this->user->getId())) {
@@ -48,6 +49,7 @@ class StudentPresenter extends BasePresenter {
 				$this->difficulty = $test_row->nb_level;
 				$this->test_id = $test_row->id;
 			}
+			$this->difficulty = $diff;
 			$this->template->form = $this['newTaskForm'];
 			$this->template->tasks = $this->tasks;
 			$this->template->unitConversion = $this->unitConversion;
@@ -87,7 +89,6 @@ class StudentPresenter extends BasePresenter {
 
 	protected function createComponentNewTaskForm() {
 		$this->tasks = array();
-
 		$form = new Form;
 		$form->getElementPrototype()->class('form-horizontal task-list');
 		if (!$this->getRequest()->isPost()) {
@@ -95,7 +96,7 @@ class StudentPresenter extends BasePresenter {
 				if ($this->unFilledTasks) {
 					$singleTask = $this->unFilledTasks[$i];
 				} else {
-					$singleTask = $this->unitConversion->generateConversion($this->user->getId(), $this->difficulty, $this->test_id);
+					$singleTask = $this->unitConversion->generateConversion($this->user->getId(), intval($this->difficulty), $this->test_id);
 				}
 				$this->tasks[$singleTask->getId()] = $singleTask;
 
@@ -134,7 +135,6 @@ class StudentPresenter extends BasePresenter {
 
 	public function handleGetHint($id) {
 		$this->payload->accepted = true;
-
 		$task = $this->unitConversion->getTask(intval($id));
 
 		if ($task && ($this->unitConversion->getTaskOwner($task) == $this->user->getId())) {

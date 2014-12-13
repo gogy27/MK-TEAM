@@ -1,7 +1,7 @@
-$(function () {
-    $('.base-number-format-input').keyup(function () {
-	$(this).siblings('.base-number-format').text($(this).val());
-    });
+$(function() {
+	$('.base-number-format-input').keyup(function() {
+		$(this).siblings('.base-number-format').text($(this).val());
+	});
 
 	$('a.remove-record').click(function(e) {
 		e.preventDefault();
@@ -63,7 +63,7 @@ $(function () {
 		e.preventDefault();
 		$count = $('.table-results').find('tr').length - 1;
 		$anchor = $(this);
-		$.getJSON($anchor.attr('href')+"&count="+$count, function(payload) {
+		$.getJSON($anchor.attr('href') + "&count=" + $count, function(payload) {
 			console.log(payload);
 			if (payload.accepted) {
 				for (var i in payload.snippets) {
@@ -77,6 +77,16 @@ $(function () {
 				$anchor.fadeOut();
 			}
 		});
+	});
+
+	$('#choose-diff').click(function(e) {
+		e.preventDefault();
+		$select = $(this).parent().find('select');
+		if ($select.parent().is(":visible")) {
+			window.location.href = $(this).attr('href')+'?diff='+$select.val();
+		} else {
+			$(this).parent().find('select').parent().slideDown();
+		}
 	});
 
 	$('#show_test_form').click(function(e) {

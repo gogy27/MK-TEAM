@@ -1,13 +1,21 @@
 {block content}
 
 <div class="row row-cells" id="student-options">
-	<div class="col-md-4 col-sm-6">
-		<a n:href="Student:newTask" class="link-cell">Riešiť príklady</a>
+	<div class="col-sm-4">
+		<a n:href="Student:newTask" class="link-cell" id="choose-diff">Riešiť príklady</a>
+		<div class="form-horizontal" style="display: none;">
+			<select name="level" class="form-control" id="level-selectbox">
+				<option value="1">Vyberte náročnosť</option>
+				{foreach $levels as $level}
+					<option value="{$level->level}">{$level->level}</option>
+				{/foreach}
+			</select>
+		</div>
 	</div>
-	<div class="col-md-4 col-sm-6">
+	<div class="col-sm-4">
 		<a n:href="Student:results" class="link-cell">Moje výsledky</a>
 	</div>
-	<div class="col-md-4 col-sm-6">
+	<div class="col-sm-4">
 		<a n:href="Student:test" class="link-cell link-cell-red">Päťminútovka</a>
 	</div>
 </div>
