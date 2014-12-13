@@ -27,14 +27,23 @@ class StudentPresenter extends BasePresenter {
 		$this->tasks = array();
 	}
 
+	/**
+	 * Handle default action for logged in student
+	 */
 	public function actionDefault() {
 		$this->template->levels = $this->unitConversion->getDistinctLevels();
 	}
 
+	/**
+	 * Manage creating and showing new tasks
+	 * 
+	 * @param boolean $test If tasks are created for test.
+	 * @param int $diff Difficulty level of the task
+	 */
 	public function actionNewTask($test = NULL, $diff = 1) {
 		if (!$this->getRequest()->isPost() && !$this->isSignalReceiver($this)) {
 			$this->unitConversion->removeUnpostedTasks($this->user->getId());
-			if ($test == 1) {
+			if ($test) {
 				$test_row = $this->testRepository->getTestForUser($this->user->getId());
 				if ($this->testRepository->getFilledTaskInTest($test_row->id, $this->user->getId())) {
 					$this->flashMessage('Už ste vyplnili test', self::FLASH_MESSAGE_DANGER);
@@ -74,10 +83,16 @@ class StudentPresenter extends BasePresenter {
 		return $results;
 	}
 
+	/**
+	 * Shows results of the last student tasks
+	 */
 	public function actionResults() {
 		$this->template->tasks = $this->getResults(0);
 	}
 
+	/**
+	 * Checks if student has unsolved and/or opened test
+	 */
 	public function actionTest() {
 		if ($this->testRepository->getTestForUser($this->user->getId())->id == NULL) {
 			$this->flashMessage('Momentálne pre Vás neexistuje test', self::FLASH_MESSAGE_WARNING);
@@ -119,6 +134,12 @@ class StudentPresenter extends BasePresenter {
 		return $form;
 	}
 
+	/**
+	 * Handle submitted solutions of the tasks
+	 * 
+	 * @param Nette\Application\UI\Form $form
+	 * @param Nette\Utils\ArrayHash|array $values The values submitted by the $form
+	 */
 	public function taskFormSubmitted($form, $values) {
 		$this->tasks = array();
 		$values = $form->getHttpData();
@@ -133,6 +154,11 @@ class StudentPresenter extends BasePresenter {
 		$this->redirect('results');
 	}
 
+	/**
+	 * Ajax handler for the task's hint
+	 * 
+	 * @param int $id ID of the task
+	 */
 	public function handleGetHint($id) {
 		$this->payload->accepted = true;
 		$task = $this->unitConversion->getTask(intval($id));
@@ -161,6 +187,11 @@ class StudentPresenter extends BasePresenter {
 		}
 	}
 	
+	/**
+	 * Ajax handler for loading more students results (older tasks)
+	 * 
+	 * @param int $count Count of the actual shown tasks
+	 */
 	public function handleGetNextResults($count) {
 		$this->template->tasks = $this->getResults(intval($count));
 		$this->payload->accepted = sizeOf($this->template->tasks) > 0;
