@@ -71,6 +71,13 @@ class TestRepository extends Repository {
 	return $this->find(intval($id));
     }
     
+    public function getTestOfTask($task_id){
+	return $this->database->query('SELECT t.* FROM task ta 
+					LEFT JOIN test t 
+						ON ta.id_test = t.id
+					WHERE ta.id = ' . intval($task_id).';')->fetch();
+    }
+    
     public function getUnfilledTaskInTest($test_id, $student_id){
 	return $this->database->query('SELECT t.id as idcko, t.nb_value_from, t.nb_power_from, u.* FROM task t
 					LEFT JOIN unit u

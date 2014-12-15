@@ -143,12 +143,22 @@ class StudentPresenter extends BasePresenter {
 	public function taskFormSubmitted($form, $values) {
 		$this->tasks = array();
 		$values = $form->getHttpData();
+		$checked = false;
 		foreach ($values as $key => $value) {
 			if (preg_match("/^task([0-9]+)$/", $key, $matches) > 0) {
 				$data['value'] = floatval(str_replace(",", ".", $value));
 				$data['exp'] = (array_key_exists('taskExp' . $matches[1], $values)) ? intval($values['taskExp' . $matches[1]]) : 0;
 				$data['expBase'] = (array_key_exists('taskBaseExp' . $matches[1], $values)) ? intval($values['taskBaseExp' . $matches[1]]) : 0;
-				$this->unitConversion->checkConversion($this->user->getId(), $matches[1], $data);
+				if(!$checked){
+				    if($this->testRepository->getTestOfTask($matches[1])->{Model\TestRepository::COLUMN_CLOSED} == Model\TestRepository::TRUE_VALUE){
+					$this->flashMessage('Test bol už uzatvorený, nestihli ste odovzdať', self::FLASH_MESSAGE_DANGER);
+					$this->redirect('Student:');
+					break;
+				    }
+				    $checked = true;
+				}else{
+				    $this->unitConversion->checkConversion($this->user->getId(), $matches[1], $data);
+				}
 			}
 		}
 		$this->redirect('results');
