@@ -49,12 +49,14 @@ $(function() {
 				else if (payload.part == "expBase") {
 					$task.find('.expBase-input').val(payload.value);
 				}
-				$anchor.fadeOut(function() {
-					$anchor.remove();
-				});
 			}
 			else {
 				alert("Hint pre danú úlohu sa nepodarilo získať!");
+			}
+			if (payload.close) {
+				$anchor.fadeOut(function() {
+					$anchor.remove();
+				});
 			}
 		});
 	});

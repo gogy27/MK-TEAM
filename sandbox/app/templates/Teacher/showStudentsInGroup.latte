@@ -1,141 +1,141 @@
 {block content}
 <table class = "table table-striped table-responsive text-center">
-    <tr>
-	<th class="text-center">Meno žiaka</th>
-	<th class="text-center">Posledný login</th>
-	<th class="text-center">Zmazať užívateľa</th>
-    </tr>
-    {foreach $students as $student}
 	<tr>
-	    <td>{$student->{$userRepository::COLUMN_NAME}}</td>
-	    <td>{$student->{$userRepository::COLUMN_LOG_TIME}|date:'F j, Y'}</td>
-	    <td><a n:href="Teacher:removeUser $student->{$userRepository::COLUMN_ID}"> <i class="glyphicon glyphicon-remove"> </i></a></td>
+		<th class="text-center">Meno žiaka</th>
+		<th class="text-center">Posledný login</th>
+		<th class="text-center">Zmazať užívateľa</th>
 	</tr>
-    {/foreach}
+	{foreach $students as $student}
+		<tr>
+			<td><a n:href="results $student->{$userRepository::COLUMN_ID}">{$student->{$userRepository::COLUMN_NAME}}</a></td>
+			<td>{$student->{$userRepository::COLUMN_LOG_TIME}|date:'F j, Y'}</td>
+			<td><a n:href="Teacher:removeUser $student->{$userRepository::COLUMN_ID}"> <i class="glyphicon glyphicon-remove"> </i></a></td>
+		</tr>
+	{/foreach}
 </table>
 <div class="row">
-    <div class="col-sm-6">
-        <div class="graph" id="taskContainer" style="height: 300px; width: 100%;"></div>
-    </div>
-    <div class="col-sm-6">
-        <div class="graph" id="userContainer" style="height: 300px; width: 100%;"></div>
-    </div>
-    <div class="col-sm-6">
-        <div class="graph" id="unitContainer" style="height: 400px; width: 100%;"></div>
-    </div>
+	<div class="col-sm-6">
+		<div class="graph" id="taskContainer" style="height: 300px; width: 100%;"></div>
+	</div>
+	<div class="col-sm-6">
+		<div class="graph" id="userContainer" style="height: 300px; width: 100%;"></div>
+	</div>
+	<div class="col-sm-6">
+		<div class="graph" id="unitContainer" style="height: 400px; width: 100%;"></div>
+	</div>
 </div>
 {/block}
 {block scripts}
 {include parent}
 <script type="text/javascript" n:syntax="double">
-    window.onload = function () {
-    var chart = new CanvasJS.Chart("taskContainer",
-    {
-    backgroundColor: "rgb(230, 230, 230)",
-	    title: {
-	    text: "Štatistika príkladov v rámci skupiny"
-	    },
-	    legend: {
-	    verticalAlign: "bottom",
-		    horizontalAlign: "center"
-	    },
-	    data: [
-	    {
-	    indexLabelFontSize: 20,
-		    indexLabelFontColor: "darkgrey",
-		    indexLabelLineColor: "darkgrey",
-		    indexLabelPlacement: "outside",
-		    type: "pie",
-		    showInLegend: true,
-		    toolTipContent: "{y} - <strong>#percent%</strong>",
-		    dataPoints: [
+	window.onload = function () {
+	var chart = new CanvasJS.Chart("taskContainer",
+	{
+	backgroundColor: "rgb(230, 230, 230)",
+					title: {
+					text: "Štatistika príkladov v rámci skupiny"
+					},
+					legend: {
+					verticalAlign: "bottom",
+									horizontalAlign: "center"
+					},
+					data: [
+					{
+					indexLabelFontSize: 20,
+									indexLabelFontColor: "darkgrey",
+									indexLabelLineColor: "darkgrey",
+									indexLabelPlacement: "outside",
+									type: "pie",
+									showInLegend: true,
+									toolTipContent: "{y} - <strong>#percent%</strong>",
+									dataPoints: [
 				{y: {{$statistics->correct}}, legendText: "OK", indexLabel: "Správne"},
 				{y: {{$statistics->uncorrect}}, legendText: "ZLE", indexLabel: "Nesprávne"},
 				{y: {{$statistics->unfilled}}, legendText: "NIČ", exploded: true, indexLabel: "Nevyplnené"}
-						    ]
-					    }
-					    ]
-				    });
-					    chart.render();
-					    chart = {};
-					    var chart2 = new CanvasJS.Chart("userContainer", {
-					    backgroundColor: "rgb(230, 230, 230)",
-						    title: {
-						    text: "Úspešnosť žiakov"
-
-						    },
-						    axisX: {
-						    interval: 1,
-							    gridThickness: 0,
-							    labelFontSize: 10,
-							    labelFontStyle: "normal",
-							    labelFontWeight: "normal",
-						    },
-						    axisY2: {
-						    interlacedColor: "rgba(1,77,101,.2)",
-							    gridColor: "rgba(1,77,101,.1)"
-
-						    },
-						    data: [
-						    {
-						    type: "bar",
-							    name: "users",
-							    axisYType: "secondary",
-							    color: "#014D65",
-							    dataPoints: [
-    {{foreach $statistics2 as $item}}
-						    {y: {{$item->points}}, label: {{$item->str_name}}},
-    {{/foreach}}
-										]
+													]
 									}
-
 									]
-								});
-								chart2.render();
-								chart2 = {};
-								var chart3 = new CanvasJS.Chart("unitContainer",
-								{
-								backgroundColor: "rgb(230, 230, 230)",
-									title:{
-									text: "Štatistika jednotiek"
-									},
-									axisY:{
-									title: "percentá"
-									},
-									toolTip:{
-									shared: true,
-										content: "{name}: {y} - <strong>#percent%</strong>",
-									},
-									data:[
-									{
-									type: "stackedBar100",
-										showInLegend: true,
-										name: "Správne",
-										dataPoints: [
-    {{foreach $statistics3 as $item}}
+					});
+									chart.render();
+									chart = {};
+									var chart2 = new CanvasJS.Chart("userContainer", {
+									backgroundColor: "rgb(230, 230, 230)",
+													title: {
+													text: "Úspešnosť žiakov"
+
+													},
+													axisX: {
+													interval: 1,
+																	gridThickness: 0,
+																	labelFontSize: 10,
+																	labelFontStyle: "normal",
+																	labelFontWeight: "normal",
+													},
+													axisY2: {
+													interlacedColor: "rgba(1,77,101,.2)",
+																	gridColor: "rgba(1,77,101,.1)"
+
+													},
+													data: [
+													{
+													type: "bar",
+																	name: "users",
+																	axisYType: "secondary",
+																	color: "#014D65",
+																	dataPoints: [
+	{{foreach $statistics2 as $item}}
+								{y: {{$item->points}}, label: {{$item->str_name}}},
+	{{/foreach}}
+																					]
+																	}
+
+																	]
+													});
+													chart2.render();
+													chart2 = {};
+													var chart3 = new CanvasJS.Chart("unitContainer",
+													{
+													backgroundColor: "rgb(230, 230, 230)",
+																	title:{
+																	text: "Štatistika jednotiek"
+																	},
+																	axisY:{
+																	title: "percentá"
+																	},
+																	toolTip:{
+																	shared: true,
+																					content: "{name}: {y} - <strong>#percent%</strong>",
+																	},
+																	data:[
+																	{
+																	type: "stackedBar100",
+																					showInLegend: true,
+																					name: "Správne",
+																					dataPoints: [
+	{{foreach $statistics3 as $item}}
 		{{if $item->correct > 0}}
-							    {y: {{$item->correct}}, label: {{$item->str_unit_description}}},
-									{{/if}}
-    {{/foreach}}
-											]
-										},
-										{
-										type: "stackedBar100",
-											showInLegend: true,
-											name: "Nesprávne",
-											dataPoints: [
-    {{foreach $statistics3 as $item}}
-	{{if $item->uncorrect > 0}}
-							    {y: {{$item->uncorrect}}, label: {{$item->str_unit_description}}},
-									{{/if}}
-    {{/foreach}}
-											]
+									{y: {{$item->correct}}, label: {{$item->str_unit_description}}},
+		{{/if}}
+	{{/foreach}}
+																						]
+																		},
+																		{
+																		type: "stackedBar100",
+																						showInLegend: true,
+																						name: "Nesprávne",
+																						dataPoints: [
+	{{foreach $statistics3 as $item}}
+		{{if $item->uncorrect > 0}}
+									{y: {{$item->uncorrect}}, label: {{$item->str_unit_description}}},
+		{{/if}}
+	{{/foreach}}
+																						]
+																		}
+																		]
+														});
+														chart3.render();
+														chart3 = {};
 										}
-										]
-									});
-									chart3.render();
-									chart3 = {};
-								}
 </script>
 <script src="{$basePath}/js/jquery.canvasjs.min.js"></script>
 {/block}

@@ -62,6 +62,7 @@ class StudentPresenter extends BasePresenter {
 			$this->template->form = $this['newTaskForm'];
 			$this->template->tasks = $this->tasks;
 			$this->template->unitConversion = $this->unitConversion;
+			$this->template->test = ($test) ? true : false;
 		}
 	}
 	
@@ -69,16 +70,7 @@ class StudentPresenter extends BasePresenter {
 		$results = array();
 		$this->tasks = $this->unitConversion->getUserTasks($this->user->getId())->order(Model\UnitConversion::UNIT_COLUMN_ID . " DESC")->limit(20, $from);
 		foreach ($this->tasks as $task) {
-			$unit = $this->unitConversion->getUnit($task->{Model\UnitConversion::TASK_COLUMN_UNIT_ID});
-			$baseUnit = $this->unitConversion->getBaseUnit($unit);
-			$results[] = array(
-					'date' => $task->{Model\UnitConversion::TASK_COLUMN_CREATED},
-					'test' => $task->{Model\UnitConversion::TASK_COLUMN_TEST_ID},
-					'prescription' => Model\Task::toHumanValue($task->{Model\UnitConversion::TASK_COLUMN_VALUE_FROM}, $task->{Model\UnitConversion::TASK_COLUMN_POWER_FROM}) . " " . $unit->{Model\UnitConversion::UNIT_COLUMN_NAME},
-					'correctAnswer' => Model\Task::toRealValue($task->{Model\UnitConversion::TASK_COLUMN_VALUE_FROM}) . " &times; 10 <sup>" . $task->{Model\UnitConversion::TASK_COLUMN_POWER_FROM} . "</sup> " . $unit->{Model\UnitConversion::UNIT_COLUMN_NAME} . " <span class='equal-to'> = </span> " . Model\Task::toRealValue($task->{Model\UnitConversion::TASK_COLUMN_VALUE_FROM}) . " &times; 10 <sup>" . Model\Task::toBaseExp($unit, $task->{Model\UnitConversion::TASK_COLUMN_POWER_FROM}) . "</sup> " . $baseUnit->{Model\UnitConversion::UNIT_COLUMN_NAME},
-					'userAnswer' => Model\Task::toRealValue($task->{Model\UnitConversion::TASK_COLUMN_VALUE_TO}) . " &times; 10 <sup>" . $task->{Model\UnitConversion::TASK_COLUMN_POWER_TO} . "</sup> " . $unit->{Model\UnitConversion::UNIT_COLUMN_NAME} . " <span class='equal-to'> = </span> " . Model\Task::toRealValue($task->{Model\UnitConversion::TASK_COLUMN_VALUE_TO}) . " &times; 10 <sup>" . $task->{Model\UnitConversion::TASK_COLUMN_POWER_BASE_TO} . "</sup> " . $baseUnit->{Model\UnitConversion::UNIT_COLUMN_NAME},
-					'isCorrect' => ($task->{Model\UnitConversion::TASK_COLUMN_CORRECT} == Model\UnitConversion::TRUE_VALUE)
-			);
+			$results[] = $this->unitConversion->getTableResult($task);
 		}
 		return $results;
 	}
@@ -161,22 +153,30 @@ class StudentPresenter extends BasePresenter {
 	 */
 	public function handleGetHint($id) {
 		$this->payload->accepted = true;
+		$this->payload->close = false;
 		$task = $this->unitConversion->getTask(intval($id));
 
-		if ($task && ($this->unitConversion->getTaskOwner($task) == $this->user->getId())) {
-			$rand = rand(0, 2);
-			if ($rand == 0) {
+		if ($task && ($this->unitConversion->getTaskOwner($task) == $this->user->getId()) && ($task->{Model\UnitConversion::TASK_COLUMN_HINT} < 2)) {
+			if ($task->{Model\UnitConversion::TASK_COLUMN_HINT} == 0) {
 				$this->payload->part = "base-number";
 				$this->payload->value = Model\Task::toRealValue($task->{Model\UnitConversion::TASK_COLUMN_VALUE_FROM});
-			} elseif ($rand == 1) {
+			} elseif ($task->{Model\UnitConversion::TASK_COLUMN_HINT} == 1) {
 				$this->payload->part = "exp";
 				$this->payload->value = $task->{Model\UnitConversion::TASK_COLUMN_POWER_FROM};
-			} else {
+				$this->payload->close = true;
+			}
+			
+			/* 
+			 * * * * HINT PRE EXPBASE * * * *
 				$this->payload->part = "expBase";
 				$this->payload->value = Model\Task::toBaseExp($this->unitConversion->getUnit($task->{Model\UnitConversion::TASK_COLUMN_UNIT_ID}), $task->{Model\UnitConversion::TASK_COLUMN_POWER_FROM});
-			}
+			 * * * * * * * * * * * * * * * * *
+			*/
+			
+			$task->update(array(Model\UnitConversion::TASK_COLUMN_HINT => $task->{Model\UnitConversion::TASK_COLUMN_HINT}+1));
 		} else {
 			$this->payload->accepted = false;
+			$this->payload->close = true;
 			$this->payload->value = 0;
 		}
 

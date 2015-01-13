@@ -9,28 +9,29 @@ class UnitConversion extends Nette\Object {
 
 	/** @internal tables and columns names in database  */
 	const UNIT_TABLE_NAME = 'unit',
-				UNIT_COLUMN_ID = 'id',
-				UNIT_COLUMN_DIFFICULTY = 'nb_level',
-				UNIT_COLUMN_BASE_UNIT = 'fl_base_unit',
-				UNIT_COLUMN_MULTIPLE = 'nb_multiple',
-				UNIT_COLUMN_CATEGORY = 'nb_category',
-				UNIT_COLUMN_NAME = 'str_unit_name',
-				TASK_TABLE_NAME = 'task',
-				TASK_COLUMN_USER_ID = 'id_user',
-				TASK_COLUMN_UNIT_ID = 'id_unit',
-				TASK_COLUMN_CREATED = 'dt_created',
-				TASK_COLUMN_UPDATED = 'dt_updated',
-				TASK_COLUMN_VALUE_FROM = 'nb_value_from',
-				TASK_COLUMN_POWER_FROM = 'nb_power_from',
-				TASK_COLUMN_VALUE_TO = 'nb_value_to',
-				TASK_COLUMN_POWER_TO = 'nb_power_to',
-				TASK_COLUMN_POWER_BASE_TO = 'nb_power_base_to',
-				TASK_COLUMN_CORRECT = 'fl_correct',
-				TASK_COLUMN_TEST_ID = 'id_test';
-	
+					UNIT_COLUMN_ID = 'id',
+					UNIT_COLUMN_DIFFICULTY = 'nb_level',
+					UNIT_COLUMN_BASE_UNIT = 'fl_base_unit',
+					UNIT_COLUMN_MULTIPLE = 'nb_multiple',
+					UNIT_COLUMN_CATEGORY = 'nb_category',
+					UNIT_COLUMN_NAME = 'str_unit_name',
+					TASK_TABLE_NAME = 'task',
+					TASK_COLUMN_USER_ID = 'id_user',
+					TASK_COLUMN_UNIT_ID = 'id_unit',
+					TASK_COLUMN_CREATED = 'dt_created',
+					TASK_COLUMN_UPDATED = 'dt_updated',
+					TASK_COLUMN_VALUE_FROM = 'nb_value_from',
+					TASK_COLUMN_POWER_FROM = 'nb_power_from',
+					TASK_COLUMN_VALUE_TO = 'nb_value_to',
+					TASK_COLUMN_POWER_TO = 'nb_power_to',
+					TASK_COLUMN_POWER_BASE_TO = 'nb_power_base_to',
+					TASK_COLUMN_CORRECT = 'fl_correct',
+					TASK_COLUMN_TEST_ID = 'id_test',
+					TASK_COLUMN_HINT = 'nb_hint';
+
 	/** boolean values represented in database */
 	const TRUE_VALUE = 'A',
-				FALSE_VALUE = 'N';
+					FALSE_VALUE = 'N';
 
 	/** @var Nette\Database\Context */
 	private $database;
@@ -191,6 +192,27 @@ class UnitConversion extends Nette\Object {
 	}
 
 	/**
+	 * Returns full listing of result
+	 * 
+	 * @param Nette\Database\Table\ActiveRow $task Row from database
+	 * @return array result in array structure.
+	 */
+	public function getTableResult($task) {
+		$unit = $this->getUnit($task->{UnitConversion::TASK_COLUMN_UNIT_ID});
+		$baseUnit = $this->getBaseUnit($unit);
+		$result = array(
+				'date' => $task->{UnitConversion::TASK_COLUMN_CREATED},
+				'test' => $task->{UnitConversion::TASK_COLUMN_TEST_ID},
+				'prescription' => Task::toHumanValue($task->{UnitConversion::TASK_COLUMN_VALUE_FROM}, $task->{UnitConversion::TASK_COLUMN_POWER_FROM}) . " " . $unit->{UnitConversion::UNIT_COLUMN_NAME},
+				'correctAnswer' => Task::toRealValue($task->{UnitConversion::TASK_COLUMN_VALUE_FROM}) . " &times; 10 <sup>" . $task->{UnitConversion::TASK_COLUMN_POWER_FROM} . "</sup> " . $unit->{UnitConversion::UNIT_COLUMN_NAME} . " <span class='equal-to'> = </span> " . Task::toRealValue($task->{UnitConversion::TASK_COLUMN_VALUE_FROM}) . " &times; 10 <sup>" . Task::toBaseExp($unit, $task->{UnitConversion::TASK_COLUMN_POWER_FROM}) . "</sup> " . $baseUnit->{UnitConversion::UNIT_COLUMN_NAME},
+				'userAnswer' => Task::toRealValue($task->{UnitConversion::TASK_COLUMN_VALUE_TO}) . " &times; 10 <sup>" . $task->{UnitConversion::TASK_COLUMN_POWER_TO} . "</sup> " . $unit->{UnitConversion::UNIT_COLUMN_NAME} . " <span class='equal-to'> = </span> " . Task::toRealValue($task->{UnitConversion::TASK_COLUMN_VALUE_TO}) . " &times; 10 <sup>" . $task->{UnitConversion::TASK_COLUMN_POWER_BASE_TO} . "</sup> " . $baseUnit->{UnitConversion::UNIT_COLUMN_NAME},
+				'hint' => $task->{UnitConversion::TASK_COLUMN_HINT},
+				'isCorrect' => ($task->{UnitConversion::TASK_COLUMN_CORRECT} == UnitConversion::TRUE_VALUE)
+		);
+		return $result;
+	}
+
+	/**
 	 * Returns all possible levels (difficulty value) of the units
 	 * @return Nette\Database\Table\Selection
 	 */
@@ -218,4 +240,5 @@ class UnitConversion extends Nette\Object {
 	public function removeUnpostedTasks($userID) {
 		$this->database->table(self::TASK_TABLE_NAME)->where(self::TASK_COLUMN_USER_ID, $userID)->where(self::TASK_COLUMN_UPDATED . " IS NULL")->where(self::TASK_COLUMN_TEST_ID, null)->delete();
 	}
+
 }

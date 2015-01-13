@@ -19,9 +19,11 @@
 				<span class="base-number-format">0</span> &times; 10 <sup>{input 'taskBaseExp'.$key}</sup> {$unitConversion->getBaseUnit($task->getUnit())->{$unitConversion::UNIT_COLUMN_NAME}|noescape}</span>
 			</div>
 			<div class="clearfix visible-xs"></div>
-			<div class="col-sm-2">
-				<a n:href="getHint! $key" class="btn btn-primary btn-hint">Hint</a>
-			</div>
+			{if !$test}
+				<div class="col-sm-2">
+					<a n:href="getHint! $key" class="btn btn-primary btn-hint">Hint</a>
+				</div>
+			{/if}
 		</div>
 	{/foreach}
 	<div class="form-group">
