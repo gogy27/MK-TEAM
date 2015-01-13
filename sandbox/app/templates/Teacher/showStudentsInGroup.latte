@@ -1,15 +1,9 @@
 {block content}
 <table class = "table table-striped table-responsive text-center">
 	<tr>
-<<<<<<< HEAD
 		<th class="text-center">Meno žiaka</th>
 		<th class="text-center">Posledný login</th>
 		<th class="text-center">Zmazať užívateľa</th>
-=======
-	    <td>{$student->{$userRepository::COLUMN_NAME}}</td>
-	    <td>{$student->{$userRepository::COLUMN_LOG_TIME}|date:'F j, Y'}</td>
-	    <td><a n:href="Teacher:removeUser $student->{$userRepository::COLUMN_ID}"> <i class="glyphicon glyphicon-trash"> </i></a></td>
->>>>>>> 453d0feba71343b6e741e7226d332e2b3701bac5
 	</tr>
 	{foreach $students as $student}
 		<tr>
