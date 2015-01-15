@@ -10,7 +10,11 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>{ifset #title}{include title|striptags} | {/ifset}Nette Adamko</title>
+		<title>
+                    {ifset #title} {include title|striptags} | 
+                    {elseifset $title}{$title} | {/ifset}
+                    {is_null($titleSection) ? '' : $titleSection . ' '}DSPV
+                </title>
 
 		<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/style.css">
 
@@ -44,6 +48,7 @@
 		</nav>
 
 		<div class="container first-content">
+                    {if $visibleHeadline && isset($title)}<h1>{$title}</h1>{/if}
 			<div class="row">
 				<div class="col-sm-6 col-sm-offset-3 text-center">
 					<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">{$flash->message}</div>

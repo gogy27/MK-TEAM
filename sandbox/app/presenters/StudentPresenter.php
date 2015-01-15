@@ -23,7 +23,7 @@ class StudentPresenter extends BasePresenter {
 		} else {
 			$this->redirect('Auth:');
 		}
-
+                $this->setTitleSection('Študent');
 		$this->tasks = array();
 	}
 
@@ -31,6 +31,8 @@ class StudentPresenter extends BasePresenter {
 	 * Handle default action for logged in student
 	 */
 	public function actionDefault() {
+            $this->setTitle('Home');
+            $this->setVisibleHeadline(false);
 		$this->template->levels = $this->unitConversion->getDistinctLevels();
 	}
 
@@ -58,6 +60,9 @@ class StudentPresenter extends BasePresenter {
 				$this->difficulty = $test_row->nb_level;
 				$this->test_id = $test_row->id;
 			}
+                        
+                        $this->setTitle(is_null($test) ? 'Riešenie príkladov' : 'Riešenie päťminútovky');
+                        
 			$this->difficulty = $diff;
 			$this->template->form = $this['newTaskForm'];
 			$this->template->tasks = $this->tasks;
@@ -79,6 +84,7 @@ class StudentPresenter extends BasePresenter {
 	 * Shows results of the last student tasks
 	 */
 	public function actionResults() {
+            $this->setTitle('Moje výsledky');
 		$this->template->tasks = $this->getResults(0);
 	}
 
