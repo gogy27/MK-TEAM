@@ -34,13 +34,15 @@ class AuthPresenter extends BasePresenter {
 				}
 			}
 		}
+                $this->setTitleSection('Autentifikácia');
+                $this->setVisibleHeadline(false);
 	}
 
         /**
          * Show root page - login form with relevant links
          */
 	public function actionDefault() {
-            //print_r($_SERVER);
+            $this->setTitle('Prihlásenie');
 	}
 
         /**
@@ -48,7 +50,7 @@ class AuthPresenter extends BasePresenter {
          * teachers
          */
 	public function actionRegister() {
-		
+		$this->setTitle('Registrácia');
 	}
 
         /**
@@ -65,7 +67,7 @@ class AuthPresenter extends BasePresenter {
          * Send email with link to reset password
          */
 	public function actionSendEmailToResetPassword() {
-		
+		$this->setTitle('Resetovanie hesla');
 	}
 
         /**
@@ -75,6 +77,7 @@ class AuthPresenter extends BasePresenter {
 		if (!$this->user->isLoggedIn()) {
 			$this->redirect('Auth:');
 		}
+                $this->setTitle('Zmena hesla');
 	}
 
         /**
@@ -84,6 +87,7 @@ class AuthPresenter extends BasePresenter {
          * @param string $hash hash to reset forgotten password
          */
 	public function actionResetPassword($user_id, $hash) {
+            $this->setTitle('Nastavenie nového hesla');
 		$this->args = ['user_id' => $user_id, 'hash' => $hash];
 	}
 

@@ -30,19 +30,23 @@ class AdminPresenter extends BasePresenter {
 		} else {
 			$this->redirect('Auth:');
 		}
+                
+                $this->setTitleSection('Admin');
 	}
 
         /**
          * Handle default action for logged in user
          */
 	public function actionDefault() {
-		
+		$this->setTitle('Home');
+                $this->setVisibleHeadline(false);
 	}
 
         /**
          * Show signed up teachers available for removal from DB
          */
 	public function actionShowTeachers() {
+            $this->setTitle('Vymazávanie učiteľov');
 		$this->template->users = $this->userRepository->getTeachers();
 	}
         
@@ -56,10 +60,11 @@ class AdminPresenter extends BasePresenter {
         public function actionShowGroups($teacher_id = NULL) {
             if (!is_null($teacher_id)) {
                 $this->template->groups = $this->classRepository->getTeacherGroups($teacher_id);
-                $this->template->teacher = $this->userRepository->getUser($teacher_id);
+                $teacher = $this->userRepository->getUser($teacher_id);
             } else {
                 $this->template->groups = $this->classRepository->getAllGroupsWithAllInfo();
             }
+            $this->setTitle('Vymazávanie skupín' . (isset($teacher) ? ' u učiteľa ' . $teacher->{Model\UserRepository::COLUMN_NAME} : ''));
         }
         
         /**
@@ -71,10 +76,15 @@ class AdminPresenter extends BasePresenter {
         public function actionShowStudents($group_id = NULL) {
             if (!is_null($group_id)) {
                 $this->template->users = $this->userRepository->getStudentsByGroup($group_id);
-                $this->template->group = $this->classRepository->getGroup($group_id);
+                $group = $this->classRepository->getGroup($group_id);
             } else {
                 $this->template->users = $this->userRepository->getStudents();
             }
+            $this->setTitle('Vymazávanie študentov' . (isset($group) ? ' v skupine '.$group->{Model\ClassRepository::COLUMN_NAME} : ''));
+        }
+        
+        public function actionRemoveTasks() {
+            $this->setTitle('Vymazávanie príkladov');
         }
 
         /**

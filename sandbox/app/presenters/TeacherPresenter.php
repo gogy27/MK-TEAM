@@ -26,12 +26,15 @@ class TeacherPresenter extends BasePresenter {
 		} else {
 			$this->redirect('Auth:');
 		}
+                $this->setTitleSection('Učiteľ');
 	}
 
 	/**
 	 * Shows groups of teacher and form for creating new groups
 	 */
 	public function actionDefault() {
+            $this->setTitle('Home');
+            $this->setVisibleHeadline(false);
 		$this->template->groups = $this->classRepository->getTeacherGroupsWithTestInfo($this->user->getId());
 		$this->template->classRepository = $this->classRepository;
 	}
@@ -41,6 +44,7 @@ class TeacherPresenter extends BasePresenter {
 	 * @param type $group_id Group unique id in DB
 	 */
 	public function actionShowStudentsInGroup($group_id) {
+            $this->setTitle('Štatistika skupiny ' . $this->classRepository->getGroup($group_id)->{Model\ClassRepository::COLUMN_NAME});
 		$this->template->students = $this->userRepository->getStudentsByGroup($group_id);
 		$this->template->userRepository = $this->userRepository;
 		$this->template->statistics = $this->userRepository->getStatisticsOfTasks($group_id);
@@ -83,6 +87,7 @@ class TeacherPresenter extends BasePresenter {
 	 */
 	public function actionSetTest($group_id) {
 		if ($this->classRepository->getGroup($group_id)->{Model\ClassRepository::COLUMN_USER_ID} == $this->user->getId()) {
+                    $this->setTitle('Zadať test');
 			$this->group_id = $group_id;
 			$this->template->open = $this->testRepository->getUnclosedTestForGroup($group_id);
 			$this->template->testRepository = $this->testRepository;
@@ -116,6 +121,7 @@ class TeacherPresenter extends BasePresenter {
 		$id_test = intval($test_id);
 		if ($this->testRepository->getTest($id_test)) {
 			if ($this->testRepository->getOwnerOfTest($id_test)->id == $this->user->getId()) {
+                            $this->setTitle('Výsledky študentov testu #' . $id_test);
 				$this->template->students = $this->testRepository->getStudentsResults($id_test);
 			} else {
 				$this->flashMessage('K tomuto testu nemáte prístup', self::FLASH_MESSAGE_DANGER);
@@ -133,6 +139,7 @@ class TeacherPresenter extends BasePresenter {
 	public function actionResults($student) {
 		$this->template->tasks = $this->getResults(0, $student);
 		$this->template->student = $student;
+                $this->setTitle($this->userRepository->getUser($student)->{Model\UserRepository::COLUMN_NAME} . ' výsledky');
 	}
 
 	private function getResults($from, $studentID) {
