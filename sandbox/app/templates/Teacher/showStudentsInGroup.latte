@@ -97,7 +97,7 @@
 													{
 													backgroundColor: "rgb(230, 230, 230)",
 																	title:{
-																	text: "Štatistika jednotiek"
+																	text: "Štatistika náročnosti jednotiek"
 																	},
 																	axisY:{
 																	title: "percentá"
@@ -114,7 +114,7 @@
 																					dataPoints: [
 	{{foreach $statistics3 as $item}}
 		{{if $item->correct > 0}}
-									{y: {{$item->correct}}, label: {{$item->str_unit_description}}},
+									{y: {{$item->correct}}, label: {{$item->nb_level}}},
 		{{/if}}
 	{{/foreach}}
 																						]
@@ -126,7 +126,7 @@
 																						dataPoints: [
 	{{foreach $statistics3 as $item}}
 		{{if $item->uncorrect > 0}}
-									{y: {{$item->uncorrect}}, label: {{$item->str_unit_description}}},
+									{y: {{$item->uncorrect}}, label: {{$item->nb_level}}},
 		{{/if}}
 	{{/foreach}}
 																						]

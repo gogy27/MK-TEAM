@@ -93,7 +93,7 @@ INSERT INTO `unit` (`id`, `fl_base_unit`, `nb_category`, `str_unit_name`, `nb_mu
 (66, 'N', 8, '&mu;N', -6, 1, 'Sila'),
 (67, 'N', 8, 'mN', -3, 1, 'Sila'),
 (68, 'A', 8, 'N', 0, 1, 'Sila'),
-(69, 'N', 8, 'kn', 3, 1, 'Sila'),
+(69, 'N', 8, 'kN', 3, 1, 'Sila'),
 (70, 'N', 8, 'MN', 6, 1, 'Sila'),
 (71, 'N', 8, 'GN', 9, 1, 'Sila'),
 (72, 'N', 8, 'TN', 12, 1, 'Sila'),

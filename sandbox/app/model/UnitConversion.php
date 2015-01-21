@@ -27,7 +27,7 @@ class UnitConversion extends Nette\Object {
 					TASK_COLUMN_POWER_BASE_TO = 'nb_power_base_to',
 					TASK_COLUMN_CORRECT = 'fl_correct',
 					TASK_COLUMN_TEST_ID = 'id_test',
-					TASK_COLUMN_HINT = 'nb_hint';
+					TASK_COLUMN_HINT = 'nb_hints';
 
 	/** boolean values represented in database */
 	const TRUE_VALUE = 'A',

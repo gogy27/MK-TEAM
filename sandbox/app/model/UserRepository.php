@@ -130,8 +130,7 @@ class UserRepository extends Repository {
 
 	public function getStatisticsOfUnits($group_id) {
 		return $this->database->query("SELECT 
-					    un.nb_category,
-					    un.str_unit_description,
+					    un.nb_level,
 					    COALESCE(sum(CASE WHEN t.fl_correct = 'A' THEN 1 ELSE 0 END), 0) as correct,
 					    COALESCE(sum(CASE WHEN t.fl_correct = 'N' THEN 1 ELSE 0 END), 0) as uncorrect
 					FROM task t
@@ -139,8 +138,8 @@ class UserRepository extends Repository {
 					    ON u.id = t.id_user
 					LEFT JOIN unit un
 					    ON un.id = t.id_unit
-					WHERE u.id_group = " . $group_id .
-														" GROUP BY un.nb_category, un.str_unit_description ORDER BY un.str_unit_description DESC")
+					WHERE u.id_group = " . $group_id . "  
+														 GROUP BY un.nb_level ORDER BY un.str_unit_description DESC")
 										->fetchAll();
 	}
 
