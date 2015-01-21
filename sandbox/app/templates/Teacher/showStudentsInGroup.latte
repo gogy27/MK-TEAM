@@ -113,7 +113,9 @@
 																					name: "Správne",
 																					dataPoints: [
 	{{foreach $statistics3 as $item}}
+		{{if $item->correct > 0}}
 									{y: {{$item->correct}}, label: {{$item->nb_level}}},
+		{{/if}}
 	{{/foreach}}
 																						]
 																		},
@@ -123,7 +125,9 @@
 																						name: "Nesprávne",
 																						dataPoints: [
 	{{foreach $statistics3 as $item}}
+		{{if $item->uncorrect > 0}}
 									{y: {{$item->uncorrect}}, label: {{$item->nb_level}}},
+		{{/if}}
 	{{/foreach}}
 																						]
 																		}
