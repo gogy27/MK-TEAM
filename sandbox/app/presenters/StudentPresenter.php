@@ -154,9 +154,8 @@ class StudentPresenter extends BasePresenter {
 					break;
 				    }
 				    $checked = true;
-				}else{
-				    $this->unitConversion->checkConversion($this->user->getId(), $matches[1], $data);
 				}
+				$this->unitConversion->checkConversion($this->user->getId(), $matches[1], $data);
 			}
 		}
 		$this->redirect('results');
