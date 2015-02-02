@@ -57,7 +57,8 @@ class StudentPresenter extends BasePresenter {
 					}
 				}
 				$this->numberOfTasks = $test_row->nb_count;
-				$this->difficulty = $test_row->nb_level;
+				//$this->difficulty = $test_row->nb_level;
+                                $diff = $test_row->nb_level;
 				$this->test_id = $test_row->id;
 			}
                         
