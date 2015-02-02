@@ -137,7 +137,7 @@ class UnitConversion extends Nette\Object {
 	}
 
 	private function getRandomUnit($difficulty) {
-		$offset_result = $this->database->table(self::UNIT_TABLE_NAME)->select("FLOOR(RAND() * COUNT(*)) AS `offset`")->where(self::UNIT_COLUMN_BASE_UNIT, self::FALSE_VALUE)->where(self::UNIT_COLUMN_DIFFICULTY . " <= " . $difficulty);
+		$offset_result = $this->database->table(self::UNIT_TABLE_NAME)->select("FLOOR(RAND() * COUNT(*)) AS `offset`")->where(self::UNIT_COLUMN_BASE_UNIT, self::FALSE_VALUE)->where(self::UNIT_COLUMN_DIFFICULTY . " = " . $difficulty);
 		$offset = $offset_result->fetch()->offset;
 		return $this->database->table(self::UNIT_TABLE_NAME)->where(self::UNIT_COLUMN_BASE_UNIT, self::FALSE_VALUE)->where(self::UNIT_COLUMN_DIFFICULTY . " = " . $difficulty)->order(self::UNIT_COLUMN_ID)->limit(1, $offset)->fetch();
 	}
